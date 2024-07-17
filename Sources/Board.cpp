@@ -1,17 +1,33 @@
 #include "Board.h"
-#include "Brick.h"
+#include "FunctionBrick.h"
+#include "StatementBrick.h"
 #include "Parameter.h"
 
 Board::Board(QColor bgColor) {
     background = bgColor;
     setMouseTracking(true);
 
-    bricks.append(new Brick("Repita", QColor(255, 0, 0)));
-    bricks[0]->addParam(Parameter("de", "", ParamType::INT));
-    bricks[0]->addParam(Parameter("ate", "", ParamType::INT));
+    Brick* b = new StatementBrick("Repita", QColor(255, 0, 0));
+    b->addParam(Parameter("de", "", ParamType::INT));
+    b->addParam(Parameter("ate", "", ParamType::INT));
 
-    bricks.append(new Brick("Escreva", QColor(0, 128, 0)));
-    bricks[1]->addParam(Parameter("", "", ParamType::STRING));
+    Brick* b1 = new FunctionBrick("Escreva no Serial", QColor(0, 128, 0));
+    b1->addParam(Parameter("", "", ParamType::STRING));
+    ((StatementBrick*)b)->addBrick(b1);
+
+    b1 = new FunctionBrick("AnalogWrite", QColor(0, 128, 0));
+    b1->addParam(Parameter("Porta:", "", ParamType::STRING));
+    b1->addParam(Parameter("Valor:", "", ParamType::STRING));
+    ((StatementBrick*)b)->addBrick(b1);
+
+    b1 = new FunctionBrick("AnalogRead", QColor(0, 128, 0));
+    b1->addParam(Parameter("Porta:", "", ParamType::STRING));
+    ((StatementBrick*)b)->addBrick(b1);
+    
+    bricks.append(new StatementBrick("Loop", QColor(150, 75, 0)));
+    ((StatementBrick*)bricks[0])->addBrick(b);
+    ((StatementBrick*)bricks[0])->addBrick(new FunctionBrick("Funcao", QColor(0, 0, 128)));
+    
 }
 
 void Board::paintEvent(QPaintEvent *event)
@@ -27,12 +43,5 @@ void Board::paintEvent(QPaintEvent *event)
 }
 
 void Board::mouseMoveEvent(QMouseEvent *event) { 
-    // this->setCursor(Qt::ArrowCursor);
-    // for(int i = 0; i < bricks.size(); i++) {
-    //     if(bricks[i]->isOver(event->pos())) {
-    //         bricks[i]->mouseMove(event);
-    //         this->setCursor(Qt::PointingHandCursor);
-    //     }
-    // }
-    // update();
+    
 }

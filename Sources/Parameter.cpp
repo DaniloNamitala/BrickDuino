@@ -28,7 +28,7 @@ void Parameter::paint(QPainter* painter, QPoint origin) {
     if (!textBefore.isEmpty()) {
         painter->save();
         painter->setPen(Brick::getTextPen());
-        painter->drawText(origin.x(), origin.y() + size(Brick::getFont()).height()/2+3, textBefore);
+        painter->drawText(origin.x(), origin.y() + Util::textSize(textBefore, Brick::getFont()).height(), textBefore);
         x += Util::textSize(textBefore, Brick::getFont()).width() + MARGIN;
         painter->restore();
     }
@@ -46,7 +46,7 @@ void Parameter::paint(QPainter* painter, QPoint origin) {
         x += EMPTY_VALUE_WIDTH + MARGIN;
         painter->save();
         painter->setPen(Brick::getTextPen());
-        painter->drawText(x, origin.y() + size(Brick::getFont()).height()/2+3, textAfter);
+        painter->drawText(x, origin.y() + Util::textSize(textAfter, Brick::getFont()).height(), textAfter);
         painter->restore();
     }
     painter->restore();
