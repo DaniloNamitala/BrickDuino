@@ -22,24 +22,12 @@ QColor Brick::getColor() {
     return color;
 }
 
-QPen Brick::getPen() {
-    QPen pen(color.darker(300));
-    pen.setWidth(2);
-    return pen;
-}
-
-QPen Brick::getTextPen() {
-    QPen textPen(QColor(255, 255, 255));
-    textPen.setWidth(3);
-    return textPen;
-}
-
 int Brick::width() { 
-    QFontMetrics fm(getFont());
+    QFontMetrics fm(Util::font());
     int funcNameWidth = fm.horizontalAdvance(functionName);
     int paramsWidth = 0;
     for (int i = 0; i < params.size(); i++) {
-        paramsWidth += params[i].size(getFont()).width();
+        paramsWidth += params[i].size(Util::font()).width();
     }
     int width = funcNameWidth + paramsWidth;
 
@@ -50,15 +38,10 @@ int Brick::width() {
 
 int Brick::height() { 
     int height = BRICK_MIN_HEIGHT;
-    QFontMetrics fm(getFont());
+    QFontMetrics fm(Util::font());
     for (int i = 0; i < params.size(); i++) {
-        height = qMax(height, params[i].size(getFont()).height());
+        height = qMax(height, params[i].size(Util::font()).height());
     }
     height = qMax(height, fm.height());
     return height + 2*MARGIN;
 }
-
-QFont Brick::getFont() {
-    return QFont("Arial", 10, QFont::Bold, false);
-}
-

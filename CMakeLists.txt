@@ -15,6 +15,7 @@ file(GLOB CPP_FILES Sources/*.cpp)
 
 #include directories
 SET(INCLUDE_DIR "Headers/")
+SET(INCLUDE_DIR_EXCEPTION "Headers/Exception/")
 
 # Adicione a origem ao executável deste projeto.
 add_executable (BrickDuino ${CPP_FILES}) 
@@ -25,6 +26,7 @@ endif()
 
 #include directories
 target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR})
+target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_EXCEPTION})
 
 # libraries
 target_link_libraries(BrickDuino PRIVATE Qt6::Widgets)

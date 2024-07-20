@@ -22,8 +22,8 @@ void StatementBrick::paint(QPainter *painter, QPoint origin) {
     path.arcTo(width() - 2 * EDGE_RADIUS, headerHeight() - 2 * EDGE_RADIUS, 2 * EDGE_RADIUS, 2 * EDGE_RADIUS, 0, -90);
 
     // Draw the socket
-    path.lineTo(BRACKET_WIDTH + 2 * EDGE_RADIUS + (PIN_H + getPen().width()) * 2, headerHeight());
-    path.arcTo(BRACKET_WIDTH + 2 * EDGE_RADIUS - getPen().width(), headerHeight() - (PIN_H + getPen().width()), 2 * (PIN_H + getPen().width()), 2 * (PIN_H + getPen().width()), 0, 180);
+    path.lineTo(BRACKET_WIDTH + 2 * EDGE_RADIUS + (PIN_H + Util::contourPen(color).width()) * 2, headerHeight());
+    path.arcTo(BRACKET_WIDTH + 2 * EDGE_RADIUS - Util::contourPen(color).width(), headerHeight() - (PIN_H + Util::contourPen(color).width()), 2 * (PIN_H + Util::contourPen(color).width()), 2 * (PIN_H + Util::contourPen(color).width()), 0, 180);
 
     path.lineTo(BRACKET_WIDTH + EDGE_RADIUS, headerHeight());
     path.arcTo(BRACKET_WIDTH, headerHeight(), 2 * EDGE_RADIUS, 2 * EDGE_RADIUS, 90, 90);
@@ -38,31 +38,31 @@ void StatementBrick::paint(QPainter *painter, QPoint origin) {
     path.arcTo(width() - 2 * EDGE_RADIUS, height() - 2 * EDGE_RADIUS, 2 * EDGE_RADIUS, 2 * EDGE_RADIUS, 0, -90);
 
     // Draw the socket
-    path.lineTo(2 * EDGE_RADIUS + (PIN_H + getPen().width()) * 2, height());
-    path.arcTo(2 * EDGE_RADIUS - getPen().width(), height() - (PIN_H + getPen().width()), 2 * (PIN_H + getPen().width()), 2 * (PIN_H + getPen().width()), 0, 180);
+    path.lineTo(2 * EDGE_RADIUS + (PIN_H + Util::contourPen(color).width()) * 2, height());
+    path.arcTo(2 * EDGE_RADIUS - Util::contourPen(color).width(), height() - (PIN_H + Util::contourPen(color).width()), 2 * (PIN_H + Util::contourPen(color).width()), 2 * (PIN_H + Util::contourPen(color).width()), 0, 180);
 
     // Draw the bottom left corner
-    path.lineTo(2 * EDGE_RADIUS - getPen().width(), height());
+    path.lineTo(2 * EDGE_RADIUS - Util::contourPen(color).width(), height());
     path.arcTo(0, height() - 2 * EDGE_RADIUS, 2 * EDGE_RADIUS, 2 * EDGE_RADIUS, 270, -90);
     path.lineTo(0, 2 * EDGE_RADIUS);
     path.arcTo(0, 0, 2 * EDGE_RADIUS, 2 * EDGE_RADIUS, 180, -90);
     path.lineTo(2 * EDGE_RADIUS, 0);
 
-    painter->setFont(getFont());
+    painter->setFont(Util::font());
 
     painter->setBrush(getColor());
-    painter->setPen(getPen());
+    painter->setPen(Util::contourPen(color));
 
     painter->setRenderHint(QPainter::Antialiasing);
     painter->translate(origin);
     painter->drawPath(path);
 
-    int funcNameWidth = Util::textSize(functionName, getFont()).width();
+    int funcNameWidth = Util::textSize(functionName, Util::font()).width();
     int x = MARGIN + funcNameWidth + MARGIN;
     
     for (int i = 0; i < params.size(); i++) {
         params[i].paint(painter, QPoint(x, MARGIN));
-        x += params[i].size(getFont()).width() + MARGIN;
+        x += params[i].size(Util::font()).width() + MARGIN;
     }
 
     QPoint point = getStatementOrigin();
@@ -71,8 +71,8 @@ void StatementBrick::paint(QPainter *painter, QPoint origin) {
         point.setY(point.y() + bricks[i]->height());
     }
 
-    painter->setPen(getTextPen());
-    painter->drawText(MARGIN, MARGIN + Util::textSize(functionName, getFont()).height(), functionName);
+    painter->setPen(Util::textPen());
+    painter->drawText(MARGIN, MARGIN + Util::textSize(functionName, Util::font()).height(), functionName);
 
     painter->translate(-origin);
     

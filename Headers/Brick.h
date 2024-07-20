@@ -20,7 +20,6 @@ class Brick
         QList<Parameter> params;
 
         QColor getColor();
-        QPen getPen();
     public:
         Brick(const char* name, QColor color);
 
@@ -29,8 +28,5 @@ class Brick
         virtual int height();
 
         void addParam(Parameter param);
-        static QPen getTextPen();
-        static QFont getFont();
-
 };
 
