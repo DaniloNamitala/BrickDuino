@@ -7,14 +7,14 @@
 
 Brick::Brick(const char* name, QColor color) {
     this->color = color;
-    functionName = QString(name);
+    this->name = QString(name);
 }
 
 void Brick::paint(QPainter* painter, QPoint origin) {
 
 }
 
-void Brick::addParam(Parameter param) {
+void Brick::addParam(Parameter* param) {
     params.append(param);
 }
 
@@ -24,10 +24,10 @@ QColor Brick::getColor() {
 
 int Brick::width() { 
     QFontMetrics fm(Util::font());
-    int funcNameWidth = fm.horizontalAdvance(functionName);
+    int funcNameWidth = fm.horizontalAdvance(name);
     int paramsWidth = 0;
     for (int i = 0; i < params.size(); i++) {
-        paramsWidth += params[i].size(Util::font()).width();
+        paramsWidth += params[i]->size(Util::font()).width();
     }
     int width = funcNameWidth + paramsWidth;
 
@@ -40,8 +40,12 @@ int Brick::height() {
     int height = BRICK_MIN_HEIGHT;
     QFontMetrics fm(Util::font());
     for (int i = 0; i < params.size(); i++) {
-        height = qMax(height, params[i].size(Util::font()).height());
+        height = qMax(height, params[i]->size(Util::font()).height());
     }
     height = qMax(height, fm.height());
     return height + 2*MARGIN;
+}
+
+QSize Brick::size() {
+    return QSize(width(), height());
 }

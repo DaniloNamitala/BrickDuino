@@ -27,8 +27,8 @@ Value::Value(int value) : Value(ValueType::INT, VALUE_COLOR) {
     this->value = (void*) new int(value);
 };
 
-Value::Value(float value) : Value(ValueType::FLOAT, VALUE_COLOR) { 
-    this->value = (void*) new float(value);
+Value::Value(double value) : Value(ValueType::DOUBLE, VALUE_COLOR) { 
+    this->value = (void*) new double(value);
 };
 
 Value::Value(bool value) : Value(ValueType::BOOL, VALUE_COLOR) { 
@@ -68,16 +68,10 @@ bool Value::isEmpty() {
     return value == NULL;
 }
 
-QSize Value::size() {
-    int width = Util::textSize(toString(), Util::font()).width() + 2*VALUE_MARGIN;
-    width = qMax(MIN_VALUE_WIDTH, width);
-    return QSize(width, MIN_VALUE_HEIGHT);
-}
-
 QString Value::toString() {
     switch (type) {
-        case ValueType::FLOAT:
-            return QString::number(*(float*)value);
+        case ValueType::DOUBLE:
+            return QString::number(*(double*)value);
         case ValueType::INT:
             return QString::number(*(int*)value);
         case ValueType::STRING:
@@ -92,3 +86,10 @@ QString Value::toString() {
 ValueType Value::getType() {
     return type;
 }
+
+QSize Value::size() {
+    int width = Util::textSize(toString(), Util::font()).width() + 2*VALUE_MARGIN;
+    width = qMax(MIN_VALUE_WIDTH, width);
+    return QSize(width, MIN_VALUE_HEIGHT);
+}
+

@@ -2,6 +2,7 @@
 
 #include <QtWidgets>
 #include <QtCore>
+#include "IBrick.h"
 
 #define MIN_VALUE_HEIGHT 20
 #define MIN_VALUE_WIDTH 40
@@ -11,13 +12,13 @@
 
 enum ValueType {
     INT,
-    FLOAT,
+    DOUBLE,
     STRING,
     BOOL,
     UNDEFINED
 };
 
-class Value {
+class Value : public IBrick {
 private:
     QColor color;
     ValueType type;
@@ -28,14 +29,13 @@ public:
     Value();
     Value(const char* value);
     Value(int value);
-    Value(float value);
+    Value(double value);
     Value(bool value);
     ValueType getType();
-    void paint(QPainter* painter, QPoint origin);
+    void paint(QPainter* painter, QPoint origin) override;
     bool isEmpty();
-    QSize size();
     QString toString();
+    QSize size() override;
 
-    
 };
 

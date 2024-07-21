@@ -13,10 +13,12 @@ class StatementBrick : public Brick
     private:
         QList<Brick*> bricks;
 
+    protected:
+        int height() override;
+        
     public:
         StatementBrick(const char* name, QColor color);
         void paint(QPainter* painter, QPoint origin) override;
-        int height() override;
         int headerHeight();
         QPoint getStatementOrigin();
 

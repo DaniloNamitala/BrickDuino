@@ -11,9 +11,11 @@ project ("BrickDuino")
 find_package(Qt6 REQUIRED COMPONENTS Widgets Core Gui)
 
 # Source code
-file(GLOB CPP_FILES Sources/*.cpp)
+file(GLOB CPP_FILES Sources/*.cpp Sources/Bricks/*.cpp)
 
 #include directories
+
+SET(INCLUDE_DIR_BRICKS "Headers/Bricks/")
 SET(INCLUDE_DIR "Headers/")
 SET(INCLUDE_DIR_EXCEPTION "Headers/Exception/")
 
@@ -27,6 +29,7 @@ endif()
 #include directories
 target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR})
 target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_EXCEPTION})
+target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_BRICKS})
 
 # libraries
 target_link_libraries(BrickDuino PRIVATE Qt6::Widgets)

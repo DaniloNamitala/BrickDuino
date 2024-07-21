@@ -41,14 +41,14 @@ void FunctionBrick::paint(QPainter *painter, QPoint origin) {
     painter->translate(origin);
     painter->drawPath(path);
 
-    int funcNameWidth = Util::textSize(functionName, Util::font()).width();
+    int funcNameWidth = Util::textSize(name, Util::font()).width();
     int x = MARGIN + funcNameWidth + MARGIN;
     
     for (int i = 0; i < params.size(); i++) {
-        params[i].paint(painter, QPoint(x, MARGIN));
-        x += params[i].size(Util::font()).width() + MARGIN;
+        params[i]->paint(painter, QPoint(x, MARGIN));
+        x += params[i]->size(Util::font()).width() + MARGIN;
     }
     painter->setPen(Util::textPen());
-    painter->drawText(MARGIN, MARGIN + Util::textSize(functionName, Util::font()).height(), functionName);
+    painter->drawText(MARGIN, MARGIN + Util::textSize(name, Util::font()).height(), name);
     painter->translate(-origin);
 }

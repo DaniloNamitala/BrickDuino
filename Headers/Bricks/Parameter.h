@@ -3,7 +3,6 @@
 #include <QtCore>
 #include <QtWidgets>
 #include "Value.h"
-#include "Value.h"
 
 #define MARGIN 8
 #define EMPTY_VALUE_WIDTH MIN_VALUE_WIDTH
@@ -15,7 +14,7 @@ class Parameter {
         QString textBefore;
         QString textAfter;
         ValueType type;
-        Value value;
+        Value* value;
         
     public:
         Parameter(ValueType type);
@@ -23,5 +22,5 @@ class Parameter {
         Parameter(QString textBefore, QString textAfter, ValueType type);
         QSize size(QFont font);
         void paint(QPainter* painter, QPoint origin);
-        void setValue(Value value);
+        void setValue(Value* value);
 };

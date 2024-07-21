@@ -7,8 +7,6 @@
 
 class FunctionBrick : public Brick
 {
-    private:
-
     public:
         FunctionBrick(const char* name, QColor color);
         void paint(QPainter* painter, QPoint origin) override;
