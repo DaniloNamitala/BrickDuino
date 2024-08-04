@@ -7,10 +7,8 @@
 
 class FunctionBrick : public Brick
 {
-    private:
-
     public:
-        FunctionBrick(const char* name, QColor color);
-        void paint(QPainter* painter, QPoint origin) override;
+        FunctionBrick(QWidget* parent, const char* name, QColor color);
+        void paintEvent(QPaintEvent* event) override;
 };
 

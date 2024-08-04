@@ -11,15 +11,18 @@
 class StatementBrick : public Brick
 {
     private:
-        QList<Brick*> bricks;
-
+        Brick* statementHead;
+    
+    
+        int statementHeight();
     public:
-        StatementBrick(const char* name, QColor color);
-        void paint(QPainter* painter, QPoint origin) override;
-        int height() override;
+        StatementBrick(QWidget* parent, const char* name, QColor color);
+        int getHeight() override;
         int headerHeight();
         QPoint getStatementOrigin();
-
-        void addBrick(Brick* brick);
+        void paintEvent(QPaintEvent* event) override;
+        void insertBrick(Brick* brick);
+        void removeBrick(Brick* brick);
+        void move(const QPoint &pos);
 };
 

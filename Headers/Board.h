@@ -13,7 +13,6 @@ class Board : public QWidget
         QList<Brick*> bricks;
     public:
         Board(QColor bgColor);
-
     protected:
         void paintEvent(QPaintEvent* event) override;
         void mouseMoveEvent(QMouseEvent* event) override;
