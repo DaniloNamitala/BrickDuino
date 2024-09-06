@@ -3,6 +3,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QCursor>
+#include "Shadow.h"
 #include "Util.h"
 
 StatementBrick::StatementBrick(QWidget* parent, const char* name, QColor color) : Brick(parent, name, color) {
@@ -109,6 +110,7 @@ void StatementBrick::insertBrick(Brick* brick) {
     QPoint p(pos().x() + BRACKET_WIDTH, pos().y() + headerHeight() + PIN_H);
     
     brick->setOwner(this);
+    brick->setZOrder(z_order + 1);
     brick->move(p);
     recalculateSize();
 }
@@ -119,4 +121,63 @@ void StatementBrick::move(const QPoint &pos) {
     QPoint p(pos.x() + BRACKET_WIDTH, pos.y() + headerHeight());
     if (statementHead != nullptr) 
         statementHead->move(p);
+}
+
+void StatementBrick::setZOrder(int z) {
+    Brick::setZOrder(z);
+    if (statementHead != nullptr)
+        statementHead->setZOrder(z+1);
+}
+
+void StatementBrick::removeShadow() {
+    if (shadow != nullptr) {
+
+        if (next == shadow) {
+            Brick* next = shadow->next;
+            dettach(shadow);
+            delete shadow;
+            shadow = nullptr;
+            attach(next);
+            return;
+        }
+
+        Brick* _next = shadow->next;
+        if (_next != nullptr)
+            insertBrick(_next);
+        else
+            removeBrick(shadow);
+
+        delete shadow;
+        shadow = nullptr;
+    }
+}
+
+void StatementBrick::makeShadow(QPoint pos) {
+    if (shadow != nullptr) return;
+    shadow = new Shadow(parentWidget());
+
+    QPoint _pos = this->pos();
+    QPoint _posBottom = this->pos();
+    _posBottom.setY(_posBottom.y() + getHeight());
+
+    if (abs(pos.y() - _pos.y()) < abs(pos.y() - _posBottom.y())) {
+        Brick* _oldHead = statementHead;
+        insertBrick(shadow);
+        shadow->attach(_oldHead);
+        return;
+    }
+    attach(shadow);
+}
+
+void StatementBrick::replaceShadow(Brick* brick) {
+    if (statementHead == shadow) {
+        Brick* _oldHead = statementHead->next;
+        removeShadow();
+        insertBrick(brick);
+
+        brick->tail()->attach(_oldHead);
+        return;
+    }
+
+    Brick::replaceShadow(brick);
 }

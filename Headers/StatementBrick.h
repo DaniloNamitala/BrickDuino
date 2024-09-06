@@ -24,5 +24,10 @@ class StatementBrick : public Brick
         void insertBrick(Brick* brick);
         void removeBrick(Brick* brick);
         void move(const QPoint &pos);
+        void setZOrder(int z);
+
+        void makeShadow(QPoint pos) override;
+        void removeShadow() override;
+        void replaceShadow(Brick* brick);
 };
 

@@ -4,6 +4,7 @@ Shadow::Shadow(QWidget* parent) : FunctionBrick(parent, "", QColor(0x5f5f5f)) {
     contourPen = QPen();
     color.setAlpha(0x6F);
     brush.setColor(color);
+    this->_isShadow = true;
     recalculateSize();
 }
 
