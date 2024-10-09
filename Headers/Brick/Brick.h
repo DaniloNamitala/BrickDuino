@@ -3,6 +3,7 @@
 #include <QtCore>
 #include <QtWidgets>
 #include "Parameter.h"
+#include "IPaintableBrick.h"
 
 #define MARGIN 8
 #define PIN_H 5
@@ -11,7 +12,7 @@
 #define CONTOUR_COLOR_DARKER 300
 
 class StatementBrick;
-class Brick : public QWidget
+class Brick : public QWidget, public IPaintableBrick
 {
     friend class StatementBrick;
     protected:
@@ -33,7 +34,6 @@ class Brick : public QWidget
         bool _isShadow;
         int z_order;
 
-        QColor getColor();
         void recalculateSize();
 
         void mouseMoveEvent(QMouseEvent* event) override;
@@ -43,6 +43,7 @@ class Brick : public QWidget
         Brick* getCloser();
     public:
         Brick(QWidget* parent, const char* name, QColor color);
+        Brick(const char* name, QColor color);
         ~Brick();
         void addParam(Parameter param);
         void setOwner(StatementBrick* owner);
@@ -62,5 +63,11 @@ class Brick : public QWidget
         virtual int getHeight();
         virtual void setZOrder(int z);
         virtual void move(const QPoint &pos);
+
+        QList<Parameter> getParams() override;
+        QPen getContourPen() override;
+        QColor getColor() override;
+        QString getName() override;
+        QWidget* getWidget() override;
 };
 

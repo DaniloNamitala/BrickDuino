@@ -4,6 +4,9 @@
 #include <QtWidgets>
 #include "Brick.h"
 
+
+#define BOARD_BACKGROUND_COLOR QColor(0x1B1B1B)
+
 class Board : public QWidget
 {   
     private:
@@ -20,3 +23,4 @@ class Board : public QWidget
         void paintEvent(QPaintEvent* event) override;
 
 };
+

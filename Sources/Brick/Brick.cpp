@@ -30,6 +30,8 @@ Brick::Brick(QWidget* parent, const char* name, QColor color)
     show();
 }
 
+Brick::Brick(const char* name, QColor color) : Brick(nullptr, name, color) { }
+
 void Brick::setColor(QColor color) {
     this->color = color;
     update();
@@ -184,7 +186,13 @@ void Brick::setOwner(StatementBrick* owner) {
 
 void Brick::recalculateSize() {
     int h = height();
-    resize(getWidth(), getHeight() + PIN_H);
+    int newW = getWidth();
+    int newH = getHeight() + PIN_H;
+
+    resize(newW, newH);
+    setMinimumSize(newW, newH);
+    setMaximumSize(newW, newH);
+
     if (owner != nullptr) {
         owner->recalculateSize();
     }
@@ -206,9 +214,14 @@ void Brick::move(const QPoint& pos) {
 }
 
 void Brick::setZOrder(int z) {
-    ((Board*)parentWidget())->setZOrder(this, z_order, z);
-    z_order = z;
-    if (next != nullptr) next->setZOrder(z);
+    if (Board* b = dynamic_cast<Board*>(parentWidget())) {
+        ((Board*)parentWidget())->setZOrder(this, z_order, z);
+        z_order = z;
+        if (next != nullptr) next->setZOrder(z);
+    }
+    else {
+        this->raise();
+    }
 }
 
 Brick* Brick::getCloser() {
@@ -223,3 +236,11 @@ Brick* Brick::getCloser() {
 Brick::~Brick() {
     ((Board*)parentWidget())->removeOrder(this, z_order);
 }
+
+QPen Brick::getContourPen() { return contourPen; }
+
+QList<Parameter> Brick::getParams() { return params; }
+
+QString Brick::getName() { return functionName; }
+
+QWidget* Brick::getWidget() { return (QWidget*) this; }

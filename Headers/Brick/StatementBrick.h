@@ -12,9 +12,8 @@ class StatementBrick : public Brick
 {
     private:
         Brick* statementHead;
-    
-    
         int statementHeight();
+        
     public:
         StatementBrick(QWidget* parent, const char* name, QColor color);
         int getHeight() override;
@@ -30,4 +29,3 @@ class StatementBrick : public Brick
         void removeShadow() override;
         void replaceShadow(Brick* brick);
 };
-
