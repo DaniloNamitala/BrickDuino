@@ -14,4 +14,5 @@ class IPaintableBrick {
     virtual void recalculateSize() = 0;
     virtual int getWidth() = 0;
     virtual int getHeight() = 0;
+    virtual int headerHeight() = 0;
 };

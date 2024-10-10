@@ -1,5 +1,4 @@
 #include "Parameter.h"
-#include "Brick.h"
 #include "Util.h"
 #include "TypeMatchException.h"
 

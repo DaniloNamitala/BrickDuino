@@ -1,4 +1,4 @@
-#include "Brick.h"
+#include "WorkspaceBrick.h"
 
 #include <QCursor>
 #include <QPainter>
@@ -9,14 +9,9 @@
 #include "StatementBrick.h"
 #include "Util.h"
 
-#include <iostream>
 
-Brick::Brick(QWidget* parent, const char* name, QColor color)
-    : QWidget(parent) {
+Workspace::Brick::Brick(QWidget* parent, const char* name, QColor color) : PaintableBrick(parent, name, color) {
     this->z_order = -1;
-    this->color = color;
-    this->contourPen = QPen(color.darker(CONTOUR_COLOR_DARKER));
-    this->functionName = QString(name);
     this->owner = nullptr;
     this->next = nullptr;
     this->previous = nullptr;
@@ -26,51 +21,19 @@ Brick::Brick(QWidget* parent, const char* name, QColor color)
 
     setMouseTracking(true);
     recalculateSize();
-    contourPen.setWidth(2);
     show();
 }
 
-Brick::Brick(const char* name, QColor color) : Brick(nullptr, name, color) { }
+Workspace::Brick::Brick(const char* name, QColor color) : Brick(nullptr, name, color) { }
 
-void Brick::setColor(QColor color) {
+void Workspace::Brick::setColor(QColor color) {
     this->color = color;
     update();
 }
 
-void Brick::addParam(Parameter param) {
-    params.append(param);
-    recalculateSize();
-}
+void Workspace::Brick::mousePressEvent(QMouseEvent* event) { mousePos = event->pos(); }
 
-QColor Brick::getColor() { return color; }
-
-int Brick::getWidth() {
-    QFontMetrics fm(Util::font());
-    int funcNameWidth = fm.horizontalAdvance(functionName);
-    int paramsWidth = 0;
-    for (int i = 0; i < params.size(); i++) {
-        paramsWidth += params[i].size(Util::font()).width();
-    }
-    int width = funcNameWidth + paramsWidth;
-
-    // margins between function name, parameters and the edges
-    width += params.size() * MARGIN + 2 * MARGIN;
-    return width;
-}
-
-int Brick::getHeight() {
-    int height = BRICK_MIN_HEIGHT;
-    QFontMetrics fm(Util::font());
-    for (int i = 0; i < params.size(); i++) {
-        height = qMax(height, params[i].size(Util::font()).height());
-    }
-    height = qMax(height, fm.height());
-    return height + 2 * MARGIN;
-}
-
-void Brick::mousePressEvent(QMouseEvent* event) { mousePos = event->pos(); }
-
-void Brick::mouseReleaseEvent(QMouseEvent* event) {
+void Workspace::Brick::mouseReleaseEvent(QMouseEvent* event) {
     setCursor(QCursor(Qt::OpenHandCursor));
     if (lastCloser != nullptr) {
         lastCloser->replaceShadow(this);
@@ -79,12 +42,12 @@ void Brick::mouseReleaseEvent(QMouseEvent* event) {
     setZOrder(0);
 }
 
-void Brick::replaceShadow(Brick* brick){
+void Workspace::Brick::replaceShadow(Workspace::Brick* brick){
     removeShadow();
     attach(brick);
 }
 
-void Brick::mouseMoveEvent(QMouseEvent* event) {
+void Workspace::Brick::mouseMoveEvent(QMouseEvent* event) {
     setCursor(QCursor(Qt::OpenHandCursor));
 
     if (event->buttons() & Qt::LeftButton) {
@@ -109,19 +72,19 @@ void Brick::mouseMoveEvent(QMouseEvent* event) {
         }
 
         if (owner != nullptr) {
-            ((StatementBrick*)owner)->removeBrick(this);
+            ((Workspace::StatementBrick*)owner)->removeBrick(this);
             setOwner(nullptr);
         }
     }
 }
 
-bool Brick::isShadow() {
+bool Workspace::Brick::isShadow() {
     return _isShadow;
 }
 
-void Brick::removeShadow() {
+void Workspace::Brick::removeShadow() {
     if (shadow != nullptr) {
-        Brick* next = shadow->next;
+        Workspace::Brick* next = shadow->next;
         dettach(shadow);
         delete shadow;
         shadow = nullptr;
@@ -129,22 +92,22 @@ void Brick::removeShadow() {
     }
 }
 
-void Brick::makeShadow(QPoint pos) {
+void Workspace::Brick::makeShadow(QPoint pos) {
     if (shadow != nullptr) return;
     shadow = new Shadow(parentWidget());
     attach(shadow);
 }
 
-void Brick::setPrevious(Brick* brick) { previous = brick; }
+void Workspace::Brick::setPrevious(Brick* brick) { previous = brick; }
 
-void Brick::setNext(Brick* brick) { this->next = brick; }
+void Workspace::Brick::setNext(Brick* brick) { this->next = brick; }
 
-Brick* Brick::tail() {
+Workspace::Brick* Workspace::Brick::tail() {
     if (next == nullptr) return this;
     return next->tail();
 }
 
-void Brick::attach(Brick* brick) {
+void Workspace::Brick::attach(Brick* brick) {
     if (brick == nullptr) return;
 
     if (next != nullptr) {
@@ -166,7 +129,7 @@ void Brick::attach(Brick* brick) {
     if (owner != nullptr) owner->recalculateSize();
 }
 
-void Brick::dettach(Brick* brick) {
+void Workspace::Brick::dettach(Brick* brick) {
     if (next != brick || brick == nullptr) return;
 
     this->setNext(nullptr);
@@ -179,23 +142,19 @@ void Brick::dettach(Brick* brick) {
     if (owner != nullptr) owner->recalculateSize();
 }
 
-void Brick::setOwner(StatementBrick* owner) {
+void Workspace::Brick::setOwner(StatementBrick* owner) {
     this->owner = owner;
     if (next != nullptr) next->setOwner(owner);
 }
 
-void Brick::recalculateSize() {
+void Workspace::Brick::recalculateSize() {
     int h = height();
-    int newW = getWidth();
-    int newH = getHeight() + PIN_H;
-
-    resize(newW, newH);
-    setMinimumSize(newW, newH);
-    setMaximumSize(newW, newH);
+    PaintableBrick::recalculateSize();
 
     if (owner != nullptr) {
         owner->recalculateSize();
     }
+
     if (h != height() && next != nullptr) {
         QPoint p = this->pos();
         p.setY(p.y() + this->height());
@@ -203,7 +162,7 @@ void Brick::recalculateSize() {
     }
 }
 
-void Brick::move(const QPoint& pos) {
+void Workspace::Brick::move(const QPoint& pos) {
     QPoint p(pos.x(), pos.y() - PIN_H);
     QWidget::move(p);
 
@@ -213,7 +172,7 @@ void Brick::move(const QPoint& pos) {
     }
 }
 
-void Brick::setZOrder(int z) {
+void Workspace::Brick::setZOrder(int z) {
     if (Board* b = dynamic_cast<Board*>(parentWidget())) {
         ((Board*)parentWidget())->setZOrder(this, z_order, z);
         z_order = z;
@@ -224,7 +183,7 @@ void Brick::setZOrder(int z) {
     }
 }
 
-Brick* Brick::getCloser() {
+Workspace::Brick* Workspace::Brick::getCloser() {
     QPoint point;
     point.setY(pos().y() - 15);
     point.setX(pos().x() + 2 * EDGE_RADIUS + PIN_H);
@@ -233,14 +192,6 @@ Brick* Brick::getCloser() {
     return nullptr;
 }
 
-Brick::~Brick() {
+Workspace::Brick::~Brick() {
     ((Board*)parentWidget())->removeOrder(this, z_order);
 }
-
-QPen Brick::getContourPen() { return contourPen; }
-
-QList<Parameter> Brick::getParams() { return params; }
-
-QString Brick::getName() { return functionName; }
-
-QWidget* Brick::getWidget() { return (QWidget*) this; }

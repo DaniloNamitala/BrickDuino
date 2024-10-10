@@ -1,22 +1,28 @@
-#include "ToolboxBrick.h"
+#include "PaintableBrick.h"
 #include "Util.h"
-#include "FunctionBrickPainter.h"
 
-ToolboxBrick::ToolboxBrick(const char* name, QColor color) : QWidget() {
+PaintableBrick::PaintableBrick(QWidget* parent, const char* name, QColor color): QWidget(parent) {
     this->color = color;
-    this->contourPen = QPen(color.darker(CONTOUR_COLOR_DARKER));
-    this->name = QString(name);
-    this->painter = new FunctionBrickPainter();
-
-    
-    contourPen.setWidth(2);
+    this->pen = QPen(color.darker(CONTOUR_COLOR_DARKER));
+    this->name = name;
+    pen.setWidth(2);
 }
 
-void ToolboxBrick::paintEvent(QPaintEvent* event) {
+QPen PaintableBrick::getContourPen() { return pen; }
+
+QList<Parameter> PaintableBrick::getParams() { return params; }
+
+QString PaintableBrick::getName() { return name; }
+
+QWidget* PaintableBrick::getWidget() { return (QWidget*) this; }
+
+QColor PaintableBrick::getColor() { return color; }
+
+void PaintableBrick::paintEvent(QPaintEvent* event) {
     painter->paint(this, event);
 }
 
-void ToolboxBrick::recalculateSize() {
+void PaintableBrick::recalculateSize() {
     int h = height();
     int newW = getWidth();
     int newH = getHeight() + PIN_H;
@@ -26,7 +32,7 @@ void ToolboxBrick::recalculateSize() {
     setMaximumSize(newW, newH);
 }
 
-int ToolboxBrick::getWidth() {
+int PaintableBrick::getWidth() {
     QFontMetrics fm(Util::font());
     int funcNameWidth = fm.horizontalAdvance(name);
     int paramsWidth = 0;
@@ -40,7 +46,7 @@ int ToolboxBrick::getWidth() {
     return width;
 }
 
-int ToolboxBrick::getHeight() {
+int PaintableBrick::getHeight() {
     int height = BRICK_MIN_HEIGHT;
     QFontMetrics fm(Util::font());
     for (int i = 0; i < params.size(); i++) {
@@ -50,17 +56,9 @@ int ToolboxBrick::getHeight() {
     return height + 2 * MARGIN;
 }
 
-void ToolboxBrick::addParam(Parameter param) {
+void PaintableBrick::addParam(Parameter param) {
     params.append(param);
     recalculateSize();
 }
 
-QPen ToolboxBrick::getContourPen() { return contourPen; }
-
-QList<Parameter> ToolboxBrick::getParams() { return params; }
-
-QString ToolboxBrick::getName() { return name; }
-
-QWidget* ToolboxBrick::getWidget() { return (QWidget*) this; }
-
-QColor ToolboxBrick::getColor() { return color; }
+int PaintableBrick::headerHeight() { return 0; }

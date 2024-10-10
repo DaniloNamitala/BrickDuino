@@ -1,7 +1,7 @@
 ﻿#include "BrickDuino.h"
 #include "Board.h"
 #include "ToolboxBrick.h"
-#include "StatementBrick.h"
+#include "ToolboxStatementBrick.h"
 #include "Spoiler.h"
 
 BrickDuino::BrickDuino(QWidget* parent) {
@@ -36,30 +36,28 @@ void BrickDuino::crteateBlockToolbox() {
     layout->setContentsMargins(0, 0, 0, 0);
     blockToolbox->setWidget(scrollArea); 
     
-    StatementBrick* b1 = new StatementBrick(nullptr, "SE", QColor(0, 128, 0));
-    b1->addParam(Parameter(ValueType::BOOL));
-
-    StatementBrick* b2 = new StatementBrick(nullptr, "ENQUANTO", QColor(0, 128, 0));
-    b2->addParam(Parameter(ValueType::BOOL));
-
-    StatementBrick* b3 = new StatementBrick(nullptr, "SWITCH", QColor(0, 128, 0));
-    b3->addParam(Parameter(ValueType::BOOL));
+    Toolbox::StatementBrick* b = new Toolbox::StatementBrick("ENQUANTO", QColor(128, 128, 0));
+    b->addParam(Parameter(ValueType::INT));
 
     Spoiler* spoiler = new Spoiler("Controle");
-    spoiler->addWidget(b1);
-    spoiler->addWidget(b2);
-    spoiler->addWidget(b3);
-
-    ToolboxBrick* B4 = new ToolboxBrick("ESCREVE", QColor(0, 128, 0));
-    B4->addParam(Parameter(ValueType::BOOL));
+    spoiler->addWidget(b);
 
     Spoiler* spoiler2 = new Spoiler("Saída");
-    spoiler2->addWidget(B4);
+     
+    Toolbox::Brick* b1 = new Toolbox::Brick("ESCREVE", QColor(0, 128, 0));
+    b1->addParam(Parameter(ValueType::BOOL));
+    spoiler2->addWidget(b1);
+
+    b1 = new Toolbox::Brick("FUNCAO 1", QColor(0, 128, 0));
+    b1->addParam(Parameter(ValueType::BOOL));
+    spoiler2->addWidget(b1);
+
+    b1 = new Toolbox::Brick("FUNCAO 2 TESTE COM NOME GRANDE", QColor(0, 128, 0));
+    b1->addParam(Parameter(ValueType::BOOL));
+    spoiler2->addWidget(b1);
 
     layout->addWidget(spoiler);
     layout->addWidget(spoiler2);
-
-
 }
 
 BrickDuino::~BrickDuino() {}

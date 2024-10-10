@@ -5,7 +5,7 @@
 #include "IPaintableBrick.h"
 #include "IPainter.h"
 
-class FunctionBrickPainter : public IPainter {
+class StatementBrickPainter : public IPainter {
     public:
         void paint(IPaintableBrick* brick, QPaintEvent* event) override;
 };

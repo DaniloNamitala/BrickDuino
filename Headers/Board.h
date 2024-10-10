@@ -2,7 +2,7 @@
 
 #include <QtCore>
 #include <QtWidgets>
-#include "Brick.h"
+#include "WorkspaceBrick.h"
 
 
 #define BOARD_BACKGROUND_COLOR QColor(0x1B1B1B)
@@ -14,7 +14,7 @@ class Board : public QWidget
         QPainter painter;
         QMap<int, QList<QWidget*>> zOrder;
 
-        QList<Brick*> bricks;
+        QList<Workspace::Brick*> bricks;
     public:
         Board(QColor bgColor);
         void setZOrder(QWidget* widget, int old_z, int new_z);

@@ -1,5 +1,6 @@
 #include "FunctionBrickPainter.h"
 #include "Util.h"
+#include "Parameter.h"
 
 void FunctionBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     QPainterPath path;
@@ -40,7 +41,7 @@ void FunctionBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     int funcNameWidth = Util::textSize(brick->getName(), Util::font()).width();
     int x = MARGIN + funcNameWidth + MARGIN;
     
-    auto params = brick->getParams();
+    QList<Parameter> params = brick->getParams();
     for (int i = 0; i < params.size(); i++) {
         params[i].paint(&painter, QPoint(x, MARGIN + PIN_H));
         x += params[i].size(Util::font()).width() + MARGIN;
