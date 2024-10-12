@@ -9,5 +9,5 @@ Workspace::Shadow::Shadow(QWidget* parent) : Workspace::FunctionBrick(parent, ""
 }
 
 int Workspace::Shadow::getWidth() {
-    return 10 * BRICK_MIN_HEIGHT;
+    return 4 * BRICK_MIN_HEIGHT;
 }

@@ -1,6 +1,6 @@
 ﻿#include "BrickDuino.h"
 #include "Board.h"
-#include "ToolboxBrick.h"
+#include "ToolboxFunctionBrick.h"
 #include "ToolboxStatementBrick.h"
 #include "Spoiler.h"
 
@@ -44,15 +44,18 @@ void BrickDuino::crteateBlockToolbox() {
 
     Spoiler* spoiler2 = new Spoiler("Saída");
      
-    Toolbox::Brick* b1 = new Toolbox::Brick("ESCREVE", QColor(0, 128, 0));
+    Toolbox::Brick* b1 = new Toolbox::FunctionBrick("ESCREVE", QColor(0, 128, 0));
+    b1->addParam(Parameter(ValueType::BOOL));
     b1->addParam(Parameter(ValueType::BOOL));
     spoiler2->addWidget(b1);
 
-    b1 = new Toolbox::Brick("FUNCAO 1", QColor(0, 128, 0));
+    b1 = new Toolbox::FunctionBrick("FUNCAO 1", QColor(0, 128, 0));
     b1->addParam(Parameter(ValueType::BOOL));
     spoiler2->addWidget(b1);
 
-    b1 = new Toolbox::Brick("FUNCAO 2 TESTE COM NOME GRANDE", QColor(0, 128, 0));
+    b1 = new Toolbox::FunctionBrick("FUNCAO 2 TESTE COM NOME GRANDE", QColor(0, 128, 0));
+    b1->addParam(Parameter(ValueType::BOOL));
+    b1->addParam(Parameter(ValueType::BOOL));
     b1->addParam(Parameter(ValueType::BOOL));
     spoiler2->addWidget(b1);
 

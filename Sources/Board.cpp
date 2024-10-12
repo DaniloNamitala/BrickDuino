@@ -4,11 +4,14 @@
 #include "Parameter.h"
 #include "Shadow.h"
 #include "StatementBrick.h"
+#include <iostream>
 
 
 Board::Board(QColor bgColor) {
     background = bgColor;
+    previewBrick = nullptr;
     setMouseTracking(true);
+    setAcceptDrops(true);
 }
 
 void Board::paintEvent(QPaintEvent* event) {
@@ -22,6 +25,44 @@ void Board::removeOrder(QWidget* widget, int z_order) {
         zOrder[z_order].removeAll(widget);
     }
 }
+
+void Board::dragLeaveEvent(QDragLeaveEvent *event) {
+    delete previewBrick;
+    previewBrick = nullptr;
+}
+
+void Board::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasFormat("application/x-brick") && previewBrick == nullptr) {
+        QByteArray data = event->mimeData()->data("application/x-brick");
+        QDataStream stream(&data, QIODevice::ReadOnly);
+        stream >> previewBrick;
+        previewBrick->setParent(this);
+        previewBrick->move(event->pos());
+        previewBrick->show();
+        bricks.append(previewBrick);
+        event->acceptProposedAction();
+    }
+}
+
+void Board::dragMoveEvent(QDragMoveEvent *event)
+{
+    if (previewBrick) {
+        previewBrick->moveBrick(event->pos());
+        event->accept();
+    }
+}
+
+
+void Board::dropEvent(QDropEvent *event)
+{
+    if (previewBrick == nullptr) return;
+
+    previewBrick->mouseReleaseEvent(nullptr);
+    previewBrick = nullptr;
+    event->acceptProposedAction();
+}
+
 
 void Board::setZOrder(QWidget* widget, int old_z, int new_z) {
     if (old_z == new_z) return;

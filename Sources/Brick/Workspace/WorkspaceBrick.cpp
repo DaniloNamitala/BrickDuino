@@ -8,7 +8,7 @@
 #include "Shadow.h"
 #include "StatementBrick.h"
 #include "Util.h"
-
+#include "ToolboxBrick.h"
 
 Workspace::Brick::Brick(QWidget* parent, const char* name, QColor color) : PaintableBrick(parent, name, color) {
     this->z_order = -1;
@@ -21,10 +21,34 @@ Workspace::Brick::Brick(QWidget* parent, const char* name, QColor color) : Paint
 
     setMouseTracking(true);
     recalculateSize();
-    show();
+    if (parent != nullptr)
+        show();
 }
 
 Workspace::Brick::Brick(const char* name, QColor color) : Brick(nullptr, name, color) { }
+
+namespace Workspace {
+    QDataStream & operator >> (QDataStream &in, Workspace::Brick* &c)
+    {
+        QString name;
+        Toolbox::BrickType type;
+        QColor color;
+        in >> name;
+        in >> type;
+        in >> color;
+
+        if (type == Toolbox::BrickType::FUNCTION) c = new Workspace::FunctionBrick(name.toStdString().c_str(), color);
+        else if (type == Toolbox::BrickType::STATEMENT) c = new Workspace::StatementBrick(name.toStdString().c_str(), color);
+        else c = new Workspace::FunctionBrick(name.toStdString().c_str(), color);
+        
+        Parameter param;
+        while (!in.atEnd()) {
+            in >> param;
+            c->addParam(param);
+        }
+        return in;
+    }
+}
 
 void Workspace::Brick::setColor(QColor color) {
     this->color = color;
@@ -47,34 +71,36 @@ void Workspace::Brick::replaceShadow(Workspace::Brick* brick){
     attach(brick);
 }
 
+void Workspace::Brick::moveBrick(QPoint newPos) {
+    setZOrder(INT32_MAX);
+    setCursor(QCursor(Qt::ClosedHandCursor));
+
+    if (previous != nullptr) previous->dettach(this);
+    move(newPos);
+    Brick* b = getCloser();
+    if (lastCloser != nullptr && b != lastCloser) {
+        lastCloser->removeShadow();
+    }
+    lastCloser = nullptr;
+    if (b != nullptr) {
+        if (!b->isShadow()) {
+            b->makeShadow(pos());
+            lastCloser = b;
+        }
+    }
+
+    if (owner != nullptr) {
+        ((Workspace::StatementBrick*)owner)->removeBrick(this);
+        setOwner(nullptr);
+    }
+}
+
 void Workspace::Brick::mouseMoveEvent(QMouseEvent* event) {
     setCursor(QCursor(Qt::OpenHandCursor));
 
     if (event->buttons() & Qt::LeftButton) {
-        setZOrder(INT32_MAX);
-        setCursor(QCursor(Qt::ClosedHandCursor));
         QPoint newPos = mapToParent(event->pos()) - mousePos;
-
-        if (previous != nullptr) previous->dettach(this);
-
-        move(newPos);
-
-        Brick* b = getCloser();
-        if (lastCloser != nullptr && b != lastCloser) {
-            lastCloser->removeShadow();
-        }
-        lastCloser = nullptr;
-        if (b != nullptr) {
-            if (!b->isShadow()) {
-                b->makeShadow(pos());
-                lastCloser = b;
-            }
-        }
-
-        if (owner != nullptr) {
-            ((Workspace::StatementBrick*)owner)->removeBrick(this);
-            setOwner(nullptr);
-        }
+        moveBrick(newPos);
     }
 }
 

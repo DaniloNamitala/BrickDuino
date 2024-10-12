@@ -12,3 +12,7 @@ int Toolbox::StatementBrick::getHeight() {
 int Toolbox::StatementBrick::headerHeight() {
     return Toolbox::Brick::getHeight();
 }
+
+Toolbox::BrickType Toolbox::StatementBrick::getType() {
+    return Toolbox::BrickType::STATEMENT;
+}

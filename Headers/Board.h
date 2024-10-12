@@ -15,12 +15,18 @@ class Board : public QWidget
         QMap<int, QList<QWidget*>> zOrder;
 
         QList<Workspace::Brick*> bricks;
+        Workspace::Brick* previewBrick;
     public:
         Board(QColor bgColor);
         void setZOrder(QWidget* widget, int old_z, int new_z);
         void removeOrder(QWidget* widget, int z_order);
     protected:
         void paintEvent(QPaintEvent* event) override;
+
+        void dragMoveEvent(QDragMoveEvent *event) override;
+        void dragEnterEvent(QDragEnterEvent *event) override;
+        void dropEvent(QDropEvent *event) override;
+        void dragLeaveEvent(QDragLeaveEvent *event) override;
 
 };
 

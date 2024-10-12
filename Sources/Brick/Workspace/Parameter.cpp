@@ -8,18 +8,28 @@ Parameter::Parameter(QString textBefore, QString textAfter, ValueType type) {
     this->type = type;
 }
 
-Parameter::Parameter(ValueType type) {
-    this->textBefore = "";
-    this->textAfter = "";
-    this->type = type;
+Parameter::Parameter(ValueType type) : Parameter("", "", type) { }
+
+Parameter::Parameter(QString textBefore, ValueType type) : Parameter(textBefore, "", type) { }
+
+Parameter::Parameter() : Parameter("", "", ValueType::UNDEFINED) { }
+
+QDataStream & operator << (QDataStream &out, const Parameter &c)
+{
+    out << c.textBefore;
+    out << c.textAfter;
+    out << c.type;
+    return out;
 }
 
-Parameter::Parameter(QString textBefore, ValueType type) {
-    this->textBefore = textBefore;
-    this->textAfter = "";
-    this->type = type;
+QDataStream & operator >> (QDataStream &in,  Parameter &c)
+{
+    in >> c.textBefore;
+    in >> c.textAfter;
+    in >> c.type;
+    return in;
 }
-
+ 
 QSize Parameter::size(QFont font) {
     int width = !value.isEmpty() ? value.size().width() : EMPTY_VALUE_WIDTH;
     QFontMetrics fm(font);
