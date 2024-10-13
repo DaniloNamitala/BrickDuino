@@ -11,7 +11,6 @@ namespace Workspace {
         public:
             FunctionBrick(QWidget* parent, const char* name, QColor color);
             FunctionBrick(const char* name, QColor color);
-            void paintEvent(QPaintEvent* event) override;
     };
 };
 

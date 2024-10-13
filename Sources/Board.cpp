@@ -84,3 +84,9 @@ void Board::setZOrder(QWidget* widget, int old_z, int new_z) {
         }
     }
 }
+
+Board::~Board() {
+    for (Workspace::Brick* brick : bricks) {
+        delete brick;
+    }
+}

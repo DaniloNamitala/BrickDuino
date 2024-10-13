@@ -6,8 +6,9 @@
 
 #include "Board.h"
 #include "Shadow.h"
-#include "StatementBrick.h"
 #include "Util.h"
+#include "StatementBrick.h"
+#include "ValueBrick.h"
 #include "ToolboxBrick.h"
 
 Workspace::Brick::Brick(QWidget* parent, const char* name, QColor color) : PaintableBrick(parent, name, color) {
@@ -37,9 +38,14 @@ namespace Workspace {
         in >> type;
         in >> color;
 
-        if (type == Toolbox::BrickType::FUNCTION) c = new Workspace::FunctionBrick(name.toStdString().c_str(), color);
-        else if (type == Toolbox::BrickType::STATEMENT) c = new Workspace::StatementBrick(name.toStdString().c_str(), color);
-        else c = new Workspace::FunctionBrick(name.toStdString().c_str(), color);
+        if (type == Toolbox::BrickType::FUNCTION) 
+            c = new Workspace::FunctionBrick(name.toStdString().c_str(), color);
+        else if (type == Toolbox::BrickType::STATEMENT) 
+            c = new Workspace::StatementBrick(name.toStdString().c_str(), color);
+        else if (type == Toolbox::BrickType::VALUE || type == Toolbox::BrickType::BINARY_OPERATOR) 
+            c = new Workspace::ValueBrick(name.toStdString().c_str(), color, type == Toolbox::BrickType::BINARY_OPERATOR);
+        else 
+            c = new Workspace::FunctionBrick(name.toStdString().c_str(), color);
         
         Parameter param;
         while (!in.atEnd()) {

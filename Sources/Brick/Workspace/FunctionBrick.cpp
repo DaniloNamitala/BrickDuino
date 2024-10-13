@@ -11,7 +11,3 @@ Workspace::FunctionBrick::FunctionBrick(QWidget* parent, const char* name, QColo
 }
 
 Workspace::FunctionBrick::FunctionBrick(const char* name, QColor color) : FunctionBrick(nullptr, name, color) { }
-
-void Workspace::FunctionBrick::paintEvent(QPaintEvent* event) {
-    painter->paint(this, event);
-}

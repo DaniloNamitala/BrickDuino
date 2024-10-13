@@ -2,6 +2,7 @@
 #include "Board.h"
 #include "ToolboxFunctionBrick.h"
 #include "ToolboxStatementBrick.h"
+#include "ToolboxValueBrick.h"
 #include "Spoiler.h"
 
 BrickDuino::BrickDuino(QWidget* parent) {
@@ -50,11 +51,10 @@ void BrickDuino::crteateBlockToolbox() {
     spoiler2->addWidget(b1);
 
     b1 = new Toolbox::FunctionBrick("FUNCAO 1", QColor(0, 128, 0));
-    b1->addParam(Parameter(ValueType::BOOL));
+    b1->addParam(Parameter("de", "ate", ValueType::BOOL));
     spoiler2->addWidget(b1);
 
-    b1 = new Toolbox::FunctionBrick("FUNCAO 2 TESTE COM NOME GRANDE", QColor(0, 128, 0));
-    b1->addParam(Parameter(ValueType::BOOL));
+    b1 = new Toolbox::ValueBrick("+", QColor(0, 128, 128), true);
     b1->addParam(Parameter(ValueType::BOOL));
     b1->addParam(Parameter(ValueType::BOOL));
     spoiler2->addWidget(b1);

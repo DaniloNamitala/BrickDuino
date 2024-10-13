@@ -18,8 +18,10 @@ class Board : public QWidget
         Workspace::Brick* previewBrick;
     public:
         Board(QColor bgColor);
+        ~Board();
         void setZOrder(QWidget* widget, int old_z, int new_z);
         void removeOrder(QWidget* widget, int z_order);
+
     protected:
         void paintEvent(QPaintEvent* event) override;
 

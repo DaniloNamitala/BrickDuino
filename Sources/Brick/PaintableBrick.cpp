@@ -23,7 +23,6 @@ void PaintableBrick::paintEvent(QPaintEvent* event) {
 }
 
 void PaintableBrick::recalculateSize() {
-    int h = height();
     int newW = getWidth();
     int newH = getHeight() + PIN_H;
 
