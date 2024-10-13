@@ -6,6 +6,7 @@
 Toolbox::ValueBrick::ValueBrick(const char* name, QColor color, bool binary) : Toolbox::Brick(name, color) {
     this->binary = binary;
     this->painter = binary ? (IPainter*)new BinaryOperatorPainter() : (IPainter*)new ValueBrickPainter();
+    recalculateSize();
 }
 
 Toolbox::BrickType Toolbox::ValueBrick::getType() {

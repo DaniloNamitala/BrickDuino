@@ -14,7 +14,7 @@ enum ValueType {
     FLOAT,
     STRING,
     BOOL,
-    UNDEFINED
+    ANY
 };
 
 class Value {

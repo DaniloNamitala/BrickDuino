@@ -6,6 +6,7 @@ PaintableBrick::PaintableBrick(QWidget* parent, const char* name, QColor color):
     this->pen = QPen(color.darker(CONTOUR_COLOR_DARKER));
     this->name = name;
     pen.setWidth(2);
+    recalculateSize();
 }
 
 QPen PaintableBrick::getContourPen() { return pen; }

@@ -12,7 +12,7 @@ Parameter::Parameter(ValueType type) : Parameter("", "", type) { }
 
 Parameter::Parameter(QString textBefore, ValueType type) : Parameter(textBefore, "", type) { }
 
-Parameter::Parameter() : Parameter("", "", ValueType::UNDEFINED) { }
+Parameter::Parameter() : Parameter("", "", ValueType::ANY) { }
 
 QDataStream & operator << (QDataStream &out, const Parameter &c)
 {

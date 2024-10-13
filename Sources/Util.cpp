@@ -22,5 +22,5 @@ QPen Util::textPen() {
 }
 
 QFont Util::font() {
-    return QFont("Arial", 10, QFont::Bold, false);
+    return QFont("Cascadia Code", 10, QFont::Bold, false);
 }

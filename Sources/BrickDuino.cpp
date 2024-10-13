@@ -36,31 +36,66 @@ void BrickDuino::crteateBlockToolbox() {
     layout->setAlignment(Qt::AlignTop);
     layout->setContentsMargins(0, 0, 0, 0);
     blockToolbox->setWidget(scrollArea); 
-    
-    Toolbox::StatementBrick* b = new Toolbox::StatementBrick("ENQUANTO", QColor(128, 128, 0));
-    b->addParam(Parameter(ValueType::INT));
 
-    Spoiler* spoiler = new Spoiler("Controle");
-    spoiler->addWidget(b);
+    loadBlocksFromJson("D:/Projetos/TCC/BrickDuino/Blocks.simple.json", layout);
+}
 
-    Spoiler* spoiler2 = new Spoiler("Saída");
-     
-    Toolbox::Brick* b1 = new Toolbox::FunctionBrick("ESCREVE", QColor(0, 128, 0));
-    b1->addParam(Parameter(ValueType::BOOL));
-    b1->addParam(Parameter(ValueType::BOOL));
-    spoiler2->addWidget(b1);
+void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
+    _fileName = path;
 
-    b1 = new Toolbox::FunctionBrick("FUNCAO 1", QColor(0, 128, 0));
-    b1->addParam(Parameter("de", "ate", ValueType::BOOL));
-    spoiler2->addWidget(b1);
+    // Opening and reading file content in buffer
+    _file.setFileName(_fileName);
+    _file.open(QIODevice::ReadOnly | QIODevice::Text);
+    _fileBuffer = _file.readAll();
+    _file.close();
 
-    b1 = new Toolbox::ValueBrick("+", QColor(0, 128, 128), true);
-    b1->addParam(Parameter(ValueType::BOOL));
-    b1->addParam(Parameter(ValueType::BOOL));
-    spoiler2->addWidget(b1);
+    // Parsing buffer to json objects
+    _document = QJsonDocument::fromJson(_fileBuffer.toUtf8());
+    _documentMap = _document.object().toVariantMap();
 
-    layout->addWidget(spoiler);
-    layout->addWidget(spoiler2);
+    // Getting blocks from json
+    QVariantList spoilers = _documentMap["spoilers"].toList();
+    for (QVariant spoiler : spoilers) {
+        QVariantMap spoilerMap = spoiler.toMap();
+        Spoiler* s = new Spoiler(spoilerMap["name"].toString());
+        QString str_color = spoilerMap["color"].toString();
+        QColor color = QColor(str_color);
+
+        QVariantList bricks = spoilerMap["bricks"].toList();
+        for (QVariant brick : bricks) {
+            QVariantMap brickMap = brick.toMap();
+            Toolbox::Brick* b = nullptr;
+            if (brickMap["type"].toString() == "STATEMENT") {
+                b = new Toolbox::StatementBrick(brickMap["message"].toString().toStdString().c_str(), color);
+            } else if (brickMap["type"].toString() == "FUNCTION") {
+                b = new Toolbox::FunctionBrick(brickMap["message"].toString().toStdString().c_str(), color);
+            } else if (brickMap["type"].toString() == "VALUE" || brickMap["type"].toString() == "BINARY_OPERATOR") {
+                b = new Toolbox::ValueBrick(brickMap["message"].toString().toStdString().c_str(), color, brickMap["type"].toString() == "BINARY_OPERATOR");
+            }
+
+            QVariantList params = brickMap["args"].toList();
+            for (QVariant param : params) {
+                QVariantMap paramMap = param.toMap();
+                ValueType type = ValueType::ANY;
+                if (paramMap["type"].toString() == "INT") {
+                    type = ValueType::INT;
+                } else if (paramMap["type"].toString() == "FLOAT") {
+                    type = ValueType::FLOAT;
+                } else if (paramMap["type"].toString() == "STRING") {
+                    type = ValueType::STRING;
+                } else if (paramMap["type"].toString() == "BOOL") {
+                    type = ValueType::BOOL;
+                }
+                Parameter p(type);
+                b->addParam(p);
+            }
+
+            if (b != nullptr)
+                s->addWidget(b);
+            
+        }
+        layout->addWidget(s);
+    }
 }
 
 BrickDuino::~BrickDuino() {}

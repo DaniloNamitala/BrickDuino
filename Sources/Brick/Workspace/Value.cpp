@@ -14,7 +14,7 @@ Value::Value(ValueType type, QColor color) {
 }
 
 Value::Value() {
-    this->type = ValueType::UNDEFINED;
+    this->type = ValueType::ANY;
     this->color = VALUE_COLOR;
     this->value = NULL;
 }
