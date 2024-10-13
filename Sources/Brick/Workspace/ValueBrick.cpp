@@ -9,7 +9,7 @@
 
 Workspace::ValueBrick::ValueBrick(QWidget* parent, const char* name, QColor color, bool binary) : Workspace::Brick(parent, name, color) { 
     this->binary = binary;
-    this->painter = binary ? (IPainter*)new BinaryOperatorPainter() : (IPainter*)new ValueBrickPainter();
+    this->painter = new ValueBrickPainter();
     recalculateSize();
 }
 

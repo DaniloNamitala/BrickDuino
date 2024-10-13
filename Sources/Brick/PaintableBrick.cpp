@@ -34,15 +34,22 @@ void PaintableBrick::recalculateSize() {
 
 int PaintableBrick::getWidth() {
     QFontMetrics fm(Util::font());
-    int funcNameWidth = fm.horizontalAdvance(name);
-    int paramsWidth = 0;
-    for (int i = 0; i < params.size(); i++) {
-        paramsWidth += params[i].size(Util::font()).width();
-    }
-    int width = funcNameWidth + paramsWidth;
+    
+    QRegularExpression re("(%[0-9]+)|([a-zA-Z0-9,\\.<>= ]+)");
+    QRegularExpressionMatchIterator i = re.globalMatch(getName());
 
-    // margins between function name, parameters and the edges
-    width += params.size() * MARGIN + 2 * MARGIN;
+    int width = MARGIN;
+    int pos = 0;
+    while (i.hasNext()) {
+        QRegularExpressionMatch match = i.next();
+        if (match.captured(1).length() > 0) {
+            if (params.count() > pos)
+                width += params[pos++].size(Util::font()).width() + MARGIN;
+        } else if (match.captured(2).length() > 0) {
+            QString txt = match.captured(2).trimmed();
+            width += fm.horizontalAdvance(txt) + MARGIN;
+        }
+    }
     return width;
 }
 

@@ -1,5 +1,6 @@
 #include "ValueBrickPainter.h"
 #include "Util.h"
+#include <QRegularExpression>
 
 void ValueBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     QPainterPath path;
@@ -24,17 +25,24 @@ void ValueBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     painter.setRenderHint(QPainter::Antialiasing);
     painter.drawPath(path);
 
-    int funcNameWidth = Util::textSize(brick->getName(), Util::font()).width();
-    int x = MARGIN + funcNameWidth + MARGIN;
-    
+    QRegularExpression re("(%[0-9]+)|([a-zA-Z0-9,\\.<>=\\+\\-\\*%/]+)");
+    QRegularExpressionMatchIterator i = re.globalMatch(brick->getName());
+
+    int x = MARGIN;
+    int pos = 0;
     QList<Parameter> params = brick->getParams();
-    for (int i = 0; i < params.size(); i++) {
-        params[i].paint(&painter, QPoint(x, VALUE_BRICK_MARGIN));
-        x += params[i].size(Util::font()).width() + MARGIN;
+    while (i.hasNext()) {
+        QRegularExpressionMatch match = i.next();
+        if (match.captured(1).length() > 0) {
+            painter.setPen(pen);
+            params[pos].paint(&painter, QPoint(x, VALUE_BRICK_MARGIN));
+            x += params[pos++].size(Util::font()).width() + MARGIN;
+        } else if (match.captured(2).length() > 0) {
+            QString txt = match.captured(2).trimmed();
+            painter.setPen(Util::textPen());
+            painter.drawText(x, VALUE_BRICK_MARGIN + Util::textSize(txt, Util::font()).height(), txt);
+            x += Util::textSize(txt, Util::font()).width() + MARGIN;
+        }
     }
-
-    painter.setPen(Util::textPen());
-    painter.drawText(MARGIN, VALUE_BRICK_MARGIN + Util::textSize(brick->getName(), Util::font()).height(), brick->getName());
-
     painter.end();
 }

@@ -2,8 +2,8 @@
 #include <QPropertyAnimation>
 #include <QStyleFactory>
 
-Spoiler::Spoiler(const QString & title, QWidget *parent) : QWidget(parent) {
-    toggleButton.setStyleSheet("QToolButton { border: none; background-color: #1b1b1b; color: white; }");
+Spoiler::Spoiler(const QString & title, QString color, QWidget *parent) : QWidget(parent) {
+    toggleButton.setStyleSheet("QToolButton { border: none; background-color:"+ color +"; color: white; font-size: 15px }");
     toggleButton.setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toggleButton.setArrowType(Qt::ArrowType::RightArrow);
     toggleButton.setText(title);

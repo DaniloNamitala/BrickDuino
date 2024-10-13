@@ -37,7 +37,7 @@ void BrickDuino::crteateBlockToolbox() {
     layout->setContentsMargins(0, 0, 0, 0);
     blockToolbox->setWidget(scrollArea); 
 
-    loadBlocksFromJson("D:/Projetos/TCC/BrickDuino/Blocks.simple.json", layout);
+    loadBlocksFromJson("D:/Projetos/TCC/BrickDuino/Blocks.json", layout);
 }
 
 void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
@@ -57,8 +57,8 @@ void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
     QVariantList spoilers = _documentMap["spoilers"].toList();
     for (QVariant spoiler : spoilers) {
         QVariantMap spoilerMap = spoiler.toMap();
-        Spoiler* s = new Spoiler(spoilerMap["name"].toString());
         QString str_color = spoilerMap["color"].toString();
+        Spoiler* s = new Spoiler(spoilerMap["name"].toString(), str_color);
         QColor color = QColor(str_color);
 
         QVariantList bricks = spoilerMap["bricks"].toList();

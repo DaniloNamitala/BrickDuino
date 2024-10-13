@@ -11,6 +11,6 @@ private:
     QToolButton toggleButton;
     QWidget contentArea;
 public:
-    explicit Spoiler(const QString & title = "Teste", QWidget *parent = 0);
+    explicit Spoiler(const QString & title = "Teste", QString color = "", QWidget *parent = 0);
     void addWidget(QWidget* widget);
 };

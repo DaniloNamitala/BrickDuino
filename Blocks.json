@@ -2,19 +2,19 @@
     "spoilers": [
         {
             "name": "ENTRADA",
-            "color": "#FFD700",
+            "color": "#82101b", 
             "bricks": [
                 {
                     "name": "prnumber_input",	
                     "type": "VALUE",
-                    "message": "LER fasda asd ",
+                    "message": "LER",
                     "output": "any"
                 }
             ]
         },
         {
             "name": "SAÍDA",
-            "color": "#FFD700",
+            "color": "#4e03fc",
             "bricks": [
                 {
                     "name": "prnumber_output",
@@ -31,12 +31,12 @@
         },
         {
             "name": "CONTROLE",
-            "color": "#FFD700",
+            "color": "#b35702",
             "bricks": [
                 {
                     "name": "for_statement",
                     "type": "STATEMENT",
-                    "message": "PARA i DE %1 ATÉ %2, INCREMENTANDO %3",
+                    "message": "PARA i DE %1 ATE %2, INCREMENTANDO %3",
                     "args": [
                         {
                             "name": "start",
@@ -100,7 +100,7 @@
         },
         {
             "name": "LOGICA",
-            "color": "#FFD700",
+            "color": "#1d8210",
             "bricks": [
                 {
                     "name": "and_operator",
@@ -137,7 +137,7 @@
                 {
                     "name": "not_operator",
                     "type": "BINARY_OPERATOR",
-                    "message": "NÃO %1",
+                    "message": "NAO %1",
                     "args": [
                         {
                             "name": "value",
@@ -246,7 +246,7 @@
         },
         {
             "name": "MATEMATICA",
-            "color": "#FFD700",
+            "color": "#107882",
             "bricks": [
                 {
                     "name": "add_operator",
