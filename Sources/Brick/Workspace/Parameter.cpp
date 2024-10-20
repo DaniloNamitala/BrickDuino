@@ -2,44 +2,20 @@
 #include "Util.h"
 #include "TypeMatchException.h"
 
-Parameter::Parameter(QString textBefore, QString textAfter, ValueType type) {
-    this->textBefore = textBefore;
-    this->textAfter = textAfter;
+Parameter::Parameter(ValueType type) {
     this->type = type;
 }
 
-Parameter::Parameter(ValueType type) : Parameter("", "", type) { }
+Parameter::Parameter() : Parameter(ValueType::ANY) { }
 
-Parameter::Parameter(QString textBefore, ValueType type) : Parameter(textBefore, "", type) { }
-
-Parameter::Parameter() : Parameter("", "", ValueType::ANY) { }
-
-QDataStream & operator << (QDataStream &out, const Parameter &c)
-{
-    out << c.textBefore;
-    out << c.textAfter;
-    out << c.type;
-    return out;
-}
-
-QDataStream & operator >> (QDataStream &in,  Parameter &c)
-{
-    in >> c.textBefore;
-    in >> c.textAfter;
-    in >> c.type;
-    return in;
+ValueType Parameter::getType() {
+    return type;
 }
  
 QSize Parameter::size(QFont font) {
     int width = !value.isEmpty() ? value.size().width() : EMPTY_VALUE_WIDTH;
     QFontMetrics fm(font);
-    if (!textBefore.isEmpty()) width +=  fm.horizontalAdvance(textBefore) + MARGIN;
-    if (!textAfter.isEmpty()) width +=  fm.horizontalAdvance(textAfter) + MARGIN;
-
     int height = !value.isEmpty() ? value.size().height() : EMPTY_VALUE_HEIGHT;
-    if (!textBefore.isEmpty() || !textAfter.isEmpty())
-        height = qMax(height, fm.height());
-        
     return QSize(width, height);
 }
 
@@ -49,14 +25,6 @@ void Parameter::paint(QPainter* painter, QPoint origin) {
 
     QPainterPath path2;
     int x = 0;
-
-    if (!textBefore.isEmpty()) {
-        x = Util::textSize(textBefore, Util::font()).width() + MARGIN;
-        painter->save();
-        painter->setPen(Util::textPen());
-        painter->drawText(0, 0 + Util::textSize(textBefore, Util::font()).height(), textBefore);
-        painter->restore();
-    }
 
     if (value.isEmpty()) {
         path2.moveTo(x + (EMPTY_VALUE_HEIGHT / 2) , 0);
@@ -69,16 +37,6 @@ void Parameter::paint(QPainter* painter, QPoint origin) {
         painter->drawPath(path2);
     } else {
         value.paint(painter, QPoint(x, 0));
-    }
-
-
-
-    if (!textAfter.isEmpty()) {
-        x += EMPTY_VALUE_WIDTH + MARGIN;
-        painter->save();
-        painter->setPen(Util::textPen());
-        painter->drawText(x, 0 + Util::textSize(textAfter, Util::font()).height(), textAfter);
-        painter->restore();
     }
     
     painter->translate(-origin);

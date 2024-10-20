@@ -21,7 +21,7 @@ void Toolbox::Brick::mousePressEvent(QMouseEvent* event) {
         stream << getType();
         stream << color;
         for (Parameter param : this->getParams()) {
-            stream << param;
+            stream << param.getType();
         }
 
         mimeData->setData("application/x-brick", data);

@@ -14,19 +14,13 @@
 
 class Parameter {
     private:
-        QString textBefore;
-        QString textAfter;
         ValueType type;
         Value value;
-        
     public:
         Parameter();
         Parameter(ValueType type);
-        Parameter(QString textBefore, ValueType type);
-        Parameter(QString textBefore, QString textAfter, ValueType type);
         QSize size(QFont font);
         void paint(QPainter* painter, QPoint origin);
         void setValue(Value value);
-        friend QDataStream & operator << (QDataStream &out, const Parameter &c);
-        friend QDataStream & operator >> (QDataStream &in,  Parameter &c);
+        ValueType getType();
 };

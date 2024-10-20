@@ -47,10 +47,10 @@ namespace Workspace {
         else 
             c = new Workspace::FunctionBrick(name.toStdString().c_str(), color);
         
-        Parameter param;
+        ValueType p_type;
         while (!in.atEnd()) {
-            in >> param;
-            c->addParam(param);
+            in >> p_type;
+            c->addParam(Parameter(p_type));
         }
         return in;
     }
