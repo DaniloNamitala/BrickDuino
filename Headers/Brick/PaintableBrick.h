@@ -8,6 +8,7 @@
 class PaintableBrick : public IPaintableBrick, public QWidget {
 protected:
     QList<Parameter> params;
+    QList<Statement> statements;
     QPen pen;
     QColor color;
     QString name;
@@ -25,6 +26,7 @@ public:
     QColor getColor() override;
     QString getName() override;
     QWidget* getWidget() override;
+    QList<Statement> getStatements() override;
     int headerHeight() override;
 
     void addParam(Parameter param);

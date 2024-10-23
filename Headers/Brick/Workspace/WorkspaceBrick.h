@@ -40,6 +40,7 @@ namespace Workspace {
         void setOwner(StatementBrick* owner);
         void setPrevious(Brick* brick);
         void setNext(Brick* brick);
+        Brick* getNext();
         void attach(Brick* brick);
         void dettach(Brick* brick);
         void setColor(QColor color);

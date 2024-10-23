@@ -37,7 +37,7 @@ void BrickDuino::crteateBlockToolbox() {
     layout->setContentsMargins(0, 0, 0, 0);
     blockToolbox->setWidget(scrollArea); 
 
-    loadBlocksFromJson("D:/Projetos/TCC/BrickDuino/Blocks.json", layout);
+    loadBlocksFromJson("D:/Projetos/TCC/BrickDuino/Blocks.simple.json", layout);
 }
 
 void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {

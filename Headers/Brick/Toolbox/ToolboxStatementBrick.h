@@ -3,6 +3,7 @@
 #include <QtCore>
 #include <QtWidgets>
 #include "ToolboxBrick.h"
+#include "Statement.h"
 
 namespace Toolbox {
     class StatementBrick : public Toolbox::Brick {

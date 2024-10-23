@@ -13,6 +13,8 @@ QPen PaintableBrick::getContourPen() { return pen; }
 
 QList<Parameter> PaintableBrick::getParams() { return params; }
 
+QList<Statement> PaintableBrick::getStatements() { return statements; }
+
 QString PaintableBrick::getName() { return name; }
 
 QWidget* PaintableBrick::getWidget() { return (QWidget*) this; }

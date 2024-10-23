@@ -4,8 +4,10 @@
 #include <QtWidgets>
 #include "Parameter.h"
 #include "WorkspaceBrick.h"	
+#include "Statement.h"
 
 namespace Workspace {
+
     class StatementBrick : public Workspace::Brick
     {
         private:

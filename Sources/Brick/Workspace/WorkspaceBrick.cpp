@@ -61,6 +61,8 @@ void Workspace::Brick::setColor(QColor color) {
     update();
 }
 
+Workspace::Brick* Workspace::Brick::getNext() { return next; }
+
 void Workspace::Brick::mousePressEvent(QMouseEvent* event) { mousePos = event->pos(); }
 
 void Workspace::Brick::mouseReleaseEvent(QMouseEvent* event) {

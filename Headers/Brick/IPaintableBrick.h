@@ -2,6 +2,7 @@
 #include <QtWidgets>
 #include <QtCore>
 #include "Parameter.h"
+#include "Statement.h"
 
 class IPaintableBrick {
    public:
@@ -10,6 +11,7 @@ class IPaintableBrick {
     virtual QColor getColor() = 0;
     virtual QString getName() = 0;
     virtual QWidget* getWidget() = 0;
+    virtual QList<Statement> getStatements() = 0;
     
     virtual void recalculateSize() = 0;
     virtual int getWidth() = 0;
