@@ -8,8 +8,7 @@ namespace Toolbox {
     enum BrickType {
         FUNCTION,
         STATEMENT,
-        VALUE,
-        BINARY_OPERATOR
+        VALUE
     };
     class Brick : public PaintableBrick {
         public:

@@ -11,10 +11,9 @@ namespace Workspace {
         protected:
             int getHeight() override;
             void recalculateSize() override;
-            bool binary;
         public:
-            ValueBrick(QWidget* parent, const char* name, QColor color, bool binary = false);
-            ValueBrick(const char* name, QColor color, bool binary = false);
+            ValueBrick(QWidget* parent, const char* name, QColor color);
+            ValueBrick(const char* name, QColor color);
     };
 };
 

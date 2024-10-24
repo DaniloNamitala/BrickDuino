@@ -42,15 +42,17 @@ namespace Workspace {
             c = new Workspace::FunctionBrick(name.toStdString().c_str(), color);
         else if (type == Toolbox::BrickType::STATEMENT) 
             c = new Workspace::StatementBrick(name.toStdString().c_str(), color);
-        else if (type == Toolbox::BrickType::VALUE || type == Toolbox::BrickType::BINARY_OPERATOR) 
-            c = new Workspace::ValueBrick(name.toStdString().c_str(), color, type == Toolbox::BrickType::BINARY_OPERATOR);
+        else if (type == Toolbox::BrickType::VALUE) 
+            c = new Workspace::ValueBrick(name.toStdString().c_str(), color);
         else 
-            c = new Workspace::FunctionBrick(name.toStdString().c_str(), color);
+            c = nullptr;
         
-        ValueType p_type;
-        while (!in.atEnd()) {
-            in >> p_type;
-            c->addParam(Parameter(p_type));
+        if (c != nullptr) {
+            ValueType p_type;
+            while (!in.atEnd()) {
+                in >> p_type;
+                c->addParam(Parameter(p_type));
+            }
         }
         return in;
     }

@@ -9,6 +9,7 @@ class PaintableBrick : public IPaintableBrick, public QWidget {
 protected:
     QList<Parameter> params;
     QList<Statement> statements;
+    QList<QString> lines;
     QPen pen;
     QColor color;
     QString name;
@@ -25,9 +26,10 @@ public:
     QPen getContourPen() override;
     QColor getColor() override;
     QString getName() override;
+    QList<QString> getLines() override;
     QWidget* getWidget() override;
     QList<Statement> getStatements() override;
-    int headerHeight() override;
+    QSize headerSize(int index = 0) override;
 
     void addParam(Parameter param);
     void paintEvent(QPaintEvent* event) override;

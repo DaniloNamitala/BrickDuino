@@ -37,7 +37,7 @@ void BrickDuino::crteateBlockToolbox() {
     layout->setContentsMargins(0, 0, 0, 0);
     blockToolbox->setWidget(scrollArea); 
 
-    loadBlocksFromJson("D:/Projetos/TCC/BrickDuino/Blocks.simple.json", layout);
+    loadBlocksFromJson("D:/Projetos/TCC/BrickDuino/Blocks.json", layout);
 }
 
 void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
@@ -69,8 +69,8 @@ void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
                 b = new Toolbox::StatementBrick(brickMap["message"].toString().toStdString().c_str(), color);
             } else if (brickMap["type"].toString() == "FUNCTION") {
                 b = new Toolbox::FunctionBrick(brickMap["message"].toString().toStdString().c_str(), color);
-            } else if (brickMap["type"].toString() == "VALUE" || brickMap["type"].toString() == "BINARY_OPERATOR") {
-                b = new Toolbox::ValueBrick(brickMap["message"].toString().toStdString().c_str(), color, brickMap["type"].toString() == "BINARY_OPERATOR");
+            } else if (brickMap["type"].toString() == "VALUE") {
+                b = new Toolbox::ValueBrick(brickMap["message"].toString().toStdString().c_str(), color);
             }
 
             QVariantList params = brickMap["args"].toList();

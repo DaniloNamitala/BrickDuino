@@ -10,8 +10,6 @@ void StatementBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     QFontMetrics fm(Util::font());
     QRegularExpression rx("(%[0-9]+)");
 
-    QList<QString> lines = brick->getName().split("%s");
-    lines.removeAll("");
     int statementIdx = 0;
 
     QPen pen = brick->getContourPen();
@@ -25,16 +23,8 @@ void StatementBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     path.arcTo(brick->getWidth() - 2 * EDGE_RADIUS, PIN_H, 2 * EDGE_RADIUS, 2 * EDGE_RADIUS, 90, -90);
     
     int lineBottom = PIN_H;
-    for (QString line : lines) {
-
-        int lineHeight = 2*MARGIN;
-        QRegularExpressionMatchIterator i = rx.globalMatch(line);
-        if (i.hasNext() && brick->getParams().count()) {
-            lineHeight += qMax(fm.height(), brick->getParams()[0].size(Util::font()).height());
-        } else {
-            lineHeight += fm.height();
-        }
-        lineBottom += lineHeight;
+    for (int i = 0; i < brick->getLines().count(); i++) {
+        lineBottom += brick->headerSize(i).height();
 
         path.lineTo(brick->getWidth(), lineBottom - 2 * EDGE_RADIUS);
         
@@ -83,25 +73,21 @@ void StatementBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     int x = MARGIN;
     int y = PIN_H;
     statementIdx = 0;
-    QList<Parameter> params = brick->getParams();
-    for (QString line : lines) {
-        int lineHeight = 2*MARGIN;
-        QRegularExpressionMatchIterator i = rx.globalMatch(line);
-        if (i.hasNext() && brick->getParams().count()) {
-            lineHeight += qMax(fm.height(), brick->getParams()[0].size(Util::font()).height());
-        } else {
-            lineHeight += fm.height();
-        }
 
-        i = re.globalMatch(line);
-        while (i.hasNext()) {
-            QRegularExpressionMatch match = i.next();
-            if (match.captured(1).length() > 0) {
+    QList<Parameter> params = brick->getParams();
+    for (int i = 0; i < brick->getLines().count(); i++) {
+        QString line = brick->getLines().at(i);
+        int lineHeight = brick->headerSize(i).height();
+
+        QRegularExpressionMatchIterator it = re.globalMatch(line);
+        while (it.hasNext()) {
+            QRegularExpressionMatch match = it.next();
+            if (match.captured(1).length() > 0) { // pinta parametro
                 int pos = match.captured(1).mid(1).toInt() - 1;
                 painter.setPen(pen);
                 params[pos].paint(&painter, QPoint(x, y + MARGIN));
                 x += params[pos].size(Util::font()).width() + MARGIN;
-            } else if (match.captured(2).length() > 0) {
+            } else if (match.captured(2).length() > 0) { // pinta texto
                 QString txt = match.captured(2).trimmed();
                 painter.setPen(Util::textPen());
                 painter.drawText(x, y, fm.horizontalAdvance(line), lineHeight, Qt::AlignVCenter, txt);
@@ -110,7 +96,7 @@ void StatementBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
         }
         y += lineHeight;
         if (statementIdx < brick->getStatements().count()) {
-            y += brick->getStatements()[statementIdx].height();
+            y += brick->getStatements()[statementIdx++].height();
         }
         x = MARGIN;
     }

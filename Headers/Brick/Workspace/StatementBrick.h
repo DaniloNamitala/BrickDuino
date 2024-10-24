@@ -16,9 +16,6 @@ namespace Workspace {
         public:
             StatementBrick(QWidget* parent, const char* name, QColor color);
             StatementBrick(const char* name, QColor color);
-            int getHeight() override;
-            int headerHeight() override;
-            QPoint getStatementOrigin();
             void insertBrick(Workspace::Brick* brick);
             void removeBrick(Workspace::Brick* brick);
             void move(const QPoint &pos);

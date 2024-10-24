@@ -12,9 +12,10 @@ class IPaintableBrick {
     virtual QString getName() = 0;
     virtual QWidget* getWidget() = 0;
     virtual QList<Statement> getStatements() = 0;
+    virtual QList<QString> getLines() = 0;
     
     virtual void recalculateSize() = 0;
     virtual int getWidth() = 0;
     virtual int getHeight() = 0;
-    virtual int headerHeight() = 0;
+    virtual QSize headerSize(int index) = 0;
 };

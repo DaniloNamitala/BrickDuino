@@ -7,13 +7,12 @@
 #include "ValueBrickPainter.h"
 #include "BinaryOperatorPainter.h"
 
-Workspace::ValueBrick::ValueBrick(QWidget* parent, const char* name, QColor color, bool binary) : Workspace::Brick(parent, name, color) { 
-    this->binary = binary;
+Workspace::ValueBrick::ValueBrick(QWidget* parent, const char* name, QColor color) : Workspace::Brick(parent, name, color) { 
     this->painter = new ValueBrickPainter();
     recalculateSize();
 }
 
-Workspace::ValueBrick::ValueBrick(const char* name, QColor color, bool binary) : ValueBrick(nullptr, name, color, binary) { }
+Workspace::ValueBrick::ValueBrick(const char* name, QColor color) : ValueBrick(nullptr, name, color) { }
 
 int Workspace::ValueBrick::getHeight() {
     int height = BRICK_MIN_HEIGHT;

@@ -4,7 +4,8 @@
 PaintableBrick::PaintableBrick(QWidget* parent, const char* name, QColor color): QWidget(parent) {
     this->color = color;
     this->pen = QPen(color.darker(CONTOUR_COLOR_DARKER));
-    this->name = name;
+    this->name = QString(name);
+    this->lines.append(QString(name));
     pen.setWidth(2);
     recalculateSize();
 }
@@ -16,6 +17,8 @@ QList<Parameter> PaintableBrick::getParams() { return params; }
 QList<Statement> PaintableBrick::getStatements() { return statements; }
 
 QString PaintableBrick::getName() { return name; }
+
+QList<QString> PaintableBrick::getLines() { return lines; }
 
 QWidget* PaintableBrick::getWidget() { return (QWidget*) this; }
 
@@ -35,34 +38,25 @@ void PaintableBrick::recalculateSize() {
 }
 
 int PaintableBrick::getWidth() {
-    QFontMetrics fm(Util::font());
-    
-    QRegularExpression re("(%[0-9]+)|([a-zA-Z0-9,\\.<>= ]+)");
-    QRegularExpressionMatchIterator i = re.globalMatch(getName());
-
-    int width = MARGIN;
-    int pos = 0;
-    while (i.hasNext()) {
-        QRegularExpressionMatch match = i.next();
-        if (match.captured(1).length() > 0) {
-            if (params.count() > pos)
-                width += params[pos++].size(Util::font()).width() + MARGIN;
-        } else if (match.captured(2).length() > 0) {
-            QString txt = match.captured(2).trimmed();
-            width += fm.horizontalAdvance(txt) + MARGIN;
-        }
+    int w = 0;
+    for (int i = 0; i < lines.count(); i++) {
+        w = qMax(w, headerSize(i).width());
     }
-    return width;
+    return w;
 }
 
 int PaintableBrick::getHeight() {
-    int height = BRICK_MIN_HEIGHT;
-    QFontMetrics fm(Util::font());
-    for (int i = 0; i < params.size(); i++) {
-        height = qMax(height, params[i].size(Util::font()).height());
+    int h = 0;
+    for (int i = 0; i < lines.count(); i++) {
+        h += headerSize(i).height();
     }
-    height = qMax(height, fm.height());
-    return height + 2 * MARGIN;
+    for (Statement st : statements) {
+        h += st.height();
+    }
+    if (lines.size() == statements.count()) {
+        h += BRACKET_WIDTH;
+    }
+    return h;
 }
 
 void PaintableBrick::addParam(Parameter param) {
@@ -70,4 +64,31 @@ void PaintableBrick::addParam(Parameter param) {
     recalculateSize();
 }
 
-int PaintableBrick::headerHeight() { return 0; }
+QSize PaintableBrick::headerSize(int index) { 
+    if (lines.count() <= index) return QSize(0, 0);
+
+    QRegularExpression re("(%[0-9]+)|([a-zA-Z0-9,\\.<>=\\+\\-\\*%/]+)");
+    QRegularExpressionMatchIterator i = re.globalMatch(lines.at(index));
+    QFontMetrics fm(Util::font());
+
+    int height =BRICK_MIN_HEIGHT;
+    int width = MARGIN;
+
+    while (i.hasNext()) {
+        QRegularExpressionMatch match = i.next();
+        if (match.captured(1).length() > 0) { // Parametro
+            int pIdx = match.captured(1).mid(1).toInt() - 1;
+            if (params.size() > pIdx) {
+                height = qMax(height, params[pIdx].size(Util::font()).height());
+                width += params[pIdx].size(Util::font()).width() + MARGIN;
+            }
+        }
+        else if (match.captured(2).length() > 0) { // Texto
+            QString str = match.captured(2).trimmed();
+            width += fm.horizontalAdvance(str) + MARGIN;
+        }
+    }
+
+    height += 2 * MARGIN;
+    return QSize(width, height);
+}

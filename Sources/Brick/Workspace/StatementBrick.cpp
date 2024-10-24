@@ -10,14 +10,16 @@
 Workspace::StatementBrick::StatementBrick(QWidget* parent, const char* name, QColor color) : Workspace::Brick(parent, name, color) {
     this->statementHead = nullptr;
     painter = new StatementBrickPainter();
+    for (int i = 0; i < QString(name).count("%s"); i++) {
+        this->statements.append(Statement());
+    }
+    lines.clear();
+    lines = QString(name).split("%s");
+    lines.removeAll("");
     recalculateSize();
  }
 
 Workspace::StatementBrick::StatementBrick(const char* name, QColor color) : Workspace::StatementBrick(nullptr, name, color) { }
-
-int Workspace::StatementBrick::headerHeight() {
-    return Workspace::Brick::getHeight();
-}
 
 int Workspace::StatementBrick::statementHeight() {
     if (statementHead == nullptr) return EMPTY_STATEMENT_GAP;
@@ -32,15 +34,6 @@ int Workspace::StatementBrick::statementHeight() {
     return height;
 }
 
-int Workspace::StatementBrick::getHeight() {
-    int instructionsHeight = statementHeight();
-    return instructionsHeight + headerHeight() + BRACKET_WIDTH ;
-}
-
-QPoint Workspace::StatementBrick::getStatementOrigin() {
-    return QPoint(BRACKET_WIDTH, headerHeight());
-}
-
 void Workspace::StatementBrick::removeBrick(Workspace::Brick* brick) {
     if (brick == statementHead)
         this->statementHead = nullptr; 
@@ -50,7 +43,7 @@ void Workspace::StatementBrick::removeBrick(Workspace::Brick* brick) {
 void Workspace::StatementBrick::insertBrick(Brick* brick) {
     this->statementHead = brick;
     this->stackUnder(brick);
-    QPoint p(pos().x() + BRACKET_WIDTH, pos().y() + headerHeight() + PIN_H);
+    QPoint p(pos().x() + BRACKET_WIDTH, pos().y() + /*headerHeight() +*/ PIN_H);
     
     brick->setOwner(this);
     brick->setZOrder(z_order + 1);
@@ -61,7 +54,7 @@ void Workspace::StatementBrick::insertBrick(Brick* brick) {
 void Workspace::StatementBrick::move(const QPoint &pos) {
     Workspace::Brick::move(pos);
 
-    QPoint p(pos.x() + BRACKET_WIDTH, pos.y() + headerHeight());
+    QPoint p(pos.x() + BRACKET_WIDTH, pos.y() /* + headerHeight()*/);
     if (statementHead != nullptr) 
         statementHead->move(p);
 }

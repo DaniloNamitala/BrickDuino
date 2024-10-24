@@ -3,14 +3,13 @@
 #include "BinaryOperatorPainter.h"
 #include "Util.h"
 
-Toolbox::ValueBrick::ValueBrick(const char* name, QColor color, bool binary) : Toolbox::Brick(name, color) {
-    this->binary = binary;
+Toolbox::ValueBrick::ValueBrick(const char* name, QColor color) : Toolbox::Brick(name, color) {
     this->painter = new ValueBrickPainter();
     recalculateSize();
 }
 
 Toolbox::BrickType Toolbox::ValueBrick::getType() {
-    return binary ? Toolbox::BrickType::BINARY_OPERATOR : Toolbox::BrickType::VALUE;
+    return Toolbox::BrickType::VALUE;
 }
 
 int Toolbox::ValueBrick::getHeight() {

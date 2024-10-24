@@ -32,71 +32,93 @@
         {
             "name": "CONTROLE",
             "color": "#b35702",
-            "bricks": [
+          "bricks": [
+            {
+              "name": "for_statement",
+              "type": "STATEMENT",
+              "message": "PARA i DE %1 ATE %2, INCREMENTANDO %3 %s",
+              "args": [
                 {
-                    "name": "for_statement",
-                    "type": "STATEMENT",
-                    "message": "PARA i DE %1 ATE %2, INCREMENTANDO %3",
-                    "args": [
-                        {
-                            "name": "start",
-                            "type": "number"
-                        },
-                        {
-                            "name": "end",
-                            "type": "number"
-                        },
-                        {
-                            "name": "increment",
-                            "type": "number"
-                        }
-                    ]
+                  "name": "start",
+                  "type": "number"
                 },
                 {
-                    "name": "while_statement",
-                    "type": "STATEMENT",
-                    "message": "ENQUANTO %1",
-                    "args": [
-                        {
-                            "name": "condition",
-                            "type": "bool"
-                        }
-                    ]
+                  "name": "end",
+                  "type": "number"
                 },
                 {
-                    "name": "if_statement",
-                    "type": "STATEMENT",
-                    "message": "SE %1",
-                    "args": [
-                        {
-                            "name": "condition",
-                            "type": "bool"
-                        }
-                    ]
-                },
-                {
-                    "name": "switch_statement",
-                    "type": "STATEMENT",
-                    "message": "ESCOLHA %1",
-                    "args": [
-                        {
-                            "name": "variable",
-                            "type": "any"
-                        }
-                    ]
-                },
-                {
-                    "name": "case_statement",
-                    "type": "STATEMENT",
-                    "message": "CASO %1",
-                    "args": [
-                        {
-                            "name": "value",
-                            "type": "any"
-                        }
-                    ]
+                  "name": "increment",
+                  "type": "number"
                 }
-            ]
+              ]
+            },
+            {
+              "name": "while_statement",
+              "type": "STATEMENT",
+              "message": "ENQUANTO %1 %s",
+              "args": [
+                {
+                  "name": "condition",
+                  "type": "bool"
+                }
+              ]
+            },
+            {
+              "name": "do_while_statement",
+              "type": "STATEMENT",
+              "message": "FACA %s ENQUANTO %1",
+              "args": [
+                {
+                  "name": "condition",
+                  "type": "bool"
+                }
+              ]
+            },
+            {
+              "name": "if_else_statement",
+              "type": "STATEMENT",
+              "message": "SE %1 %s SENAO %s",
+              "args": [
+                {
+                  "name": "condition",
+                  "type": "bool"
+                }
+              ]
+            },
+            {
+              "name": "if_statement",
+              "type": "STATEMENT",
+              "message": "SE %1 %s",
+              "args": [
+                {
+                  "name": "condition",
+                  "type": "bool"
+                }
+              ]
+            },
+            {
+              "name": "switch_statement",
+              "type": "STATEMENT",
+              "message": "ESCOLHA %1 %s",
+              "args": [
+                {
+                  "name": "variable",
+                  "type": "any"
+                }
+              ]
+            },
+            {
+              "name": "case_statement",
+              "type": "STATEMENT",
+              "message": "CASO %1 %s",
+              "args": [
+                {
+                  "name": "value",
+                  "type": "any"
+                }
+              ]
+            }
+          ]
         },
         {
             "name": "LOGICA",
@@ -104,7 +126,7 @@
             "bricks": [
                 {
                     "name": "and_operator",
-                    "type": "BINARY_OPERATOR",
+                    "type": "VALUE",
                     "message": "%1 E %2",
                     "args": [
                         {
@@ -120,7 +142,7 @@
                 },
                 {
                     "name": "or_operator",
-                    "type": "BINARY_OPERATOR",
+                    "type": "VALUE",
                     "message": "%1 OU %2",
                     "args": [
                         {
@@ -136,7 +158,7 @@
                 },
                 {
                     "name": "not_operator",
-                    "type": "BINARY_OPERATOR",
+                    "type": "VALUE",
                     "message": "NAO %1",
                     "args": [
                         {
@@ -148,7 +170,7 @@
                 },
                 {
                     "name": "equal_operator",
-                    "type": "BINARY_OPERATOR",
+                    "type": "VALUE",
                     "message": "%1 = %2",
                     "args": [
                         {
@@ -164,7 +186,7 @@
                 },
                 {
                     "name": "greater_operator",
-                    "type": "BINARY_OPERATOR",
+                    "type": "VALUE",
                     "message": "%1 > %2",
                     "args": [
                         {
@@ -180,7 +202,7 @@
                 },
                 {
                     "name": "less_operator",
-                    "type": "BINARY_OPERATOR",
+                    "type": "VALUE",
                     "message": "%1 < %2",
                     "args": [
                         {
@@ -196,7 +218,7 @@
                 },
                 {
                     "name": "greater_equal_operator",
-                    "type": "BINARY_OPERATOR",
+                    "type": "VALUE",
                     "message": "%1 >= %2",
                     "args": [
                         {
@@ -212,7 +234,7 @@
                 },
                 {
                     "name": "less_equal_operator",
-                    "type": "BINARY_OPERATOR",
+                    "type": "VALUE",
                     "message": "%1 <= %2",
                     "args": [
                         {
@@ -228,7 +250,7 @@
                 },
                 {
                     "name": "not_equal_operator",
-                    "type": "BINARY_OPERATOR",
+                    "type": "VALUE",
                     "message": "%1 != %2",
                     "args": [
                         {
@@ -250,7 +272,7 @@
             "bricks": [
                 {
                     "name": "add_operator",
-                    "type": "BINARY_OPERATOR",
+                    "type": "VALUE",
                     "message": "%1 + %2",
                     "args": [
                         {
@@ -266,7 +288,7 @@
                 },
                 {
                     "name": "sub_operator",
-                    "type": "BINARY_OPERATOR",
+                    "type": "VALUE",
                     "message": "%1 - %2",
                     "args": [
                         {
@@ -282,7 +304,7 @@
                 },
                 {
                     "name": "mul_operator",
-                    "type": "BINARY_OPERATOR",
+                    "type": "VALUE",
                     "message": "%1 * %2",
                     "args": [
                         {
@@ -298,7 +320,7 @@
                 },
                 {
                     "name": "div_operator",
-                    "type": "BINARY_OPERATOR",
+                    "type": "VALUE",
                     "message": "%1 / %2",
                     "args": [
                         {
@@ -314,7 +336,7 @@
                 },
                 {
                     "name": "mod_operator",
-                    "type": "BINARY_OPERATOR",
+                    "type": "VALUE",
                     "message": "%1 % %2",
                     "args": [
                         {
