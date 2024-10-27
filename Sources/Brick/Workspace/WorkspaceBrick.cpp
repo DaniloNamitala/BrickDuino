@@ -221,7 +221,7 @@ void Workspace::Brick::setZOrder(int z) {
 
 Workspace::Brick* Workspace::Brick::getCloser() {
     QPoint point;
-    point.setY(pos().y() - 15);
+    point.setY(pos().y() - 5);
     point.setX(pos().x() + 2 * EDGE_RADIUS + PIN_H);
     QWidget* widget = parentWidget()->childAt(point);
     if (Brick* b = dynamic_cast<Brick*>(widget)) return b;

@@ -18,7 +18,6 @@ protected:
 
     void recalculateSize() override;
     int getWidth() override;
-    int getHeight() override;
 public:
     PaintableBrick(QWidget* parent, const char* name, QColor color);
 
@@ -30,6 +29,7 @@ public:
     QWidget* getWidget() override;
     QList<Statement> getStatements() override;
     QSize headerSize(int index = 0) override;
+    int getHeight() override;
 
     void addParam(Parameter param);
     void paintEvent(QPaintEvent* event) override;
