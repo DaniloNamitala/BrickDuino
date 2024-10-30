@@ -6,9 +6,11 @@
 #include "Shadow.h"
 #include "Util.h"
 #include "StatementBrickPainter.h"
+#include "ConfigBrickIf.h"
 
 Workspace::StatementBrick::StatementBrick(QWidget* parent, const char* name, QColor color) : Workspace::Brick(parent, name, color) {
     painter = new StatementBrickPainter();
+    _showConfig = true;
     for (int i = 0; i < QString(name).count("%s"); i++) {
         this->statements.append(Statement());
     }
@@ -29,6 +31,58 @@ void Workspace::StatementBrick::removeBrick(Workspace::Brick* brick) {
         }
     }
     recalculateSize();
+}
+
+void Workspace::StatementBrick::addCondition() {
+    int param = params.count() + 1;
+    QString line = QString("SENAO SE %%1").arg(param);
+    int idx = lines.count();
+    if (lines.last().trimmed() == "SENAO")
+        idx--;
+
+    lines.insert(idx, line);
+    params.append(Parameter(ValueType::BOOL));
+    statements.insert(idx, Statement());
+
+    recalculateSize();
+}
+
+void Workspace::StatementBrick::addElse() {
+    if (lines.last().trimmed() == "SENAO") return;
+    int param = params.count() + 1;
+    QString line = QString("SENAO").arg(param);
+    lines.append(line);
+    statements.append(Statement());
+
+    recalculateSize();
+}
+
+void Workspace::StatementBrick::removeCondition() {
+    QRegularExpression re("SENAO SE %[0-9]+");
+    int idx = lines.lastIndexOf(re);
+    if (idx >= statements.count() || idx < 0) return;
+    if(statements[idx].head() != nullptr) return;
+
+    lines.removeAt(idx);
+    params.removeLast();
+    statements.removeAt(idx);
+
+    recalculateSize();
+}
+
+void Workspace::StatementBrick::removeElse() {
+    if (lines.last().trimmed() != "SENAO") return;
+    if(statements.last().head() != nullptr) return;
+
+    lines.removeLast();
+    statements.removeLast();
+    
+    recalculateSize();
+}
+
+void Workspace::StatementBrick::openConfig() {
+    ConfigBrickIf* config = new ConfigBrickIf(this, this);
+    config->show();
 }
 
 void Workspace::StatementBrick::insertBrick(Brick* brick, int st_idx) {
@@ -63,7 +117,7 @@ void Workspace::StatementBrick::move(const QPoint &pos) {
     Workspace::Brick::move(pos);
 
     int y = pos.y();
-    for (int i=0; i<statements.count(); i++) {
+    for (int i=0; i< statements.count(); i++) {
         QPoint p(pos.x() + BRACKET_WIDTH, y + headerSize(i).height());
         if (statements[i].head() != nullptr) 
             statements[i].head()->move(p);

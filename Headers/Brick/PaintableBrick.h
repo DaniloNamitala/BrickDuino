@@ -4,6 +4,7 @@
 #include "IPainter.h"
 #include <QtWidgets>
 #include <QtCore> 
+#include <QPixmap> 
 
 class PaintableBrick : public IPaintableBrick, public QWidget {
 protected:
@@ -14,7 +15,10 @@ protected:
     QColor color;
     QString name;
 
+    QPixmap** cachePaint;
+
     IPainter* painter;
+    bool _showConfig;
 
     void recalculateSize() override;
     int getWidth() override;
@@ -33,5 +37,7 @@ public:
 
     void addParam(Parameter param);
     void paintEvent(QPaintEvent* event) override;
-
+    bool showConfig() override;
+    QRect configRect() override;
+    QPixmap** getCache() override;
 };

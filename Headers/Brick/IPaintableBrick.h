@@ -18,4 +18,7 @@ class IPaintableBrick {
     virtual int getWidth() = 0;
     virtual int getHeight() = 0;
     virtual QSize headerSize(int index) = 0;
+    virtual bool showConfig() = 0;
+    virtual QRect configRect() = 0;
+    virtual QPixmap** getCache() = 0;
 };

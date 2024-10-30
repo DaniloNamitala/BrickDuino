@@ -7,6 +7,9 @@ PaintableBrick::PaintableBrick(QWidget* parent, const char* name, QColor color):
     this->name = QString(name);
     this->lines.append(QString(name));
     pen.setWidth(2);
+    _showConfig = false;
+    cachePaint = new QPixmap*;
+    *cachePaint = nullptr;
     recalculateSize();
 }
 
@@ -31,6 +34,10 @@ void PaintableBrick::paintEvent(QPaintEvent* event) {
 void PaintableBrick::recalculateSize() {
     int newW = getWidth();
     int newH = getHeight() + PIN_H;
+    
+    if (*cachePaint != nullptr)
+        delete *cachePaint;
+    *cachePaint = nullptr;
 
     resize(newW, newH);
     setMinimumSize(newW, newH);
@@ -42,7 +49,17 @@ int PaintableBrick::getWidth() {
     for (int i = 0; i < lines.count(); i++) {
         w = qMax(w, headerSize(i).width());
     }
+    if (_showConfig)
+        w += MARGIN + 20;
     return w;
+}
+
+bool PaintableBrick::showConfig() {
+    return _showConfig;
+}
+
+QRect PaintableBrick::configRect() {
+    return QRect(QPoint(getWidth() - 25, PIN_H + 5), QSize(20, 20));
 }
 
 int PaintableBrick::getHeight() {
@@ -62,6 +79,10 @@ int PaintableBrick::getHeight() {
 void PaintableBrick::addParam(Parameter param) {
     params.append(param);
     recalculateSize();
+}
+
+QPixmap** PaintableBrick::getCache() {
+    return cachePaint;
 }
 
 QSize PaintableBrick::headerSize(int index) { 

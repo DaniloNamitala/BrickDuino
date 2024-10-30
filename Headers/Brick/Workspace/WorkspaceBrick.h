@@ -31,7 +31,7 @@ namespace Workspace {
         void mousePressEvent(QMouseEvent* event) override;
 
         Brick* getCloser();
-        
+        virtual void openConfig();
     public:
         void mouseReleaseEvent(QMouseEvent* event) override;
         Brick(QWidget* parent, const char* name, QColor color);

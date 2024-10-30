@@ -5,15 +5,23 @@
 void StatementBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     QPainterPath path;
     QWidget* widget = brick->getWidget();
-    QPainter painter(widget);
 
     QFontMetrics fm(Util::font());
     QRegularExpression rx("(%[0-9]+)");
 
+    QPixmap** cache = brick->getCache();
+    if (*cache != nullptr) {
+        QPainter _painter(widget);
+        _painter.drawPixmap(widget->rect(), *(*cache));
+        _painter.end();
+        return;
+    }
+    *cache = new QPixmap(widget->size());
+    (*cache)->fill(Qt::transparent);
+    QPainter painter(*cache);
+
     int statementIdx = 0;
-
     QPen pen = brick->getContourPen();
-
     // Draw the pin
     path.moveTo(2 * EDGE_RADIUS, PIN_H);
     path.arcTo(2 * EDGE_RADIUS, 0, 2 * PIN_H, 2 * PIN_H, 180, -180);
@@ -100,6 +108,15 @@ void StatementBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
         }
         x = MARGIN;
     }
+
+    if (brick->showConfig()) {
+        // paint config icon
+        QPixmap bmp("D:/Projetos/TCC/BrickDuino/Assets/config.png", "png");
+        painter.drawPixmap(brick->configRect(), bmp);
+    }
     
     painter.end();
+    QPainter _painter(widget);
+    _painter.drawPixmap(widget->rect(), *(*cache));
+    _painter.end();
 }

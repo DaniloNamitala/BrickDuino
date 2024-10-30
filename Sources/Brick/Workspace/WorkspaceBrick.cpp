@@ -65,15 +65,26 @@ void Workspace::Brick::setColor(QColor color) {
 
 Workspace::Brick* Workspace::Brick::getNext() { return next; }
 
-void Workspace::Brick::mousePressEvent(QMouseEvent* event) { mousePos = event->pos(); }
+void Workspace::Brick::mousePressEvent(QMouseEvent* event) { 
+    mousePos = event->pos(); 
+    if (configRect().contains(event->pos())) {
+        openConfig();
+    }
+}
+
+void Workspace::Brick::openConfig(){
+    // NOTHING TO DO
+}
 
 void Workspace::Brick::mouseReleaseEvent(QMouseEvent* event) {
     setCursor(QCursor(Qt::OpenHandCursor));
+    setZOrder(0);
+    
     if (lastCloser != nullptr) {
         lastCloser->replaceShadow(this);
     }
     lastCloser = nullptr;
-    setZOrder(0);
+    
 }
 
 void Workspace::Brick::replaceShadow(Workspace::Brick* brick){
@@ -107,6 +118,8 @@ void Workspace::Brick::moveBrick(QPoint newPos) {
 
 void Workspace::Brick::mouseMoveEvent(QMouseEvent* event) {
     setCursor(QCursor(Qt::OpenHandCursor));
+    if (showConfig() && configRect().contains(event->pos()))
+        setCursor(QCursor(Qt::PointingHandCursor));
 
     if (event->buttons() & Qt::LeftButton) {
         QPoint newPos = mapToParent(event->pos()) - mousePos;

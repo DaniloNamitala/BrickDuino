@@ -17,6 +17,7 @@ file(GLOB BRICK_W_CPP_FILES Sources/Brick/Workspace/*.cpp)
 file(GLOB BRICK_CPP_FILES Sources/Brick/*.cpp)
 file(GLOB PAINTER_CPP_FILES Sources/Painter/*.cpp)
 file(GLOB TOOLBOX_CPP_FILES Sources/Toolbox/*.cpp)
+file(GLOB SCREENS_CPP_FILES Sources/Screens/*.cpp)
 
 #include directories
 SET(INCLUDE_DIR "Headers/")
@@ -26,9 +27,18 @@ SET(INCLUDE_DIR_BRICK_T "Headers/Brick/Toolbox")
 SET(INCLUDE_DIR_BRICK_W "Headers/Brick/Workspace")
 SET(INCLUDE_DIR_PAINTER "Headers/Painter/")
 SET(INCLUDE_DIR_TOOLBOX "Headers/Toolbox/")
+SET(INCLUDE_DIR_SCREENS "Headers/Screens/")
 
 # Adicione a origem ao executável deste projeto.
-add_executable (BrickDuino ${MAIN_CPP_FILES} ${TOOLBOX_CPP_FILES} ${PAINTER_CPP_FILES} ${BRICK_CPP_FILES} ${BRICK_T_CPP_FILES} ${BRICK_W_CPP_FILES})  
+add_executable (BrickDuino 
+  ${MAIN_CPP_FILES} 
+  ${TOOLBOX_CPP_FILES} 
+  ${PAINTER_CPP_FILES} 
+  ${SCREENS_CPP_FILES} 
+  ${BRICK_CPP_FILES} 
+  ${BRICK_T_CPP_FILES} 
+  ${BRICK_W_CPP_FILES}
+)  
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET BrickDuino PROPERTY CXX_STANDARD 20)
@@ -42,6 +52,7 @@ target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_BRICK_W})
 target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_BRICK_R})
 target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_PAINTER})
 target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_TOOLBOX})
+target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_SCREENS})
 
 # libraries
 target_link_libraries(BrickDuino PRIVATE Qt6::Widgets)

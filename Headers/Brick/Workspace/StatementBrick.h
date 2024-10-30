@@ -5,6 +5,7 @@
 #include "Parameter.h"
 #include "WorkspaceBrick.h"	
 #include "Statement.h"
+#include <QPushButton>
 
 namespace Workspace {
 
@@ -12,7 +13,10 @@ namespace Workspace {
     {
         private: 
             int shadow_statement_idx;
+
+            QPushButton* btnConfig;
         protected:
+            void openConfig() override;
         public:
             StatementBrick(QWidget* parent, const char* name, QColor color);
             StatementBrick(const char* name, QColor color);
@@ -26,5 +30,10 @@ namespace Workspace {
             void replaceShadow(Workspace::Brick* brick);
             
             void recalculateSize() override;
+            void addCondition();
+            void removeCondition();
+
+            void addElse();
+            void removeElse();
     };
 };
