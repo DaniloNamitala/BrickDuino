@@ -2,12 +2,12 @@
 
 #include <QtCore>
 #include <QtWidgets>
-
 #include "PaintableBrick.h"
-#include "Parameter.h"
+
 
 namespace Workspace {
     class StatementBrick;
+    class Shadow;
     class Brick : public PaintableBrick {
         friend class StatementBrick;
 
@@ -16,7 +16,7 @@ namespace Workspace {
         QPoint origin;
         QPoint mousePos;
 
-        StatementBrick* owner;
+        Brick* owner;
         Brick* next;
         Brick* previous;
         Brick* shadow;
@@ -37,7 +37,7 @@ namespace Workspace {
         Brick(QWidget* parent, const char* name, QColor color);
         Brick(const char* name, QColor color);
         ~Brick();
-        void setOwner(StatementBrick* owner);
+        void setOwner(Brick* owner);
         void setPrevious(Brick* brick);
         void setNext(Brick* brick);
         Brick* getNext();
@@ -49,7 +49,7 @@ namespace Workspace {
 
         void moveBrick(QPoint newPos);
 
-        virtual void makeShadow(QPoint pos);
+        virtual void makeShadow(QPoint pos, bool value);
         virtual void removeShadow();
         virtual void replaceShadow(Brick* brick);
 

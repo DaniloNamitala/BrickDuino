@@ -40,4 +40,5 @@ public:
     bool showConfig() override;
     QRect configRect() override;
     QPixmap** getCache() override;
+    BrickType getType() override;
 };

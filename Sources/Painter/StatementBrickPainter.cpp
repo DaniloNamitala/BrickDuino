@@ -93,7 +93,7 @@ void StatementBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
             if (match.captured(1).length() > 0) { // pinta parametro
                 int pos = match.captured(1).mid(1).toInt() - 1;
                 painter.setPen(pen);
-                params[pos].paint(&painter, QPoint(x, y + MARGIN));
+                params[pos].paint(&painter, QPoint(x, y + MARGIN), widget->pos());
                 x += params[pos].size(Util::font()).width() + MARGIN;
             } else if (match.captured(2).length() > 0) { // pinta texto
                 QString txt = match.captured(2).trimmed();

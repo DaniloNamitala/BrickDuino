@@ -8,6 +8,7 @@ void FunctionBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     QPainter painter(widget);
 
     QPen pen = brick->getContourPen();
+    QFontMetrics fm(Util::font());
 
     // Draw the pin
     path.moveTo(2 * EDGE_RADIUS, PIN_H);
@@ -48,12 +49,13 @@ void FunctionBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
         QRegularExpressionMatch match = i.next();
         if (match.captured(1).length() > 0) {
             painter.setPen(pen);
-            params[pos].paint(&painter, QPoint(x, MARGIN + PIN_H));
+            int y = (brick->getHeight() - params[pos].size(Util::font()).height()) / 2;
+            params[pos].paint(&painter, QPoint(x, y + PIN_H), widget->pos());
             x += params[pos++].size(Util::font()).width() + MARGIN;
         } else if (match.captured(2).length() > 0) {
             QString txt = match.captured(2).trimmed();
             painter.setPen(Util::textPen());
-            painter.drawText(x, MARGIN + Util::textSize(txt, Util::font()).height() + PIN_H, txt);
+            painter.drawText(x, PIN_H, fm.horizontalAdvance(txt), brick->getHeight(), Qt::AlignVCenter, txt);
             x += Util::textSize(txt, Util::font()).width() + MARGIN;
         }
     }

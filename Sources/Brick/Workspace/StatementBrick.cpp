@@ -70,6 +70,10 @@ void Workspace::StatementBrick::removeCondition() {
     recalculateSize();
 }
 
+BrickType Workspace::StatementBrick::getType() {
+    return BrickType::STATEMENT;
+}
+
 void Workspace::StatementBrick::removeElse() {
     if (lines.last().trimmed() != "SENAO") return;
     if(statements.last().head() != nullptr) return;
@@ -153,7 +157,7 @@ void Workspace::StatementBrick::removeShadow() {
     }
 }
 
-void Workspace::StatementBrick::makeShadow(QPoint pos) {
+void Workspace::StatementBrick::makeShadow(QPoint pos, bool value) {
     QPoint _pos = this->pos();
     QPoint _posBottom = this->pos();
     _posBottom.setY(_posBottom.y() + getHeight());
@@ -170,7 +174,7 @@ void Workspace::StatementBrick::makeShadow(QPoint pos) {
     if (idxLine < statements.count()) {
         if (shadow != nullptr && shadow == statements[idxLine].head()) return;
         if (shadow == nullptr)
-            shadow = new Shadow(parentWidget());
+            shadow = new Shadow(parentWidget(), value);
         else
             dettach(shadow);
         
@@ -183,7 +187,7 @@ void Workspace::StatementBrick::makeShadow(QPoint pos) {
 
     if (shadow != nullptr && shadow == next) return;
     if (shadow == nullptr)
-        shadow = new Shadow(parentWidget());
+        shadow = new Shadow(parentWidget(), value);
     else
         removeBrick(shadow);
     shadow_statement_idx = -1;

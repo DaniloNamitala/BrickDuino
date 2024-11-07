@@ -12,6 +12,6 @@ Toolbox::StatementBrick::StatementBrick(const char* name, QColor color) : Toolbo
     lines.removeAll("");
 }
 
-Toolbox::BrickType Toolbox::StatementBrick::getType() {
-    return Toolbox::BrickType::STATEMENT;
+BrickType Toolbox::StatementBrick::getType() {
+    return BrickType::STATEMENT;
 }

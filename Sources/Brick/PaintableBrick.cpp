@@ -44,6 +44,10 @@ void PaintableBrick::recalculateSize() {
     setMaximumSize(newW, newH);
 }
 
+BrickType PaintableBrick::getType() {
+    return BrickType::UNDEFINED;
+}
+
 int PaintableBrick::getWidth() {
     int w = 0;
     for (int i = 0; i < lines.count(); i++) {
@@ -92,7 +96,7 @@ QSize PaintableBrick::headerSize(int index) {
     QRegularExpressionMatchIterator i = re.globalMatch(lines.at(index));
     QFontMetrics fm(Util::font());
 
-    int height =BRICK_MIN_HEIGHT;
+    int height = BRICK_MIN_HEIGHT;
     int width = MARGIN;
 
     while (i.hasNext()) {

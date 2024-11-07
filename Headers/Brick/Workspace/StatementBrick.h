@@ -25,7 +25,7 @@ namespace Workspace {
             void move(const QPoint &pos);
             void setZOrder(int z);
 
-            void makeShadow(QPoint pos) override;
+            void makeShadow(QPoint pos, bool value) override;
             void removeShadow() override;
             void replaceShadow(Workspace::Brick* brick);
             
@@ -35,5 +35,6 @@ namespace Workspace {
 
             void addElse();
             void removeElse();
+            BrickType getType() override;
     };
 };

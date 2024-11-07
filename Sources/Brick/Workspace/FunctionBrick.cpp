@@ -11,3 +11,7 @@ Workspace::FunctionBrick::FunctionBrick(QWidget* parent, const char* name, QColo
 }
 
 Workspace::FunctionBrick::FunctionBrick(const char* name, QColor color) : FunctionBrick(nullptr, name, color) { }
+
+BrickType Workspace::FunctionBrick::getType() {
+    return BrickType::FUNCTION;
+}

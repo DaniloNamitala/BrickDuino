@@ -1,6 +1,5 @@
 #include "ToolboxValueBrick.h"
 #include "ValueBrickPainter.h"
-#include "BinaryOperatorPainter.h"
 #include "Util.h"
 
 Toolbox::ValueBrick::ValueBrick(const char* name, QColor color) : Toolbox::Brick(name, color) {
@@ -8,8 +7,8 @@ Toolbox::ValueBrick::ValueBrick(const char* name, QColor color) : Toolbox::Brick
     recalculateSize();
 }
 
-Toolbox::BrickType Toolbox::ValueBrick::getType() {
-    return Toolbox::BrickType::VALUE;
+BrickType Toolbox::ValueBrick::getType() {
+    return BrickType::VALUE;
 }
 
 int Toolbox::ValueBrick::getHeight() {

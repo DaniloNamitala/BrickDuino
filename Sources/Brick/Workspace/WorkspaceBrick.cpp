@@ -3,13 +3,13 @@
 #include <QCursor>
 #include <QPainter>
 #include <QPainterPath>
-
 #include "Board.h"
 #include "Shadow.h"
 #include "Util.h"
 #include "StatementBrick.h"
 #include "ValueBrick.h"
 #include "ToolboxBrick.h"
+#include "FunctionBrick.h"
 
 Workspace::Brick::Brick(QWidget* parent, const char* name, QColor color) : PaintableBrick(parent, name, color) {
     this->z_order = -1;
@@ -32,17 +32,17 @@ namespace Workspace {
     QDataStream & operator >> (QDataStream &in, Workspace::Brick* &c)
     {
         QString name;
-        Toolbox::BrickType type;
+        BrickType type;
         QColor color;
         in >> name;
         in >> type;
         in >> color;
 
-        if (type == Toolbox::BrickType::FUNCTION) 
+        if (type == BrickType::FUNCTION) 
             c = new Workspace::FunctionBrick(name.toStdString().c_str(), color);
-        else if (type == Toolbox::BrickType::STATEMENT) 
+        else if (type == BrickType::STATEMENT) 
             c = new Workspace::StatementBrick(name.toStdString().c_str(), color);
-        else if (type == Toolbox::BrickType::VALUE) 
+        else if (type == BrickType::VALUE) 
             c = new Workspace::ValueBrick(name.toStdString().c_str(), color);
         else 
             c = nullptr;
@@ -93,10 +93,14 @@ void Workspace::Brick::replaceShadow(Workspace::Brick* brick){
 }
 
 void Workspace::Brick::moveBrick(QPoint newPos) {
-    setZOrder(INT32_MAX);
+    setZOrder(INT16_MAX);
     setCursor(QCursor(Qt::ClosedHandCursor));
 
-    if (previous != nullptr) previous->dettach(this);
+    if (previous != nullptr) 
+        previous->dettach(this);
+    if (getType() == BrickType::VALUE && owner != nullptr)
+        owner->dettach(this);
+
     move(newPos);
     Brick* b = getCloser();
     if (lastCloser != nullptr && b != lastCloser) {
@@ -105,7 +109,7 @@ void Workspace::Brick::moveBrick(QPoint newPos) {
     lastCloser = nullptr;
     if (b != nullptr) {
         if (!b->isShadow()) {
-            b->makeShadow(pos());
+            b->makeShadow(pos(), getType() == BrickType::VALUE);
             lastCloser = b;
         }
     }
@@ -141,9 +145,10 @@ void Workspace::Brick::removeShadow() {
     }
 }
 
-void Workspace::Brick::makeShadow(QPoint pos) {
+
+void Workspace::Brick::makeShadow(QPoint pos, bool value) {
     if (shadow != nullptr) return;
-    shadow = new Shadow(parentWidget());
+    this->shadow = new Shadow(parentWidget(), value);
     attach(shadow);
 }
 
@@ -158,6 +163,16 @@ Workspace::Brick* Workspace::Brick::tail() {
 
 void Workspace::Brick::attach(Brick* brick) {
     if (brick == nullptr) return;
+
+    if (brick->getType() == BrickType::VALUE) {
+        if (params.count() > 0) {
+            brick->setOwner(this);
+            params.last().setValue((ValueBrick*) brick);
+            brick->setZOrder(z_order + 1);
+            recalculateSize();
+            return;
+        }
+    }
 
     if (next != nullptr) {
         Brick* _tail = brick->tail();
@@ -179,7 +194,26 @@ void Workspace::Brick::attach(Brick* brick) {
 }
 
 void Workspace::Brick::dettach(Brick* brick) {
-    if (next != brick || brick == nullptr) return;
+    if (brick == nullptr) return;
+    
+    if (brick->getType() == BrickType::VALUE) {
+        if (params.count() > 0) {
+            Brick* _brick = nullptr;
+            int i=0;
+            for (; i<params.count(); i++) {
+                if (params[i].getValue() == brick) {
+                    break; 
+                }
+            }
+            if (i < params.count()) {
+                params[i].setValue(nullptr);
+                brick->setOwner(nullptr);
+                recalculateSize();
+            }
+        }
+    }
+
+    if (brick != next) return;
 
     this->setNext(nullptr);
     brick->setOwner(nullptr);
@@ -188,12 +222,15 @@ void Workspace::Brick::dettach(Brick* brick) {
     p.setY(p.y() + this->height());
     brick->move(p);
 
-    if (owner != nullptr) owner->recalculateSize();
+    if (owner != nullptr) 
+        owner->recalculateSize();
 }
 
-void Workspace::Brick::setOwner(StatementBrick* owner) {
+void Workspace::Brick::setOwner(Brick* owner) {
     this->owner = owner;
-    if (next != nullptr) next->setOwner(owner);
+    
+    if (getType() != BrickType::VALUE)
+        if (next != nullptr) next->setOwner(owner);
 }
 
 void Workspace::Brick::recalculateSize() {
@@ -214,7 +251,9 @@ void Workspace::Brick::recalculateSize() {
 void Workspace::Brick::move(const QPoint& pos) {
     QPoint p(pos.x(), pos.y() - PIN_H);
     QWidget::move(p);
-
+    for (int i=0; i<params.count(); i++) {
+        params[i].reposition(p);
+    }
     if (next != nullptr) {
         p.setY(p.y() + this->height());
         next->move(p);
@@ -225,6 +264,9 @@ void Workspace::Brick::setZOrder(int z) {
     if (Board* b = dynamic_cast<Board*>(parentWidget())) {
         ((Board*)parentWidget())->setZOrder(this, z_order, z);
         z_order = z;
+        for (int i=0; i<params.count(); i++) 
+            if (params[i].getValue() != nullptr)
+                params[i].getValue()->setZOrder(z+1);
         if (next != nullptr) next->setZOrder(z);
     }
     else {

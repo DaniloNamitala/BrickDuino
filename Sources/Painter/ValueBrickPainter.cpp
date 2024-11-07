@@ -35,7 +35,7 @@ void ValueBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
         QRegularExpressionMatch match = i.next();
         if (match.captured(1).length() > 0) {
             painter.setPen(pen);
-            params[pos].paint(&painter, QPoint(x, VALUE_BRICK_MARGIN));
+            params[pos].paint(&painter, QPoint(x, VALUE_BRICK_MARGIN), widget->pos());
             x += params[pos++].size(Util::font()).width() + MARGIN;
         } else if (match.captured(2).length() > 0) {
             QString txt = match.captured(2).trimmed();

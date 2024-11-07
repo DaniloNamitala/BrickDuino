@@ -4,6 +4,13 @@
 #include "Parameter.h"
 #include "Statement.h"
 
+enum BrickType {
+    FUNCTION,
+    STATEMENT,
+    VALUE,
+    UNDEFINED
+};
+
 class IPaintableBrick {
    public:
     virtual QList<Parameter> getParams() = 0;
@@ -21,4 +28,5 @@ class IPaintableBrick {
     virtual bool showConfig() = 0;
     virtual QRect configRect() = 0;
     virtual QPixmap** getCache() = 0;
+    virtual BrickType getType() = 0;
 };

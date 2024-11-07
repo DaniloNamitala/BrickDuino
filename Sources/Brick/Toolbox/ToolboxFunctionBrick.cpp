@@ -6,6 +6,6 @@ Toolbox::FunctionBrick::FunctionBrick(const char* name, QColor color) : Toolbox:
     this->painter = new FunctionBrickPainter();
 }
 
-Toolbox::BrickType Toolbox::FunctionBrick::getType() {
-    return Toolbox::BrickType::FUNCTION;
+BrickType Toolbox::FunctionBrick::getType() {
+    return BrickType::FUNCTION;
 }

@@ -2,7 +2,6 @@
 
 #include <QtCore>
 #include <QtWidgets>
-#include "Parameter.h"
 #include "WorkspaceBrick.h"	
 
 namespace Workspace {
@@ -10,10 +9,13 @@ namespace Workspace {
     {
         protected:
             int getHeight() override;
+            int getWidth() override;
             void recalculateSize() override;
         public:
             ValueBrick(QWidget* parent, const char* name, QColor color);
             ValueBrick(const char* name, QColor color);
+            BrickType getType() override;
+            void move(const QPoint& pos) override;
     };
 };
 
