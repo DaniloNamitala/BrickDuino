@@ -13,12 +13,13 @@ BrickType Toolbox::ValueBrick::getType() {
 
 int Toolbox::ValueBrick::getHeight() {
     int height = BRICK_MIN_HEIGHT;
-    QFontMetrics fm(Util::font());
+    QFontMetrics fm(Util::font_sm());
     for (int i = 0; i < params.size(); i++) {
-        height = qMax(height, params[i].size(Util::font()).height());
+        height = qMax(height, params[i].size().height());
     }
     height = qMax(height, fm.height());
-    return height + 2 * VALUE_BRICK_MARGIN;
+    height += (params.count() == 0) ? (2 * VALUE_BRICK_MARGIN) : (2 * VALUE_BRICK_MARGIN_WITH_PARAM);
+    return height;
 }
 
 void Toolbox::ValueBrick::recalculateSize() {

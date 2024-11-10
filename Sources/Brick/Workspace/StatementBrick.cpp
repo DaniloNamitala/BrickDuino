@@ -157,7 +157,7 @@ void Workspace::StatementBrick::removeShadow() {
     }
 }
 
-void Workspace::StatementBrick::makeShadow(QPoint pos, bool value) {
+void Workspace::StatementBrick::makeShadow(QPoint pos) {
     QPoint _pos = this->pos();
     QPoint _posBottom = this->pos();
     _posBottom.setY(_posBottom.y() + getHeight());
@@ -174,7 +174,7 @@ void Workspace::StatementBrick::makeShadow(QPoint pos, bool value) {
     if (idxLine < statements.count()) {
         if (shadow != nullptr && shadow == statements[idxLine].head()) return;
         if (shadow == nullptr)
-            shadow = new Shadow(parentWidget(), value);
+            shadow = new Shadow(parentWidget());
         else
             dettach(shadow);
         
@@ -187,7 +187,7 @@ void Workspace::StatementBrick::makeShadow(QPoint pos, bool value) {
 
     if (shadow != nullptr && shadow == next) return;
     if (shadow == nullptr)
-        shadow = new Shadow(parentWidget(), value);
+        shadow = new Shadow(parentWidget());
     else
         removeBrick(shadow);
     shadow_statement_idx = -1;

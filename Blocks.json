@@ -4,12 +4,24 @@
             "name": "ENTRADA",
             "color": "#82101b", 
             "bricks": [
-                {
-                    "name": "prnumber_input",	
-                    "type": "VALUE",
-                    "message": "LER",
-                    "output": "any"
-                }
+              {
+                "name": "prnumber_input",
+                "type": "VALUE",
+                "message": "LER",
+                "output": "any"
+              },
+              {
+                "name": "prnumber_input",
+                "type": "VALUE",
+                "message": "Variavel %1",
+                "output": "any",
+                "args": [
+                    {
+                        "name": "texto",
+                        "type": "any"
+                    }
+                ]
+              }
             ]
         },
         {

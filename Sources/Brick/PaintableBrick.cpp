@@ -15,7 +15,7 @@ PaintableBrick::PaintableBrick(QWidget* parent, const char* name, QColor color):
 
 QPen PaintableBrick::getContourPen() { return pen; }
 
-QList<Parameter> PaintableBrick::getParams() { return params; }
+QList<Parameter>& PaintableBrick::getParams() { return params; }
 
 QList<Statement> PaintableBrick::getStatements() { return statements; }
 
@@ -42,6 +42,7 @@ void PaintableBrick::recalculateSize() {
     resize(newW, newH);
     setMinimumSize(newW, newH);
     setMaximumSize(newW, newH);
+    update();
 }
 
 BrickType PaintableBrick::getType() {
@@ -104,8 +105,8 @@ QSize PaintableBrick::headerSize(int index) {
         if (match.captured(1).length() > 0) { // Parametro
             int pIdx = match.captured(1).mid(1).toInt() - 1;
             if (params.size() > pIdx) {
-                height = qMax(height, params[pIdx].size(Util::font()).height());
-                width += params[pIdx].size(Util::font()).width() + MARGIN;
+                height = qMax(height, params[pIdx].size().height());
+                width += params[pIdx].size().width() + MARGIN;
             }
         }
         else if (match.captured(2).length() > 0) { // Texto

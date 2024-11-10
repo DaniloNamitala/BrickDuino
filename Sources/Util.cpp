@@ -24,3 +24,7 @@ QPen Util::textPen() {
 QFont Util::font() {
     return QFont("Cascadia Code", 10, QFont::Bold, false);
 }
+
+QFont Util::font_sm() {
+    return QFont("Cascadia Code", 9, QFont::Bold, false);
+}

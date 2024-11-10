@@ -5,9 +5,22 @@
 void ValueBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     QPainterPath path;
     QWidget* widget = brick->getWidget();
-    QPainter painter(widget);
+    
+    
+    QPixmap** cache = brick->getCache();
+    if (*cache != nullptr) {
+        QPainter _painter(widget);
+        _painter.drawPixmap(widget->rect(), *(*cache));
+        _painter.end();
+        return;
+    }
+    
+    *cache = new QPixmap(widget->size());
+    (*cache)->fill(Qt::transparent);
+    QPainter painter(*cache);
 
     QPen pen = brick->getContourPen();
+    
 
 
     // Draw the shape of the brick
@@ -17,7 +30,7 @@ void ValueBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     path.arcTo(widget->width() - widget->height(), 0, widget->height(), widget->height(), 270, 180);
     path.lineTo((widget->height() / 2), 0);
 
-    painter.setFont(Util::font());
+    painter.setFont(Util::font_sm());
 
     painter.setBrush(brick->getColor());
     painter.setPen(pen);
@@ -30,19 +43,25 @@ void ValueBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
 
     int x = MARGIN;
     int pos = 0;
-    QList<Parameter> params = brick->getParams();
+    QFontMetrics fm(Util::font_sm());
+    QList<Parameter>& params = brick->getParams();
     while (i.hasNext()) {
         QRegularExpressionMatch match = i.next();
         if (match.captured(1).length() > 0) {
             painter.setPen(pen);
-            params[pos].paint(&painter, QPoint(x, VALUE_BRICK_MARGIN), widget->pos());
-            x += params[pos++].size(Util::font()).width() + MARGIN;
+            int y = (widget->height() - params[pos].size().height()) / 2;
+            params[pos].paint(&painter, QPoint(x, y), widget->pos());
+            x += params[pos++].size().width() + MARGIN;
         } else if (match.captured(2).length() > 0) {
             QString txt = match.captured(2).trimmed();
             painter.setPen(Util::textPen());
-            painter.drawText(x, VALUE_BRICK_MARGIN + Util::textSize(txt, Util::font()).height(), txt);
-            x += Util::textSize(txt, Util::font()).width() + MARGIN;
+            painter.drawText(x, 0, fm.horizontalAdvance(txt), widget->height(), Qt::AlignVCenter, txt);
+            x += Util::textSize(txt, Util::font_sm()).width() + MARGIN;
         }
     }
+    
     painter.end();
+    QPainter _painter(widget);
+    _painter.drawPixmap(widget->rect(), *(*cache));
+    _painter.end();
 }

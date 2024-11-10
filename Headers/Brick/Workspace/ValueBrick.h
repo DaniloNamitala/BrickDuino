@@ -9,7 +9,6 @@ namespace Workspace {
     {
         protected:
             int getHeight() override;
-            int getWidth() override;
             void recalculateSize() override;
         public:
             ValueBrick(QWidget* parent, const char* name, QColor color);

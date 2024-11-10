@@ -5,10 +5,7 @@ namespace Workspace {
         private:
             BrickType type; 
         public:
-            Shadow(QWidget* parent, bool value);
+            Shadow(QWidget* parent);
             int getWidth() override;
-            int getHeight() override;
-            BrickType getType() override;
-            void move(const QPoint& pos) override;
     };
 };

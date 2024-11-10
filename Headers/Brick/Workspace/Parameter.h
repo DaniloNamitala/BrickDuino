@@ -18,14 +18,18 @@ class Parameter {
     private:
         ValueType type;
         Workspace::ValueBrick* value;
-        QPoint origin;
+        QPoint _origin;
+        bool outline;
     public:
         Parameter();
         Parameter(ValueType type);
-        QSize size(QFont font);
+        QSize size();
         void paint(QPainter* painter, QPoint origin, QPoint parentPos);
         void setValue(Workspace::ValueBrick* value);
         void reposition(QPoint pos);
         ValueType getType();
+        QPoint pos();
         Workspace::ValueBrick* getValue();
+        void highlight(bool value);
+        bool outlined();
 };

@@ -4,7 +4,8 @@
 #include <QtWidgets>
 #include "IPaintableBrick.h"
 
-#define VALUE_BRICK_MARGIN 5
+#define VALUE_BRICK_MARGIN 2
+#define VALUE_BRICK_MARGIN_WITH_PARAM 5
 #define MARGIN 8
 #define PIN_H 5
 #define EDGE_RADIUS 6

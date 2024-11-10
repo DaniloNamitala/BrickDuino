@@ -5,10 +5,21 @@
 void FunctionBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     QPainterPath path;
     QWidget* widget = brick->getWidget();
-    QPainter painter(widget);
 
     QPen pen = brick->getContourPen();
     QFontMetrics fm(Util::font());
+
+    QPixmap** cache = brick->getCache();
+    if (*cache != nullptr) {
+        QPainter _painter(widget);
+        _painter.drawPixmap(widget->rect(), *(*cache));
+        _painter.end();
+        return;
+    }
+    
+    *cache = new QPixmap(widget->size());
+    (*cache)->fill(Qt::transparent);
+    QPainter painter(*cache);
 
     // Draw the pin
     path.moveTo(2 * EDGE_RADIUS, PIN_H);
@@ -44,14 +55,14 @@ void FunctionBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
 
     int x = MARGIN;
     int pos = 0;
-    QList<Parameter> params = brick->getParams();
+    QList<Parameter>& params = brick->getParams();
     while (i.hasNext()) {
         QRegularExpressionMatch match = i.next();
         if (match.captured(1).length() > 0) {
             painter.setPen(pen);
-            int y = (brick->getHeight() - params[pos].size(Util::font()).height()) / 2;
+            int y = (brick->getHeight() - params[pos].size().height()) / 2;
             params[pos].paint(&painter, QPoint(x, y + PIN_H), widget->pos());
-            x += params[pos++].size(Util::font()).width() + MARGIN;
+            x += params[pos++].size().width() + MARGIN;
         } else if (match.captured(2).length() > 0) {
             QString txt = match.captured(2).trimmed();
             painter.setPen(Util::textPen());
@@ -61,4 +72,7 @@ void FunctionBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     }
 
     painter.end();
+    QPainter _painter(widget);
+    _painter.drawPixmap(widget->rect(), *(*cache));
+    _painter.end();
 }

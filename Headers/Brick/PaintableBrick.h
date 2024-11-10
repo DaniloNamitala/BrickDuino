@@ -25,7 +25,7 @@ protected:
 public:
     PaintableBrick(QWidget* parent, const char* name, QColor color);
 
-    QList<Parameter> getParams() override;
+    QList<Parameter>& getParams() override;
     QPen getContourPen() override;
     QColor getColor() override;
     QString getName() override;

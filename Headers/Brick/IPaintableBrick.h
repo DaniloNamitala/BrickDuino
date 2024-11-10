@@ -13,7 +13,7 @@ enum BrickType {
 
 class IPaintableBrick {
    public:
-    virtual QList<Parameter> getParams() = 0;
+    virtual QList<Parameter>& getParams() = 0;
     virtual QPen getContourPen() = 0;
     virtual QColor getColor() = 0;
     virtual QString getName() = 0;

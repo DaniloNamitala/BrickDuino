@@ -7,9 +7,11 @@
 
 namespace Workspace {
     class StatementBrick;
+    class VakueBrick;
     class Shadow;
     class Brick : public PaintableBrick {
         friend class StatementBrick;
+        friend class ValueBrick;
 
     protected:
         QBrush brush;
@@ -49,9 +51,12 @@ namespace Workspace {
 
         void moveBrick(QPoint newPos);
 
-        virtual void makeShadow(QPoint pos, bool value);
+        virtual void makeShadow(QPoint pos);
+        virtual void highlightParam(QPoint pos, bool value);
         virtual void removeShadow();
         virtual void replaceShadow(Brick* brick);
+        virtual void insertParam(Brick* value);
+        virtual void removeParam(Brick* value);
 
         virtual void setZOrder(int z);
         virtual void move(const QPoint& pos);

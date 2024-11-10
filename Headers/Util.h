@@ -7,4 +7,5 @@ namespace Util {
     QPen contourPen(QColor color);
     QPen textPen();
     QFont font();
+    QFont font_sm();
 };

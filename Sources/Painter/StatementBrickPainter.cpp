@@ -16,6 +16,7 @@ void StatementBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
         _painter.end();
         return;
     }
+    
     *cache = new QPixmap(widget->size());
     (*cache)->fill(Qt::transparent);
     QPainter painter(*cache);
@@ -82,7 +83,7 @@ void StatementBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     int y = PIN_H;
     statementIdx = 0;
 
-    QList<Parameter> params = brick->getParams();
+    QList<Parameter>& params = brick->getParams();
     for (int i = 0; i < brick->getLines().count(); i++) {
         QString line = brick->getLines().at(i);
         int lineHeight = brick->headerSize(i).height();
@@ -93,8 +94,9 @@ void StatementBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
             if (match.captured(1).length() > 0) { // pinta parametro
                 int pos = match.captured(1).mid(1).toInt() - 1;
                 painter.setPen(pen);
-                params[pos].paint(&painter, QPoint(x, y + MARGIN), widget->pos());
-                x += params[pos].size(Util::font()).width() + MARGIN;
+                int _deltaY = (lineHeight - params[pos].size().height()) / 2;
+                params[pos].paint(&painter, QPoint(x, y + _deltaY), widget->pos());
+                x += params[pos].size().width() + MARGIN;
             } else if (match.captured(2).length() > 0) { // pinta texto
                 QString txt = match.captured(2).trimmed();
                 painter.setPen(Util::textPen());
