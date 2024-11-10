@@ -39,7 +39,7 @@ void ValueBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     painter.drawPath(path);
 
     QRegularExpression re("(%[0-9]+)|([a-zA-Z0-9,\\.<>=\\+\\-\\*%/]+)");
-    QRegularExpressionMatchIterator i = re.globalMatch(brick->getName());
+    QRegularExpressionMatchIterator i = re.globalMatch(brick->getMessage());
 
     int x = MARGIN;
     int pos = 0;

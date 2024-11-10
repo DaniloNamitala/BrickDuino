@@ -8,7 +8,7 @@
 namespace Toolbox {
     class StatementBrick : public Toolbox::Brick {
         public:
-            StatementBrick(const char* name, QColor color);
+            StatementBrick(const char* message, const char* name, QColor color);
             BrickType getType() override;
     };    
 };

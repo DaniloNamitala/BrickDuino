@@ -1,11 +1,12 @@
 #include "PaintableBrick.h"
 #include "Util.h"
 
-PaintableBrick::PaintableBrick(QWidget* parent, const char* name, QColor color): QWidget(parent) {
+PaintableBrick::PaintableBrick(QWidget* parent, const char* message, const char* name, QColor color): QWidget(parent) {
     this->color = color;
     this->pen = QPen(color.darker(CONTOUR_COLOR_DARKER));
+    this->message = QString(message);
     this->name = QString(name);
-    this->lines.append(QString(name));
+    this->lines.append(QString(message));
     pen.setWidth(2);
     _showConfig = false;
     cachePaint = new QPixmap*;
@@ -19,7 +20,7 @@ QList<Parameter>& PaintableBrick::getParams() { return params; }
 
 QList<Statement> PaintableBrick::getStatements() { return statements; }
 
-QString PaintableBrick::getName() { return name; }
+QString PaintableBrick::getMessage() { return message; }
 
 QList<QString> PaintableBrick::getLines() { return lines; }
 

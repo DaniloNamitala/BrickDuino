@@ -2,7 +2,7 @@
 #include "ValueBrickPainter.h"
 #include "Util.h"
 
-Toolbox::ValueBrick::ValueBrick(const char* name, QColor color) : Toolbox::Brick(name, color) {
+Toolbox::ValueBrick::ValueBrick(const char* message, const char* name, QColor color) : Toolbox::Brick(message, name, color) {
     this->painter = new ValueBrickPainter();
     recalculateSize();
 }

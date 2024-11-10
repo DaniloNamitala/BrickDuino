@@ -11,8 +11,8 @@ namespace Workspace {
             int getHeight() override;
             void recalculateSize() override;
         public:
-            ValueBrick(QWidget* parent, const char* name, QColor color);
-            ValueBrick(const char* name, QColor color);
+            ValueBrick(QWidget* parent, const char* message, const char* name, QColor color);
+            ValueBrick(const char* message, const char* name, QColor color);
             BrickType getType() override;
             void move(const QPoint& pos) override;
     };

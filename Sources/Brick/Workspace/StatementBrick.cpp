@@ -7,21 +7,22 @@
 #include "Util.h"
 #include "StatementBrickPainter.h"
 #include "ConfigBrickIf.h"
+#include "string.h"
 
-Workspace::StatementBrick::StatementBrick(QWidget* parent, const char* name, QColor color) : Workspace::Brick(parent, name, color) {
+Workspace::StatementBrick::StatementBrick(QWidget* parent, const char* message, const char* name, QColor color) : Workspace::Brick(parent, message, name, color) {
     painter = new StatementBrickPainter();
-    _showConfig = true;
-    for (int i = 0; i < QString(name).count("%s"); i++) {
+    _showConfig = strcmp(name, "if_statement") == 0;
+    for (int i = 0; i < QString(message).count("%s"); i++) {
         this->statements.append(Statement());
     }
     shadow_statement_idx = -1;
     lines.clear();
-    lines = QString(name).split("%s");
+    lines = QString(message).split("%s");
     lines.removeAll("");
     recalculateSize();
  }
 
-Workspace::StatementBrick::StatementBrick(const char* name, QColor color) : Workspace::StatementBrick(nullptr, name, color) { }
+Workspace::StatementBrick::StatementBrick(const char* message, const char* name, QColor color) : Workspace::StatementBrick(nullptr, message, name, color) { }
 
 void Workspace::StatementBrick::removeBrick(Workspace::Brick* brick) {
     for (int i = 0; i < statements.count(); i++) {

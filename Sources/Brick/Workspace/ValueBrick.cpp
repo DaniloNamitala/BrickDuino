@@ -6,12 +6,12 @@
 #include "Util.h"
 #include "ValueBrickPainter.h"
 
-Workspace::ValueBrick::ValueBrick(QWidget* parent, const char* name, QColor color) : Workspace::Brick(parent, name, color) { 
+Workspace::ValueBrick::ValueBrick(QWidget* parent, const char* message, const char* name, QColor color) : Workspace::Brick(parent, message, name, color) { 
     this->painter = new ValueBrickPainter();
     recalculateSize();
 }
 
-Workspace::ValueBrick::ValueBrick(const char* name, QColor color) : ValueBrick(nullptr, name, color) { }
+Workspace::ValueBrick::ValueBrick(const char* message, const char* name, QColor color) : ValueBrick(nullptr, message, name, color) { }
 
 int Workspace::ValueBrick::getHeight() {
     int height = BRICK_MIN_HEIGHT;

@@ -11,7 +11,7 @@
 #include "ToolboxBrick.h"
 #include "FunctionBrick.h"
 
-Workspace::Brick::Brick(QWidget* parent, const char* name, QColor color) : PaintableBrick(parent, name, color) {
+Workspace::Brick::Brick(QWidget* parent, const char* message, const char* name, QColor color) : PaintableBrick(parent, message, name, color) {
     this->z_order = -1;
     this->owner = nullptr;
     this->next = nullptr;
@@ -26,24 +26,26 @@ Workspace::Brick::Brick(QWidget* parent, const char* name, QColor color) : Paint
         show();
 }
 
-Workspace::Brick::Brick(const char* name, QColor color) : Brick(nullptr, name, color) { }
+Workspace::Brick::Brick(const char* message, const char* name, QColor color) : Brick(nullptr, message, name, color) { }
 
 namespace Workspace {
     QDataStream & operator >> (QDataStream &in, Workspace::Brick* &c)
     {
+        QString message;
         QString name;
         BrickType type;
         QColor color;
+        in >> message;
         in >> name;
         in >> type;
         in >> color;
 
         if (type == BrickType::FUNCTION) 
-            c = new Workspace::FunctionBrick(name.toStdString().c_str(), color);
+            c = new Workspace::FunctionBrick(message.toStdString().c_str(), name.toStdString().c_str(), color);
         else if (type == BrickType::STATEMENT) 
-            c = new Workspace::StatementBrick(name.toStdString().c_str(), color);
+            c = new Workspace::StatementBrick(message.toStdString().c_str(), name.toStdString().c_str(), color);
         else if (type == BrickType::VALUE) 
-            c = new Workspace::ValueBrick(name.toStdString().c_str(), color);
+            c = new Workspace::ValueBrick(message.toStdString().c_str(), name.toStdString().c_str(), color);
         else 
             c = nullptr;
         
@@ -186,9 +188,12 @@ void Workspace::Brick::highlightParam(QPoint pos, bool value) {
         return;
     }
 
+
     for (Parameter& p : params) {
-        QPoint _pos = this->pos() + p.pos();
-        if (pos.x() >= _pos.x() && pos.x() <= (_pos.x() + p.size().width())) {
+        QPoint _pos = this->pos() + p.pos() + QPoint(-10, -10);
+        QSize size = p.size() + QSize(20, 20);
+        QRect rect(_pos, sicleaze);
+        if (rect.contains(pos)) {
             p.highlight(value);
         } else {
             p.highlight(false);

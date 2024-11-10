@@ -2,7 +2,7 @@
 #include "FunctionBrickPainter.h"
 #include "ValueBrickPainter.h"
 
-Workspace::Shadow::Shadow(QWidget* parent) : Workspace::Brick(parent, "", QColor(0x5f5f5f)) {    
+Workspace::Shadow::Shadow(QWidget* parent) : Workspace::Brick(parent, "", "shadow_brick", QColor(0x5f5f5f)) {    
     painter = new FunctionBrickPainter();
     type = BrickType::FUNCTION;
 

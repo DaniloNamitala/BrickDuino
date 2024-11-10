@@ -13,6 +13,7 @@ protected:
     QList<QString> lines;
     QPen pen;
     QColor color;
+    QString message;
     QString name;
 
     QPixmap** cachePaint;
@@ -23,12 +24,12 @@ protected:
     void recalculateSize() override;
     int getWidth() override;
 public:
-    PaintableBrick(QWidget* parent, const char* name, QColor color);
+    PaintableBrick(QWidget* parent, const char* message, const char* name, QColor color);
 
     QList<Parameter>& getParams() override;
     QPen getContourPen() override;
     QColor getColor() override;
-    QString getName() override;
+    QString getMessage() override;
     QList<QString> getLines() override;
     QWidget* getWidget() override;
     QList<Statement> getStatements() override;

@@ -2,7 +2,7 @@
 #include "FunctionBrickPainter.h"
 #include <QDrag>
 
-Toolbox::Brick::Brick(const char* name, QColor color) : PaintableBrick(nullptr, name, color) {
+Toolbox::Brick::Brick(const char* message, const char* name, QColor color) : PaintableBrick(nullptr, message, name, color) {
     this->painter = new FunctionBrickPainter();
     setMouseTracking(true);
 }
@@ -17,7 +17,8 @@ void Toolbox::Brick::mousePressEvent(QMouseEvent* event) {
         QByteArray data;
         QDataStream stream(&data, QIODevice::WriteOnly);
         
-        stream << this->getName();
+        stream << message;
+        stream << name;
         stream << getType();
         stream << color;
         for (Parameter param : this->getParams()) {

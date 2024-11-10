@@ -18,8 +18,8 @@ namespace Workspace {
         protected:
             void openConfig() override;
         public:
-            StatementBrick(QWidget* parent, const char* name, QColor color);
-            StatementBrick(const char* name, QColor color);
+            StatementBrick(QWidget* parent, const char* message, const char* name, QColor color);
+            StatementBrick(const char* message, const char* name, QColor color);
             void insertBrick(Workspace::Brick* brick, int st_idx);
             void removeBrick(Workspace::Brick* brick);
             void move(const QPoint &pos);

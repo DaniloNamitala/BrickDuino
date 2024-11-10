@@ -87,7 +87,7 @@
               ]
             },
             {
-              "name": "if_else_statement",
+              "name": "if_statement",
               "type": "STATEMENT",
               "message": "SE %1 %s SENAO %s",
               "args": [

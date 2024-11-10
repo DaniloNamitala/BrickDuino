@@ -7,7 +7,7 @@
 namespace Toolbox {
     class Brick : public PaintableBrick {
         public:
-            Brick(const char* name, QColor color);
+            Brick(const char* message, const char* name, QColor color);
 
             void mouseMoveEvent(QMouseEvent* event) override;
             void mousePressEvent(QMouseEvent* event) override;

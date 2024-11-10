@@ -2,7 +2,7 @@
 #include "FunctionBrickPainter.h"
 #include <QDrag>
 
-Toolbox::FunctionBrick::FunctionBrick(const char* name, QColor color) : Toolbox::Brick(name, color) {
+Toolbox::FunctionBrick::FunctionBrick(const char* message, const char* name, QColor color) : Toolbox::Brick(message, name, color) {
     this->painter = new FunctionBrickPainter();
 }
 

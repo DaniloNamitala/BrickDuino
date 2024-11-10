@@ -65,12 +65,13 @@ void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
         for (QVariant brick : bricks) {
             QVariantMap brickMap = brick.toMap();
             Toolbox::Brick* b = nullptr;
+            
             if (brickMap["type"].toString() == "STATEMENT") {
-                b = new Toolbox::StatementBrick(brickMap["message"].toString().toStdString().c_str(), color);
+                b = new Toolbox::StatementBrick(brickMap["message"].toString().toStdString().c_str(), brickMap["name"].toString().toStdString().c_str(), color);
             } else if (brickMap["type"].toString() == "FUNCTION") {
-                b = new Toolbox::FunctionBrick(brickMap["message"].toString().toStdString().c_str(), color);
+                b = new Toolbox::FunctionBrick(brickMap["message"].toString().toStdString().c_str(), brickMap["name"].toString().toStdString().c_str(), color);
             } else if (brickMap["type"].toString() == "VALUE") {
-                b = new Toolbox::ValueBrick(brickMap["message"].toString().toStdString().c_str(), color);
+                b = new Toolbox::ValueBrick(brickMap["message"].toString().toStdString().c_str(), brickMap["name"].toString().toStdString().c_str(), color);
             }
 
             QVariantList params = brickMap["args"].toList();

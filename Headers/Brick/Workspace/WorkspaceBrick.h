@@ -36,8 +36,8 @@ namespace Workspace {
         virtual void openConfig();
     public:
         void mouseReleaseEvent(QMouseEvent* event) override;
-        Brick(QWidget* parent, const char* name, QColor color);
-        Brick(const char* name, QColor color);
+        Brick(QWidget* parent, const char* message, const char* name, QColor color);
+        Brick(const char* message, const char* name, QColor color);
         ~Brick();
         void setOwner(Brick* owner);
         void setPrevious(Brick* brick);
