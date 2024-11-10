@@ -40,6 +40,7 @@ void Board::dragEnterEvent(QDragEnterEvent *event)
         previewBrick->setParent(this);
         previewBrick->move(event->pos());
         previewBrick->show();
+
         bricks.append(previewBrick);
         event->acceptProposedAction();
     }

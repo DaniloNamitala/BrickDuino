@@ -103,6 +103,16 @@ void Workspace::Brick::insertParam(Brick* value) {
         }
 }
 
+void Workspace::Brick::setParent(QWidget* parent) {
+    QWidget::setParent(parent);
+    if (this->name == "switch_statement" && statements.last().head() == nullptr) {
+        StatementBrick* _case = new StatementBrick(parent, "CASO %1 %s PADRAO %s", "case_statement" ,color.darker(-500) );
+        _case->addParam(Parameter(ValueType::ANY));
+        _case->show();
+        ((StatementBrick*) this)->insertBrick(_case, 0);
+    }
+}
+
 void Workspace::Brick::mouseReleaseEvent(QMouseEvent* event) {
     setCursor(QCursor(Qt::OpenHandCursor));
     setZOrder(0);
@@ -121,6 +131,8 @@ void Workspace::Brick::replaceShadow(Workspace::Brick* brick){
 }
 
 void Workspace::Brick::moveBrick(QPoint newPos) {
+    if (name == "case_statement") return;
+
     setZOrder(INT16_MAX);
     setCursor(QCursor(Qt::ClosedHandCursor));
 
@@ -149,7 +161,7 @@ void Workspace::Brick::moveBrick(QPoint newPos) {
     }
 
     if (getType() != BrickType::VALUE && owner != nullptr) {
-        ((Workspace::StatementBrick*)owner)->removeBrick(this);
+        ((Workspace::StatementBrick*) owner)->removeBrick(this);
         setOwner(nullptr);
     }
 }
@@ -192,7 +204,7 @@ void Workspace::Brick::highlightParam(QPoint pos, bool value) {
     for (Parameter& p : params) {
         QPoint _pos = this->pos() + p.pos() + QPoint(-10, -10);
         QSize size = p.size() + QSize(20, 20);
-        QRect rect(_pos, sicleaze);
+        QRect rect(_pos, size);
         if (rect.contains(pos)) {
             p.highlight(value);
         } else {
@@ -248,6 +260,7 @@ void Workspace::Brick::dettach(Brick* brick) {
 
     this->setNext(nullptr);
     brick->setOwner(nullptr);
+    brick->setPrevious(nullptr);
 
     QPoint p = this->pos();
     p.setY(p.y() + this->height());

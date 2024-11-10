@@ -3,7 +3,7 @@ using namespace Workspace;
 
 #include "ToolboxStatementBrick.h"
 
-ConfigBrickIf::ConfigBrickIf(StatementBrick* brick, QWidget* parent) : QDialog(parent) {
+ConfigBrickIf::ConfigBrickIf(StatementBrick* brick, QString name) : QDialog(brick->getWidget()) {
     this->_brick = brick;
     setModal(true);
 
@@ -15,11 +15,17 @@ ConfigBrickIf::ConfigBrickIf(StatementBrick* brick, QWidget* parent) : QDialog(p
     QPushButton* btnRemoveElse = new QPushButton("-");
 
     connect(btnAddIf, &QPushButton::clicked, [=]() {
-        brick->addCondition();
+        if (name == "case_statement")
+            brick->addCase();
+        else
+            brick->addCondition();
     });
 
     connect(btnRemoveIf, &QPushButton::clicked, [=]() {
-        brick->removeCondition();
+        if (name == "case_statement")
+            brick->removeCase();
+        else
+            brick->removeCondition();
     });
 
     connect(btnAddElse, &QPushButton::clicked, [=]() {
@@ -31,14 +37,18 @@ ConfigBrickIf::ConfigBrickIf(StatementBrick* brick, QWidget* parent) : QDialog(p
     });
 
     QLabel* lblCondition = new QLabel("ELSE IF");
+    if (name == "case_statement")
+        lblCondition->setText("CASO");
     QLabel* lblElse = new QLabel("ELSE");
 
     layout->addWidget(lblCondition, 0, 0, 1, 2, Qt::AlignHCenter);
     layout->addWidget(btnAddIf, 1, 0);
     layout->addWidget(btnRemoveIf, 1, 1);
-    layout->addWidget(lblElse, 2, 0, 1, 2, Qt::AlignHCenter);
-    layout->addWidget(btnAddElse, 3, 0);
-    layout->addWidget(btnRemoveElse, 3, 1);
+    if (name == "if_statement") {
+        layout->addWidget(lblElse, 2, 0, 1, 2, Qt::AlignHCenter);
+        layout->addWidget(btnAddElse, 3, 0);
+        layout->addWidget(btnRemoveElse, 3, 1);
+    }
 
     layout->setContentsMargins(10, 10, 10, 10);
     setLayout(layout);

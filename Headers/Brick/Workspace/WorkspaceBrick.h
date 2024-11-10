@@ -57,6 +57,8 @@ namespace Workspace {
         virtual void replaceShadow(Brick* brick);
         virtual void insertParam(Brick* value);
         virtual void removeParam(Brick* value);
+        void setParent(QWidget* parent);
+
 
         virtual void setZOrder(int z);
         virtual void move(const QPoint& pos);

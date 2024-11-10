@@ -8,5 +8,5 @@ class ConfigBrickIf : public QDialog {
     private:
         Workspace::StatementBrick* _brick;
     public:
-        ConfigBrickIf(Workspace::StatementBrick* brick, QWidget* parent);
+        ConfigBrickIf(Workspace::StatementBrick* brick, QString name);
 };

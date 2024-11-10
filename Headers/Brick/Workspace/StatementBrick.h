@@ -30,8 +30,10 @@ namespace Workspace {
             void replaceShadow(Workspace::Brick* brick);
             
             void recalculateSize() override;
+            void addCase();
             void addCondition();
             void removeCondition();
+            void removeCase();
 
             void addElse();
             void removeElse();

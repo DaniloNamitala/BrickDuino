@@ -11,7 +11,7 @@
 
 Workspace::StatementBrick::StatementBrick(QWidget* parent, const char* message, const char* name, QColor color) : Workspace::Brick(parent, message, name, color) {
     painter = new StatementBrickPainter();
-    _showConfig = strcmp(name, "if_statement") == 0;
+    _showConfig = strcmp(name, "if_statement") == 0 || strcmp(name, "case_statement") == 0;
     for (int i = 0; i < QString(message).count("%s"); i++) {
         this->statements.append(Statement());
     }
@@ -19,6 +19,7 @@ Workspace::StatementBrick::StatementBrick(QWidget* parent, const char* message, 
     lines.clear();
     lines = QString(message).split("%s");
     lines.removeAll("");
+
     recalculateSize();
  }
 
@@ -31,6 +32,31 @@ void Workspace::StatementBrick::removeBrick(Workspace::Brick* brick) {
             break;
         }
     }
+    recalculateSize();
+}
+
+void Workspace::StatementBrick::addCase() {
+    int param = params.count() + 1;
+    QString line = QString("CASO %%1").arg(param);
+    int idx = lines.count() -1;
+
+    lines.insert(idx, line);
+    params.append(Parameter(ValueType::BOOL));
+    statements.insert(idx, Statement());
+
+    recalculateSize();
+}
+
+void Workspace::StatementBrick::removeCase() {
+    QRegularExpression re("CASO %[0-9]+");
+    int idx = lines.lastIndexOf(re);
+    if (idx >= statements.count() || idx < 0) return;
+    if(statements[idx].head() != nullptr) return;
+
+    lines.removeAt(idx);
+    params.removeLast();
+    statements.removeAt(idx);
+
     recalculateSize();
 }
 
@@ -86,7 +112,8 @@ void Workspace::StatementBrick::removeElse() {
 }
 
 void Workspace::StatementBrick::openConfig() {
-    ConfigBrickIf* config = new ConfigBrickIf(this, this);
+    if (!showConfig()) return;
+    ConfigBrickIf* config = new ConfigBrickIf(this, name);
     config->show();
 }
 
@@ -159,6 +186,7 @@ void Workspace::StatementBrick::removeShadow() {
 }
 
 void Workspace::StatementBrick::makeShadow(QPoint pos) {
+    if (name == "switch_statement") return;
     QPoint _pos = this->pos();
     QPoint _posBottom = this->pos();
     _posBottom.setY(_posBottom.y() + getHeight());
