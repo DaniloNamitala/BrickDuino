@@ -36,7 +36,7 @@ public:
     QSize headerSize(int index = 0) override;
     int getHeight() override;
 
-    void addParam(Parameter param);
+    virtual void addParam(Parameter param);
     void paintEvent(QPaintEvent* event) override;
     bool showConfig() override;
     QRect configRect() override;

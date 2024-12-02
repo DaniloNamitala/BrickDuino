@@ -10,8 +10,9 @@ namespace Toolbox {
             int getHeight() override;
             void recalculateSize() override;
             bool binary;
+            BrickType b_type;
         public:
-            ValueBrick(const char* message, const char* name, QColor color);
+            ValueBrick(const char* message, const char* name, QColor color, bool literal = false);
             BrickType getType() override;
     };    
 };

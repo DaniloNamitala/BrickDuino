@@ -2,13 +2,16 @@
 #include "ValueBrickPainter.h"
 #include "Util.h"
 
-Toolbox::ValueBrick::ValueBrick(const char* message, const char* name, QColor color) : Toolbox::Brick(message, name, color) {
+Toolbox::ValueBrick::ValueBrick(const char* message, const char* name, QColor color, bool literal) : Toolbox::Brick(message, name, color) {
     this->painter = new ValueBrickPainter();
+    b_type = BrickType::VALUE;
+    if (literal)
+        b_type = BrickType::LITERAL_VALUE;
     recalculateSize();
 }
 
 BrickType Toolbox::ValueBrick::getType() {
-    return BrickType::VALUE;
+    return b_type;
 }
 
 int Toolbox::ValueBrick::getHeight() {

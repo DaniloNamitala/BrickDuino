@@ -2,6 +2,7 @@
 #include "Util.h"
 #include "TypeMatchException.h"
 #include "ValueBrick.h"
+#include "LiteralValueBrick.h"
 
 Parameter::Parameter(ValueType type) {
     this->type = type;

@@ -10,6 +10,7 @@
 #include "ValueBrick.h"
 #include "ToolboxBrick.h"
 #include "FunctionBrick.h"
+#include "LiteralValueBrick.h"
 
 Workspace::Brick::Brick(QWidget* parent, const char* message, const char* name, QColor color) : PaintableBrick(parent, message, name, color) {
     this->z_order = -1;
@@ -46,6 +47,8 @@ namespace Workspace {
             c = new Workspace::StatementBrick(message.toStdString().c_str(), name.toStdString().c_str(), color);
         else if (type == BrickType::VALUE) 
             c = new Workspace::ValueBrick(message.toStdString().c_str(), name.toStdString().c_str(), color);
+        else if (type == BrickType::LITERAL_VALUE)
+            c = new Workspace::LiteralValueBrick(message.toStdString().c_str(),name.toStdString().c_str(), color);
         else 
             c = nullptr;
         
@@ -105,6 +108,12 @@ void Workspace::Brick::insertParam(Brick* value) {
 
 void Workspace::Brick::setParent(QWidget* parent) {
     QWidget::setParent(parent);
+    this->show();
+
+    for (int i = 0; i < params.count(); i++)
+        if (params[i].getValue() != nullptr)
+            params[i].getValue()->setParent(parent);
+
     if (this->name == "switch_statement" && statements.last().head() == nullptr) {
         StatementBrick* _case = new StatementBrick(parent, "CASO %1 %s PADRAO %s", "case_statement" ,color.darker(-500) );
         _case->addParam(Parameter(ValueType::ANY));
@@ -211,8 +220,6 @@ void Workspace::Brick::highlightParam(QPoint pos, bool value) {
             p.highlight(false);
         }
     }
-
-
     recalculateSize();
 }
 
@@ -252,6 +259,18 @@ void Workspace::Brick::attach(Brick* brick) {
     brick->move(p);
     
     if (owner != nullptr) owner->recalculateSize();
+}
+
+void Workspace::Brick::addParam(Parameter param) {
+    PaintableBrick::addParam(param);
+
+    if (param.getType() == ValueType::LITERAL) {
+        Brick* b = new LiteralValueBrick("FUNCTION", "literal_value", QColor(0x82101b));
+        b->setOwner(this);
+        b->hide();
+        params.last().setValue((ValueBrick*) b);
+        recalculateSize();
+    }
 }
 
 void Workspace::Brick::dettach(Brick* brick) {

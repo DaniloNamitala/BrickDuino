@@ -26,5 +26,5 @@ QFont Util::font() {
 }
 
 QFont Util::font_sm() {
-    return QFont("Cascadia Code", 9, QFont::Bold, false);
+    return QFont("Cascadia Code", 10, QFont::Bold, false);
 }

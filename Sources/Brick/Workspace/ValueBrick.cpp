@@ -1,3 +1,4 @@
+
 #include "ValueBrick.h"
 
 #include <QPainter>

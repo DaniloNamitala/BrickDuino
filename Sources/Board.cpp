@@ -1,9 +1,7 @@
 #include "Board.h"
 
-#include "FunctionBrick.h"
 #include "Parameter.h"
 #include "Shadow.h"
-#include "StatementBrick.h"
 #include <iostream>
 
 
@@ -40,8 +38,6 @@ void Board::dragEnterEvent(QDragEnterEvent *event)
         previewBrick->setParent(this);
         previewBrick->move(event->pos());
         previewBrick->show();
-
-        bricks.append(previewBrick);
         event->acceptProposedAction();
     }
 }
@@ -87,7 +83,11 @@ void Board::setZOrder(QWidget* widget, int old_z, int new_z) {
 }
 
 Board::~Board() {
-    for (Workspace::Brick* brick : bricks) {
-        delete brick;
+    QMapIterator<int, QList<QWidget*>> i(zOrder);
+    while (i.hasNext()) {
+        i.next();
+        for (QWidget* w : i.value()) {
+            delete w;
+        }
     }
 }

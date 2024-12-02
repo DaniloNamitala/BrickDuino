@@ -10,6 +10,8 @@ Toolbox::StatementBrick::StatementBrick(const char* message, const char* name, Q
     lines.clear();
     lines = QString(message).split("%s");
     lines.removeAll("");
+
+    recalculateSize();
 }
 
 BrickType Toolbox::StatementBrick::getType() {

@@ -8,6 +8,7 @@ enum BrickType {
     FUNCTION,
     STATEMENT,
     VALUE,
+    LITERAL_VALUE,
     UNDEFINED
 };
 

@@ -58,6 +58,7 @@ namespace Workspace {
         virtual void insertParam(Brick* value);
         virtual void removeParam(Brick* value);
         void setParent(QWidget* parent);
+        void addParam(Parameter param) override;
 
 
         virtual void setZOrder(int z);

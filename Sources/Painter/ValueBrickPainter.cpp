@@ -6,7 +6,6 @@ void ValueBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     QPainterPath path;
     QWidget* widget = brick->getWidget();
     
-    
     QPixmap** cache = brick->getCache();
     if (*cache != nullptr) {
         QPainter _painter(widget);
@@ -21,8 +20,6 @@ void ValueBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
 
     QPen pen = brick->getContourPen();
     
-
-
     // Draw the shape of the brick
     path.moveTo(widget->height() / 2 , 0);
     path.arcTo(0, 0, widget->height(), widget->height(), 90, 180);

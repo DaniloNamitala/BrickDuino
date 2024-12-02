@@ -72,6 +72,8 @@ void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
                 b = new Toolbox::FunctionBrick(brickMap["message"].toString().toStdString().c_str(), brickMap["name"].toString().toStdString().c_str(), color);
             } else if (brickMap["type"].toString() == "VALUE") {
                 b = new Toolbox::ValueBrick(brickMap["message"].toString().toStdString().c_str(), brickMap["name"].toString().toStdString().c_str(), color);
+            } else if (brickMap["type"].toString() == "LITERAL_VALUE") {
+                b = new Toolbox::ValueBrick(brickMap["message"].toString().toStdString().c_str(), brickMap["name"].toString().toStdString().c_str(), color, true);
             }
 
             QVariantList params = brickMap["args"].toList();
@@ -80,12 +82,14 @@ void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
                 ValueType type = ValueType::ANY;
                 if (paramMap["type"].toString() == "INT") {
                     type = ValueType::INT;
-                } else if (paramMap["type"].toString() == "FLOAT") {
+                } else if (paramMap["type"].toString().toUpper() == "FLOAT") {
                     type = ValueType::FLOAT;
-                } else if (paramMap["type"].toString() == "STRING") {
+                } else if (paramMap["type"].toString().toUpper() == "STRING") {
                     type = ValueType::STRING;
-                } else if (paramMap["type"].toString() == "BOOL") {
+                } else if (paramMap["type"].toString().toUpper() == "BOOL") {
                     type = ValueType::BOOL;
+                } else if (paramMap["type"].toString().toUpper() == "LITERAL") {
+                    type = ValueType::LITERAL;
                 }
                 Parameter p(type);
                 b->addParam(p);

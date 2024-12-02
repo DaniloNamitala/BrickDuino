@@ -1,44 +1,21 @@
 {
     "spoilers": [
         {
-            "name": "CONTROLE",
-            "color": "#82101b", 
+            "name": "SAÍDA",
+            "color": "#4e03fc",
             "bricks": [
                 {
-                    "name": "if_statement",
-                    "type": "STATEMENT",
-                    "message": "IF %1 %s",
+                    "name": "prnumber_output",
+                    "type": "FUNCTION",
+                    "message": "ESCREVER %1",
                     "args": [
                         {
-                            "name": "condition",
-                            "type": "bool"
-                        }
-                    ]
-                },
-                {
-                    "name": "for_statement",
-                    "type": "STATEMENT",
-                    "message": "DO %s WHILE %1",
-                    "args": [
-                        {
-                            "name": "condition",
-                            "type": "bool"
-                        }
-                    ]
-                },
-                {
-                    "name": "if_else_statement",
-                    "type": "STATEMENT",
-                    "message": "IF %1 %s ELSE %s",
-                    "args": [
-                        {
-                            "name": "condition",
-                            "type": "bool"
+                            "name": "texto",
+                            "type": "any"
                         }
                     ]
                 }
             ]
         }
-
     ]
 }

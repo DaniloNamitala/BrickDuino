@@ -14,6 +14,7 @@ enum ValueType {
     FLOAT,
     STRING,
     BOOL,
+    LITERAL,
     ANY
 };
 
