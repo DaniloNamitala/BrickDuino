@@ -19,9 +19,17 @@ private:
     QJsonDocument _document;
     QVariantMap _documentMap;
 
-    void crteateBlockToolbox();
+    QMenu* fileMenu;
+    QAction* saveAct;
+    QAction* saveAsAct;
+
+    void createBlockToolbox();
     void loadBlocksFromJson(const char* path, QLayout* layout);
-    void crteateBlockBoard();
+    void createBlockBoard();
+    void createActions();
+    void createMenus();
+    void saveFile();
+    void saveFileAs();
 public:
     explicit BrickDuino(QWidget *parent = nullptr);
     ~BrickDuino();

@@ -6,16 +6,44 @@
 #include "Spoiler.h"
 
 BrickDuino::BrickDuino(QWidget* parent) {
-    crteateBlockBoard();
-    crteateBlockToolbox();
+    createBlockBoard();
+    createBlockToolbox();
+    createActions();
+    createMenus();
 }
 
-void BrickDuino::crteateBlockBoard() {
+void BrickDuino::createActions() {
+    saveAct = new QAction(QIcon::fromTheme(QIcon::ThemeIcon::DocumentSave),tr("&Salvar"), this);
+    saveAct->setShortcuts(QKeySequence::Save);
+    saveAct->setStatusTip(tr("Salvar Projeto"));
+    connect(saveAct, &QAction::triggered, this, &BrickDuino::saveFile);
+
+    saveAsAct = new QAction(QIcon::fromTheme(QIcon::ThemeIcon::DocumentSaveAs), tr("&Salvar Como"), this);
+    saveAsAct->setShortcuts(QKeySequence::SaveAs);
+    saveAsAct->setStatusTip(tr("Salvar Projeto"));
+    connect(saveAsAct, &QAction::triggered, this, &BrickDuino::saveFileAs);
+}
+
+void BrickDuino::createMenus() {
+    fileMenu = menuBar()->addMenu(tr("&Arquivo"));
+    fileMenu->addAction(saveAct);
+    fileMenu->addAction(saveAsAct);
+}
+
+void BrickDuino::saveFile() {
+    blockBoard->saveToFile("D:/Projetos/TCC/BrickDuino/save.json");
+}
+
+void BrickDuino::saveFileAs() {
+    saveFile();
+}
+
+void BrickDuino::createBlockBoard() {
     blockBoard = new Board(BOARD_BACKGROUND_COLOR);
     this->setCentralWidget(blockBoard);
 }
 
-void BrickDuino::crteateBlockToolbox() {
+void BrickDuino::createBlockToolbox() {
     blockToolbox = new QDockWidget(tr("Blocks"), this);
     blockToolbox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -80,6 +108,8 @@ void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
             for (QVariant param : params) {
                 QVariantMap paramMap = param.toMap();
                 ValueType type = ValueType::ANY;
+                QString p_name = paramMap.value("name", tr("undefined")).toString();
+                if (paramMap.contains("name"))
                 if (paramMap["type"].toString() == "INT") {
                     type = ValueType::INT;
                 } else if (paramMap["type"].toString().toUpper() == "FLOAT") {
@@ -91,7 +121,7 @@ void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
                 } else if (paramMap["type"].toString().toUpper() == "LITERAL") {
                     type = ValueType::LITERAL;
                 }
-                Parameter p(type);
+                Parameter p(type, p_name);
                 b->addParam(p);
             }
 

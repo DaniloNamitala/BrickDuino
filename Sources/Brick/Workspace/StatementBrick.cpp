@@ -41,7 +41,7 @@ void Workspace::StatementBrick::addCase() {
     int idx = lines.count() -1;
 
     lines.insert(idx, line);
-    params.append(Parameter(ValueType::BOOL));
+    params.append(Parameter(ValueType::BOOL, "case_value"));
     statements.insert(idx, Statement());
 
     recalculateSize();
@@ -68,7 +68,7 @@ void Workspace::StatementBrick::addCondition() {
         idx--;
 
     lines.insert(idx, line);
-    params.append(Parameter(ValueType::BOOL));
+    params.append(Parameter(ValueType::BOOL, "condition"));
     statements.insert(idx, Statement());
 
     recalculateSize();

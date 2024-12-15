@@ -12,6 +12,18 @@
 #include "FunctionBrick.h"
 #include "LiteralValueBrick.h"
 
+#define X(a, b) b,
+const char* type_name[] = {
+  TYPE_TABLE
+};
+#undef X
+
+#define X(a, b) b,
+const char* value_type_name[] = {
+  VALUE_TYPE_TABLE
+};
+#undef X
+
 Workspace::Brick::Brick(QWidget* parent, const char* message, const char* name, QColor color) : PaintableBrick(parent, message, name, color) {
     this->z_order = -1;
     this->owner = nullptr;
@@ -54,9 +66,11 @@ namespace Workspace {
         
         if (c != nullptr) {
             ValueType p_type;
+            QString p_name;
             while (!in.atEnd()) {
                 in >> p_type;
-                c->addParam(Parameter(p_type));
+                in >> p_name;
+                c->addParam(Parameter(p_type, p_name));
             }
         }
         return in;
@@ -106,6 +120,54 @@ void Workspace::Brick::insertParam(Brick* value) {
         }
 }
 
+QJsonObject Workspace::Brick::GetJson() {    
+    QJsonObject json;
+    json["name"] = this->name;
+    json["type"] = type_name[this->getType()];
+    json["message"] = this->message;
+    if (isFree()) {
+        json["pos"] = tr("(") + QString::number(pos().x()) + tr(",") + QString::number(pos().y()) + tr(")");
+    }
+
+    QJsonArray jsonParams;
+    if (!params.isEmpty()) {
+        for (Parameter& p : params) {
+            QJsonObject jsonParam;
+            jsonParam["name"] = p.getName();
+            jsonParam["type"] = value_type_name[p.getType()];
+            if (p.getValue() != nullptr) {
+                jsonParam["value"] = p.getValue()->GetJson();
+            }
+            jsonParams.append(jsonParam);
+        }
+        json["args"] = jsonParams;
+    }
+
+    QJsonArray jsonStatements;
+    if (!statements.isEmpty()) {
+        for (Statement& s : statements) {
+            if (s.head() != nullptr) { 
+                QJsonObject jsonStatement;
+                jsonStatement["head"] = s.head()->GetJson();
+                jsonStatements.append(jsonStatement);
+            }
+        }
+        json["statements"] = jsonStatements;
+    }
+
+    if (previous == nullptr && next != nullptr) {
+        QJsonArray chain;
+        Brick* _b = next;
+        while (_b != nullptr) {
+            chain.append(_b->GetJson());
+            _b = _b->getNext();
+        }
+        json["chain"] = chain;
+    }
+ 
+    return json;
+}
+
 void Workspace::Brick::setParent(QWidget* parent) {
     QWidget::setParent(parent);
     this->show();
@@ -116,7 +178,7 @@ void Workspace::Brick::setParent(QWidget* parent) {
 
     if (this->name == "switch_statement" && statements.last().head() == nullptr) {
         StatementBrick* _case = new StatementBrick(parent, "CASO %1 %s PADRAO %s", "case_statement" ,color.darker(-500) );
-        _case->addParam(Parameter(ValueType::ANY));
+        _case->addParam(Parameter(ValueType::ANY, "case_value"));
         _case->show();
         ((StatementBrick*) this)->insertBrick(_case, 0);
     }
@@ -189,6 +251,11 @@ void Workspace::Brick::mouseMoveEvent(QMouseEvent* event) {
 bool Workspace::Brick::isShadow() {
     return _isShadow;
 }
+
+bool Workspace::Brick::isFree() {
+    return previous == nullptr && owner == nullptr;
+}
+
 
 void Workspace::Brick::removeShadow() {
     if (shadow != nullptr) {

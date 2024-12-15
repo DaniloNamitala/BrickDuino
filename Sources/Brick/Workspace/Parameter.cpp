@@ -4,16 +4,21 @@
 #include "ValueBrick.h"
 #include "LiteralValueBrick.h"
 
-Parameter::Parameter(ValueType type) {
+Parameter::Parameter(ValueType type, QString name) {
+    this->name = name;
     this->type = type;
     this->value = nullptr;
     this->outline = false;
 }
 
-Parameter::Parameter() : Parameter(ValueType::ANY) { }
+Parameter::Parameter() : Parameter(ValueType::ANY, "undefned") { }
 
 ValueType Parameter::getType() {
     return type;
+}
+
+QString Parameter::getName() {
+    return name;
 }
  
 QSize Parameter::size() {

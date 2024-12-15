@@ -9,14 +9,24 @@
 
 #define VALUE_COLOR QColor(0xFF6600)
 
+#ifndef VALUE_TYPE_ENUM
+#define VALUE_TYPE_ENUM
+
+#define VALUE_TYPE_TABLE \
+X(INT, "INT") \
+X(FLOAT, "FLOAT") \
+X(STRING, "STRING") \
+X(BOOL, "BOOL") \
+X(LITERAL, "LITERAL") \
+X(ANY, "ANY")
+
+#define X(a, b) a,
 enum ValueType {
-    INT,
-    FLOAT,
-    STRING,
-    BOOL,
-    LITERAL,
-    ANY
+    VALUE_TYPE_TABLE
 };
+#undef X
+#endif // !VALUE_TYPE_ENUM
+
 
 class Value {
 private:

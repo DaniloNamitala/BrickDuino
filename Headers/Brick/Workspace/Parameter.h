@@ -20,14 +20,16 @@ class Parameter {
         Workspace::ValueBrick* value;
         QPoint _origin;
         bool outline;
+        QString name;
     public:
         Parameter();
-        Parameter(ValueType type);
+        Parameter(ValueType type, QString p_name);
         QSize size();
         void paint(QPainter* painter, QPoint origin, QPoint parentPos);
         void setValue(Workspace::ValueBrick* value);
         void reposition(QPoint pos);
         ValueType getType();
+        QString getName();
         QPoint pos();
         Workspace::ValueBrick* getValue();
         void highlight(bool value);

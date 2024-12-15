@@ -4,13 +4,23 @@
 #include "Parameter.h"
 #include "Statement.h"
 
+#ifndef BRICK_TYPE
+#define BRICK_TYPE
+
+#define TYPE_TABLE \
+X(FUNCTION, "FUNCTION") \
+X(STATEMENT, "STATEMENT") \
+X(VALUE, "VALUE") \
+X(LITERAL_VALUE, "LITERAL_VALUE") \
+X(UNDEFINED, "UNDEFINED")
+
+#define X(a, b) a,
 enum BrickType {
-    FUNCTION,
-    STATEMENT,
-    VALUE,
-    LITERAL_VALUE,
-    UNDEFINED
+    TYPE_TABLE
 };
+#undef X
+#endif
+
 
 class IPaintableBrick {
    public:

@@ -16,19 +16,20 @@ class Board : public QWidget
 
         QList<Workspace::Brick*> bricks;
         Workspace::Brick* previewBrick;
+
+    protected:
+        void paintEvent(QPaintEvent* event) override;
+
+        void dragMoveEvent(QDragMoveEvent* event) override;
+        void dragEnterEvent(QDragEnterEvent* event) override;
+        void dropEvent(QDropEvent* event) override;
+        void dragLeaveEvent(QDragLeaveEvent* event) override;
+
     public:
         Board(QColor bgColor);
         ~Board();
         void setZOrder(QWidget* widget, int old_z, int new_z);
         void removeOrder(QWidget* widget, int z_order);
-
-    protected:
-        void paintEvent(QPaintEvent* event) override;
-
-        void dragMoveEvent(QDragMoveEvent *event) override;
-        void dragEnterEvent(QDragEnterEvent *event) override;
-        void dropEvent(QDropEvent *event) override;
-        void dragLeaveEvent(QDragLeaveEvent *event) override;
-
+        void saveToFile(QString path);
 };
 

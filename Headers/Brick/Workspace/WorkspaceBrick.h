@@ -47,6 +47,7 @@ namespace Workspace {
         void dettach(Brick* brick);
         void setColor(QColor color);
         bool isShadow();
+        bool isFree();
         Brick* tail();
 
         void moveBrick(QPoint newPos);
@@ -60,6 +61,7 @@ namespace Workspace {
         void setParent(QWidget* parent);
         void addParam(Parameter param) override;
 
+        QJsonObject GetJson();
 
         virtual void setZOrder(int z);
         virtual void move(const QPoint& pos);
