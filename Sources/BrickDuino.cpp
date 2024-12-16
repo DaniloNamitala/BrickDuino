@@ -6,6 +6,7 @@
 #include "Spoiler.h"
 
 BrickDuino::BrickDuino(QWidget* parent) {
+    this->_path = "";
     createBlockBoard();
     createBlockToolbox();
     createActions();
@@ -31,11 +32,24 @@ void BrickDuino::createMenus() {
 }
 
 void BrickDuino::saveFile() {
-    blockBoard->saveToFile("D:/Projetos/TCC/BrickDuino/save.json");
+    if (_path.isEmpty())
+        return saveFileAs();
+
+    blockBoard->saveToFile(_path);
 }
 
 void BrickDuino::saveFileAs() {
-    saveFile();
+    QFileDialog dialog(this);
+    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setNameFilter(tr("Saves (*.json)"));
+    dialog.setViewMode(QFileDialog::Detail);
+    if (dialog.exec()) {
+        _path = dialog.selectedFiles().first();
+        if (!_path.endsWith(".json"))
+            _path.append(".json");
+        blockBoard->saveToFile(_path);
+    }
 }
 
 void BrickDuino::createBlockBoard() {

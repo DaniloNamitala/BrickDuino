@@ -19,6 +19,8 @@ private:
     QJsonDocument _document;
     QVariantMap _documentMap;
 
+    // for saving
+    QString _path;
     QMenu* fileMenu;
     QAction* saveAct;
     QAction* saveAsAct;
