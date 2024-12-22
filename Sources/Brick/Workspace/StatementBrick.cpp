@@ -36,8 +36,11 @@ void Workspace::StatementBrick::removeBrick(Workspace::Brick* brick) {
 }
 
 void Workspace::StatementBrick::addCase() {
+    //"CASO %1 %s PADRAO %s"
     int param = params.count() + 1;
     QString line = QString("CASO %%1").arg(param);
+    int idx_ins = message.indexOf("PADRAO");
+    message.insert(idx_ins, line + " ");
     int idx = lines.count() -1;
 
     lines.insert(idx, line);
@@ -53,6 +56,11 @@ void Workspace::StatementBrick::removeCase() {
     if (idx >= statements.count() || idx < 0) return;
     if(statements[idx].head() != nullptr) return;
 
+    QString line = lines.at(idx);
+    QString s = message.remove(line + " %s ");
+    if (s.isEmpty())
+        message.remove(line + " %s");
+
     lines.removeAt(idx);
     params.removeLast();
     statements.removeAt(idx);
@@ -63,6 +71,12 @@ void Workspace::StatementBrick::removeCase() {
 void Workspace::StatementBrick::addCondition() {
     int param = params.count() + 1;
     QString line = QString("SENAO SE %%1").arg(param);
+    if (message.contains("SENAO %s")) {
+        int idx_ins = message.indexOf("SENAO %s");
+        message.insert(idx_ins, line + " %s ");
+    } else {
+        message += " " + line + " %s";
+    }
     int idx = lines.count();
     if (lines.last().trimmed() == "SENAO")
         idx--;
@@ -78,6 +92,7 @@ void Workspace::StatementBrick::addElse() {
     if (lines.last().trimmed() == "SENAO") return;
     int param = params.count() + 1;
     QString line = QString("SENAO").arg(param);
+    message += " " + line + " %s";
     lines.append(line);
     statements.append(Statement());
 
@@ -89,6 +104,11 @@ void Workspace::StatementBrick::removeCondition() {
     int idx = lines.lastIndexOf(re);
     if (idx >= statements.count() || idx < 0) return;
     if(statements[idx].head() != nullptr) return;
+    
+    QString line = lines.at(idx);
+    QString s = message.remove(line + " %s ");
+    if (s.contains(line))
+        message.remove(" " + line + " %s");
 
     lines.removeAt(idx);
     params.removeLast();
@@ -104,6 +124,11 @@ BrickType Workspace::StatementBrick::getType() {
 void Workspace::StatementBrick::removeElse() {
     if (lines.last().trimmed() != "SENAO") return;
     if(statements.last().head() != nullptr) return;
+
+    QString line = lines.last();
+    if (!line.startsWith(" ")) line = " " + line;
+    if (!line.endsWith(" ")) line += " ";
+    message.remove(line + "%s");
 
     lines.removeLast();
     statements.removeLast();

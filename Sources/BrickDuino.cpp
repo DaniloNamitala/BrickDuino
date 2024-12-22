@@ -4,6 +4,7 @@
 #include "ToolboxStatementBrick.h"
 #include "ToolboxValueBrick.h"
 #include "Spoiler.h"
+#include "Compiler.h"
 
 BrickDuino::BrickDuino(QWidget* parent) {
     this->_path = "";
@@ -23,19 +24,36 @@ void BrickDuino::createActions() {
     saveAsAct->setShortcuts(QKeySequence::SaveAs);
     saveAsAct->setStatusTip(tr("Salvar Projeto"));
     connect(saveAsAct, &QAction::triggered, this, &BrickDuino::saveFileAs);
+
+    compileAct = new QAction(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart), tr("&Compilar"), this);
+    compileAct->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_B);
+    compileAct->setStatusTip(tr("Compilar Projeto"));
+    connect(compileAct, &QAction::triggered, this, &BrickDuino::compileProject);
+}
+
+void BrickDuino::compileProject() {
+    saveFile();
+
+    //Compiler compiler(_document, _path + ".cpp");
+    Compiler compiler(_document, _path + ".pas");
+    compiler.compile();
 }
 
 void BrickDuino::createMenus() {
     fileMenu = menuBar()->addMenu(tr("&Arquivo"));
     fileMenu->addAction(saveAct);
     fileMenu->addAction(saveAsAct);
+
+    compileMenu = menuBar()->addMenu(tr("&Compilar"));
+    compileMenu->addAction(compileAct);
 }
 
 void BrickDuino::saveFile() {
+    _path = tr("C:/Users/danil/Desktop/teste.json");
     if (_path.isEmpty())
         return saveFileAs();
 
-    blockBoard->saveToFile(_path);
+    _document = blockBoard->saveToFile(_path);
 }
 
 void BrickDuino::saveFileAs() {
@@ -48,7 +66,7 @@ void BrickDuino::saveFileAs() {
         _path = dialog.selectedFiles().first();
         if (!_path.endsWith(".json"))
             _path.append(".json");
-        blockBoard->saveToFile(_path);
+        _document = blockBoard->saveToFile(_path);
     }
 }
 
@@ -83,20 +101,21 @@ void BrickDuino::createBlockToolbox() {
 }
 
 void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
-    _fileName = path;
 
     // Opening and reading file content in buffer
-    _file.setFileName(_fileName);
-    _file.open(QIODevice::ReadOnly | QIODevice::Text);
-    _fileBuffer = _file.readAll();
-    _file.close();
+    QFile file;
+    QString fileBuffer;
+    file.setFileName(tr(path));
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    fileBuffer = file.readAll();
+    file.close();
 
     // Parsing buffer to json objects
-    _document = QJsonDocument::fromJson(_fileBuffer.toUtf8());
-    _documentMap = _document.object().toVariantMap();
+    QJsonDocument document = QJsonDocument::fromJson(fileBuffer.toUtf8());
+    QVariantMap documentMap = document.object().toVariantMap();
 
     // Getting blocks from json
-    QVariantList spoilers = _documentMap["spoilers"].toList();
+    QVariantList spoilers = documentMap["spoilers"].toList();
     for (QVariant spoiler : spoilers) {
         QVariantMap spoilerMap = spoiler.toMap();
         QString str_color = spoilerMap["color"].toString();

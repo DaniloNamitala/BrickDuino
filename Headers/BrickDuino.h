@@ -12,18 +12,17 @@ private:
     QDockWidget *blockToolbox;
     Board* blockBoard;
 
-    //json
-    QString _fileName;
-    QString _fileBuffer;
-    QFile _file;
-    QJsonDocument _document;
-    QVariantMap _documentMap;
-
     // for saving
     QString _path;
     QMenu* fileMenu;
     QAction* saveAct;
     QAction* saveAsAct;
+
+    // for compiling
+    QJsonDocument _document;
+    QString _compilePath;
+    QMenu* compileMenu;
+    QAction* compileAct;
 
     void createBlockToolbox();
     void loadBlocksFromJson(const char* path, QLayout* layout);
@@ -32,6 +31,7 @@ private:
     void createMenus();
     void saveFile();
     void saveFileAs();
+    void compileProject();
 public:
     explicit BrickDuino(QWidget *parent = nullptr);
     ~BrickDuino();

@@ -5,13 +5,13 @@
             "color": "#82101b",
             "bricks": [
                 {
-                  "name": "prnumber_input",
+                  "name": "std_input",
                   "type": "VALUE",
                   "message": "LER",
                   "output": "any"
                 },
                 {
-                    "name": "literal_value",
+                    "name": "literal_string",
                     "type": "LITERAL_VALUE",
                     "message": "STRING",
                     "output": "ANY"
@@ -23,7 +23,7 @@
             "color": "#4e03fc",
             "bricks": [
                 {
-                    "name": "prnumber_output",
+                    "name": "std_output",
                     "type": "FUNCTION",
                     "message": "ESCREVER %1",
                     "args": [
@@ -39,17 +39,6 @@
             "name": "CONTROLE",
             "color": "#b35702",
             "bricks": [
-                {
-                    "name": "function_declaration",
-                    "type": "STATEMENT",
-                    "message": "DECLARE %1 %s",
-                    "args": [
-                        {
-                            "name": "funcname",
-                            "type": "literal"
-                        }   
-                    ]
-                },
                 {
                     "name": "for_statement",
                     "type": "STATEMENT",
@@ -120,17 +109,6 @@
                     "args": [
                         {
                             "name": "variable",
-                            "type": "any"
-                        }
-                    ]
-                },
-                {
-                    "name": "case_statement",
-                    "type": "STATEMENT",
-                    "message": "CASO %1 %s",
-                    "args": [
-                        {
-                            "name": "value",
                             "type": "any"
                         }
                     ]
@@ -380,7 +358,7 @@
                 "output": "number"
               },
               {
-                "name": "literal_value",
+                "name": "literal_number",
                 "type": "LITERAL_VALUE",
                 "message": "0",
                 "output": "ANY"

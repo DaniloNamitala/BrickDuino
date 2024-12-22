@@ -29,7 +29,7 @@ void Board::dragLeaveEvent(QDragLeaveEvent* event) {
 	previewBrick = nullptr;
 }
 
-void Board::saveToFile(QString path) {
+QJsonDocument Board::saveToFile(QString path) {
 	if (zOrder.contains(0)) {
 
 		QJsonArray jsonArray;
@@ -49,7 +49,9 @@ void Board::saveToFile(QString path) {
 		file.open(QFile::WriteOnly | QFile::Text);
 		file.write(document.toJson(QJsonDocument::Indented));
 		file.close();
+		return document;
 	}
+	return QJsonDocument();
 }
 
 void Board::dragEnterEvent(QDragEnterEvent* event)

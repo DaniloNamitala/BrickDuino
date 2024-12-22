@@ -30,6 +30,6 @@ class Board : public QWidget
         ~Board();
         void setZOrder(QWidget* widget, int old_z, int new_z);
         void removeOrder(QWidget* widget, int z_order);
-        void saveToFile(QString path);
+        QJsonDocument saveToFile(QString path);
 };
 
