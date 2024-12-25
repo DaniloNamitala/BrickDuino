@@ -4,20 +4,7 @@
 #include <QtWidgets>
 #include <QLineEdit>
 #include "ValueBrick.h"	
-
-class LineEdit : public QLineEdit {
-
-public:
-    LineEdit(QWidget* parent = nullptr) : QLineEdit(parent) {}
-
-protected:
-    void keyReleaseEvent(QKeyEvent* event) override {
-        QLineEdit::keyReleaseEvent(event);
-        if (event->key() == Qt::Key_Escape || event->key() == Qt::Key_Return) {
-            emit editingFinished();
-        }
-    }
-};
+#include "LineEdit.h"
 
 namespace Workspace {
     class LiteralValueBrick : public Workspace::ValueBrick
@@ -27,6 +14,7 @@ namespace Workspace {
 
             void lineEditChanged(const QString& text);
             void lineEditDone();
+            void lineEditReject();
         protected:
             int getHeight() override;
             int getWidth() override;

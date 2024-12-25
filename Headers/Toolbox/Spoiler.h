@@ -1,3 +1,4 @@
+#pragma once
 #include <QFrame>
 #include <QGridLayout>
 #include <QParallelAnimationGroup>
@@ -10,7 +11,9 @@ private:
     QVBoxLayout mainLayout;
     QToolButton toggleButton;
     QWidget contentArea;
+    QString title;
 public:
     explicit Spoiler(const QString & title = "Teste", QString color = "", QWidget *parent = 0);
+    QString getTitle();
     void addWidget(QWidget* widget);
 };

@@ -19,6 +19,7 @@ file(GLOB PAINTER_CPP_FILES Sources/Painter/*.cpp)
 file(GLOB TOOLBOX_CPP_FILES Sources/Toolbox/*.cpp)
 file(GLOB SCREENS_CPP_FILES Sources/Screens/*.cpp)
 file(GLOB COMPILER_FILES Sources/Compiler/*.cpp)
+file(GLOB COMPONENTS_FILES Sources/Components/*.cpp)
 
 #include directories
 SET(INCLUDE_DIR "Headers/")
@@ -30,6 +31,7 @@ SET(INCLUDE_DIR_PAINTER "Headers/Painter/")
 SET(INCLUDE_DIR_TOOLBOX "Headers/Toolbox/")
 SET(INCLUDE_DIR_SCREENS "Headers/Screens/")
 SET(INCLUDE_DIR_COMPILER "Headers/Compiler/")
+SET(INCLUDE_DIR_COMPONENTS "Headers/Components/")
 
 # Adicione a origem ao executável deste projeto.
 add_executable (BrickDuino 
@@ -40,6 +42,7 @@ add_executable (BrickDuino
   ${BRICK_CPP_FILES} 
   ${BRICK_T_CPP_FILES} 
   ${BRICK_W_CPP_FILES}
+  ${COMPONENTS_FILES}
   ${COMPILER_FILES})  
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
@@ -56,6 +59,7 @@ target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_PAINTER})
 target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_TOOLBOX})
 target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_SCREENS})
 target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_COMPILER})
+target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_COMPONENTS})
 
 # libraries
 target_link_libraries(BrickDuino PRIVATE Qt6::Widgets)

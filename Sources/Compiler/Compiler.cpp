@@ -1,12 +1,6 @@
 #include "Compiler.h"
 #include <QtCore>
 
-#define LINE_BREAK		 "\n"
-#define STATEMENT_START	 "{"
-#define STATEMENT_END	 "}"
-#define PARENTESIS_START "("
-#define PARENTESIS_END	 ")"
-
 Compiler::Compiler(QJsonDocument document, QString output) {
 	this->document = document;
 	this->path = output;

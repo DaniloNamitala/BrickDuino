@@ -5,11 +5,13 @@
 #include <QtWidgets>
 #include <QMainWindow>
 #include "Board.h"
+#include "Spoiler.h"
 
 class BrickDuino : public QMainWindow
 {
 private:
     QDockWidget *blockToolbox;
+    QMap<QString, Spoiler*> spoilerMap;
     Board* blockBoard;
 
     // for saving
@@ -32,6 +34,8 @@ private:
     void saveFile();
     void saveFileAs();
     void compileProject();
+    void addSpoilerActions();
+    void createVariable();
 public:
     explicit BrickDuino(QWidget *parent = nullptr);
     ~BrickDuino();

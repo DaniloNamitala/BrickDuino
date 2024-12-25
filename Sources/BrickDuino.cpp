@@ -5,9 +5,11 @@
 #include "ToolboxValueBrick.h"
 #include "Spoiler.h"
 #include "Compiler.h"
+#include "ModalNewVariable.h"
 
 BrickDuino::BrickDuino(QWidget* parent) {
     this->_path = "";
+    spoilerMap = QMap<QString, Spoiler*>();
     createBlockBoard();
     createBlockToolbox();
     createActions();
@@ -39,6 +41,17 @@ void BrickDuino::compileProject() {
     compiler.compile();
 }
 
+void BrickDuino::createVariable() {
+    ModalNewVariable* modal = new ModalNewVariable(this);
+    if (modal->exec()) {
+        qDebug() << modal->getText();
+    }
+    else {
+        qDebug() << "RESULT 0";
+    }
+    delete modal;
+}
+
 void BrickDuino::createMenus() {
     fileMenu = menuBar()->addMenu(tr("&Arquivo"));
     fileMenu->addAction(saveAct);
@@ -49,7 +62,7 @@ void BrickDuino::createMenus() {
 }
 
 void BrickDuino::saveFile() {
-    _path = tr("C:/Users/danil/Desktop/teste.json");
+    _path = tr("C:/Users/danil/Desktop/save/teste.json");
     if (_path.isEmpty())
         return saveFileAs();
 
@@ -98,6 +111,17 @@ void BrickDuino::createBlockToolbox() {
     blockToolbox->setWidget(scrollArea); 
 
     loadBlocksFromJson("D:/Projetos/TCC/BrickDuino/Blocks.json", layout);
+    addSpoilerActions();
+}
+
+void BrickDuino::addSpoilerActions() {
+    Spoiler* _spoiler = spoilerMap.value("VARIAVEIS", nullptr);
+    if (_spoiler != nullptr) {
+        QPushButton* addVariable = new QPushButton("Criar Variável");
+        addVariable->setCursor(Qt::PointingHandCursor);
+        connect(addVariable, &QPushButton::clicked, this, &BrickDuino::createVariable);
+        _spoiler->addWidget(addVariable);
+    }
 }
 
 void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
@@ -117,12 +141,12 @@ void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
     // Getting blocks from json
     QVariantList spoilers = documentMap["spoilers"].toList();
     for (QVariant spoiler : spoilers) {
-        QVariantMap spoilerMap = spoiler.toMap();
-        QString str_color = spoilerMap["color"].toString();
-        Spoiler* s = new Spoiler(spoilerMap["name"].toString(), str_color);
+        QVariantMap _spoilerMap = spoiler.toMap();
+        QString str_color = _spoilerMap["color"].toString();
+        Spoiler* s = new Spoiler(_spoilerMap["name"].toString(), str_color);
         QColor color = QColor(str_color);
 
-        QVariantList bricks = spoilerMap["bricks"].toList();
+        QVariantList bricks = _spoilerMap["bricks"].toList();
         for (QVariant brick : bricks) {
             QVariantMap brickMap = brick.toMap();
             Toolbox::Brick* b = nullptr;
@@ -162,6 +186,7 @@ void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
                 s->addWidget(b);
             
         }
+        spoilerMap[s->getTitle()] = s;
         layout->addWidget(s);
     }
 }

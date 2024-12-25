@@ -1,15 +1,9 @@
 {
     "spoilers": [
         {
-            "name": "ENTRADA",
+            "name": "VARIAVEIS",
             "color": "#82101b",
             "bricks": [
-                {
-                  "name": "std_input",
-                  "type": "VALUE",
-                  "message": "LER",
-                  "output": "any"
-                },
                 {
                     "name": "literal_string",
                     "type": "LITERAL_VALUE",
@@ -21,19 +15,30 @@
         {
             "name": "SAÍDA",
             "color": "#4e03fc",
-            "bricks": [
+          "bricks": [
+            {
+              "name": "std_output",
+              "type": "FUNCTION",
+              "message": "ESCREVER %1",
+              "args": [
                 {
-                    "name": "std_output",
-                    "type": "FUNCTION",
-                    "message": "ESCREVER %1",
-                    "args": [
-                        {
-                            "name": "texto",
-                            "type": "any"
-                        }
-                    ]
+                  "name": "texto",
+                  "type": "any"
                 }
-            ]
+              ]
+            },
+            {
+              "name": "std_input",
+              "type": "FUNCTION",
+              "message": "LER %1",
+              "args": [
+                {
+                  "name": "variavel",
+                  "type":  "ANY"
+                }
+              ]
+            }
+          ]
         },
         {
             "name": "CONTROLE",

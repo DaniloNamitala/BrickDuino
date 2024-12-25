@@ -3,6 +3,7 @@
 #include <QStyleFactory>
 
 Spoiler::Spoiler(const QString & title, QString color, QWidget *parent) : QWidget(parent) {
+    this->title = title;
     toggleButton.setStyleSheet("QToolButton { border: none; background-color:"+ color +"; color: white; font-size: 15px }");
     toggleButton.setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toggleButton.setArrowType(Qt::ArrowType::RightArrow);
@@ -26,6 +27,10 @@ Spoiler::Spoiler(const QString & title, QString color, QWidget *parent) : QWidge
         toggleButton.setArrowType(checked ? Qt::ArrowType::DownArrow : Qt::ArrowType::RightArrow);
         contentArea.setVisible(checked);
     });
+}
+
+QString Spoiler::getTitle() {
+    return this->title;
 }
 
 void Spoiler::addWidget(QWidget* widget) {

@@ -21,6 +21,7 @@ Workspace::LiteralValueBrick::LiteralValueBrick(QWidget* parent, const char* mes
 
     connect(lineEdtMessage, &QLineEdit::textChanged, this, &LiteralValueBrick::lineEditChanged);
     connect(lineEdtMessage, &QLineEdit::editingFinished, this, &LiteralValueBrick::lineEditDone);
+    connect(lineEdtMessage, &QLineEdit::inputRejected, this, &LiteralValueBrick::lineEditReject);
 }
 Workspace::LiteralValueBrick::LiteralValueBrick(const char* message, const char* name, QColor color) : LiteralValueBrick(nullptr, message, name, color) { }
 
@@ -46,7 +47,11 @@ int Workspace::LiteralValueBrick::getWidth() {
     return w;
 }
 
-
+void Workspace::LiteralValueBrick::lineEditReject() {
+    lineEdtMessage->hide();
+    lineEdtMessage->clearFocus();
+    recalculateSize();
+}
 
 void Workspace::LiteralValueBrick::lineEditDone() {
     message = lineEdtMessage->text();
@@ -59,8 +64,8 @@ void Workspace::LiteralValueBrick::lineEditDone() {
 void Workspace::LiteralValueBrick::mouseDoubleClickEvent(QMouseEvent* event) { 
     lines[0] = "";
     lineEdtMessage->show();
-    lineEdtMessage->setFocus();
     lineEdtMessage->setText(message);
+    lineEdtMessage->setFocus();
     message = "";
     lineEdtMessage->move(QPoint(MARGIN, VALUE_BRICK_MARGIN));
     recalculateSize();
