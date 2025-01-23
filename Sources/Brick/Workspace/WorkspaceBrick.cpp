@@ -307,7 +307,7 @@ Workspace::Brick* Workspace::Brick::tail() {
 }
 
 void Workspace::Brick::attach(Brick* brick) {
-    if (brick == nullptr || brick->getType() == BrickType::VALUE) return;
+    if (brick == nullptr || brick->getType() == BrickType::VALUE || getType() == BrickType::VALUE) return;
 
     if (next != nullptr) {
         Brick* _tail = brick->tail();

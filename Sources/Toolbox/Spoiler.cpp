@@ -4,6 +4,7 @@
 
 Spoiler::Spoiler(const QString & title, QString color, QWidget *parent) : QWidget(parent) {
     this->title = title;
+    this->color = QColor(color);
     toggleButton.setStyleSheet("QToolButton { border: none; background-color:"+ color +"; color: white; font-size: 15px }");
     toggleButton.setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toggleButton.setArrowType(Qt::ArrowType::RightArrow);
@@ -18,6 +19,10 @@ Spoiler::Spoiler(const QString & title, QString color, QWidget *parent) : QWidge
     contentArea.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     contentArea.setVisible(false);
 
+    buttonLayout = new QVBoxLayout();
+    buttonLayout->setAlignment(Qt::AlignTop);
+    contentLayout->addLayout(buttonLayout);
+
     mainLayout.setContentsMargins(0, 0, 0, 0);
     mainLayout.addWidget(&toggleButton);
     mainLayout.addWidget(&contentArea);
@@ -29,11 +34,20 @@ Spoiler::Spoiler(const QString & title, QString color, QWidget *parent) : QWidge
     });
 }
 
+QColor Spoiler::getColor() {
+    return color;
+}
+
 QString Spoiler::getTitle() {
     return this->title;
 }
 
+void Spoiler::addActionButton(QWidget* widget) {
+    buttonLayout->addWidget(widget);
+    contentArea.setFixedHeight(contentArea.layout()->sizeHint().height());
+}
+
 void Spoiler::addWidget(QWidget* widget) {
     contentArea.layout()->addWidget(widget);
-    contentArea.setFixedHeight(contentArea.layout()->sizeHint().height());
+    contentArea.setFixedHeight(contentArea.layout()->sizeHint().height() + buttonLayout->sizeHint().height());
 }

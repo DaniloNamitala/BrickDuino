@@ -15,6 +15,7 @@ private:
 	void writeCase(QTextStream &stream, QVariantMap bMap, QString tab);
 	void readGrammar(const char* path);
 	QString getValue(QVariantMap map);
+	void writeVariables(QTextStream& stream);
 public:
 	Compiler(QJsonDocument document, QString output);
 	bool compile();

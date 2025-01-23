@@ -13,7 +13,13 @@ bool Compiler::compile() {
 	out.open(QFile::WriteOnly | QFile::Text);
 	QTextStream stream(&out);
 
-	QVariantList bricks = document.array().toVariantList();
+	if (grammar.contains("includes")) {
+		stream << grammar["includes"];
+	}
+
+	writeVariables(stream);
+
+	QVariantList bricks = document["bricks"].toArray().toVariantList();
 	for (QVariant brick : bricks) {
 		QVariantMap bMap = brick.toMap();
 		writeBrick(stream, bMap, "");
@@ -21,8 +27,20 @@ bool Compiler::compile() {
 	return true;
 }
 
-void Compiler::writeCase(QTextStream& stream, QVariantMap bMap, QString tab) {
+void Compiler::writeVariables(QTextStream& stream) {
+	QVariantList variables = document["variables"].toArray().toVariantList();
 
+	for (QVariant var : variables) {
+		QJsonObject obj = var.toJsonObject();
+		QString name = obj.keys().first();
+		QString type = obj.value(name).toString().toLower();
+
+		stream << type << " " << name << ";\n";
+	}
+	stream << "\n";
+}
+
+void Compiler::writeCase(QTextStream& stream, QVariantMap bMap, QString tab) {
 	QString message = bMap.value("message", "").toString();
 	QStringList lines = message.split("%s");
 	lines.removeAll("");
@@ -191,6 +209,7 @@ QString Compiler::getValue(QVariantMap map) {
 
 	if (name == "literal_number") return message;
 	if (name == "literal_string") return "\"" + message + "\"";
+	if (name == "variable_call") return message;
 
 	QVariantList args = map["args"].toList();
 	if (grammar.contains(name)) {
@@ -204,8 +223,7 @@ QString Compiler::getValue(QVariantMap map) {
 				QString arg = getValue(args[pos].toMap()["value"].toMap());
 				code.replace(match, arg);
 			}
-		}
-		return code;
+		}		return code;
 	}
 	else {
 		return "";

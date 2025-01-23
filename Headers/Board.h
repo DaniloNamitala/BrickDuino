@@ -16,6 +16,9 @@ class Board : public QWidget
 
         QList<Workspace::Brick*> bricks;
         Workspace::Brick* previewBrick;
+        QMap<QString, ValueType> variables;
+
+        void createMainFunction();
 
     protected:
         void paintEvent(QPaintEvent* event) override;
@@ -31,5 +34,7 @@ class Board : public QWidget
         void setZOrder(QWidget* widget, int old_z, int new_z);
         void removeOrder(QWidget* widget, int z_order);
         QJsonDocument saveToFile(QString path);
+        void addVariable(QString name, ValueType type);
+        bool variableExist(QString name);
 };
 

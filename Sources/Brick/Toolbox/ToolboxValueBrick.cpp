@@ -8,6 +8,20 @@ Toolbox::ValueBrick::ValueBrick(const char* message, const char* name, QColor co
     if (literal)
         b_type = BrickType::LITERAL_VALUE;
     recalculateSize();
+    type = ValueType::ANY;
+}
+
+ValueType Toolbox::ValueBrick::setType(QString type) {
+    if (type == "INT") {
+        this->type = ValueType::INT;
+    } else if (type == "STRING") {
+        this->type = ValueType::STRING;
+    } else if (type == "FLOAT") {
+        this->type = ValueType::FLOAT;
+    } else if (type == "BOOL") {
+        this->type = ValueType::BOOL;
+    }
+    return this->type;
 }
 
 BrickType Toolbox::ValueBrick::getType() {

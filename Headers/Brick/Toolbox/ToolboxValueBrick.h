@@ -11,8 +11,10 @@ namespace Toolbox {
             void recalculateSize() override;
             bool binary;
             BrickType b_type;
+            ValueType type;
         public:
             ValueBrick(const char* message, const char* name, QColor color, bool literal = false);
+            ValueType setType(QString type);
             BrickType getType() override;
     };    
 };

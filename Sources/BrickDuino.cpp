@@ -36,20 +36,32 @@ void BrickDuino::createActions() {
 void BrickDuino::compileProject() {
     saveFile();
 
-    //Compiler compiler(_document, _path + ".cpp");
-    Compiler compiler(_document, _path + ".pas");
+    Compiler compiler(_document, _path + ".cpp");
     compiler.compile();
 }
 
-void BrickDuino::createVariable() {
+void BrickDuino::modalCreateVariable() {
     ModalNewVariable* modal = new ModalNewVariable(this);
     if (modal->exec()) {
-        qDebug() << modal->getText();
-    }
-    else {
-        qDebug() << "RESULT 0";
+        createVariable(modal->getText(), modal->getType());
     }
     delete modal;
+}
+
+void BrickDuino::createVariable(QString name, QString type) {
+
+    if (blockBoard->variableExist(name)) {
+        QMessageBox::warning(this, "Erro", "Ja existe uma variavel com este nome!!");
+        return;
+    }
+
+    Spoiler* spoiler = spoilerMap.value("VARIAVEIS", nullptr);
+    if (spoiler != nullptr) {
+        Toolbox::ValueBrick* b = new Toolbox::ValueBrick(name.toStdString().c_str(), "variable_call", spoiler->getColor());
+        ValueType _type = b->setType(type);
+        blockBoard->addVariable(name, _type);
+        spoiler->addWidget(b);
+    }
 }
 
 void BrickDuino::createMenus() {
@@ -119,8 +131,9 @@ void BrickDuino::addSpoilerActions() {
     if (_spoiler != nullptr) {
         QPushButton* addVariable = new QPushButton("Criar Variável");
         addVariable->setCursor(Qt::PointingHandCursor);
-        connect(addVariable, &QPushButton::clicked, this, &BrickDuino::createVariable);
-        _spoiler->addWidget(addVariable);
+        addVariable->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        connect(addVariable, &QPushButton::clicked, this, &BrickDuino::modalCreateVariable);
+        _spoiler->addActionButton(addVariable);
     }
 }
 

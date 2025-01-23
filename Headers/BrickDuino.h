@@ -35,7 +35,8 @@ private:
     void saveFileAs();
     void compileProject();
     void addSpoilerActions();
-    void createVariable();
+    void createVariable(QString name, QString type);
+    void modalCreateVariable();
 public:
     explicit BrickDuino(QWidget *parent = nullptr);
     ~BrickDuino();

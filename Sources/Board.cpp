@@ -2,14 +2,28 @@
 
 #include "Parameter.h"
 #include "Shadow.h"
+#include "StatementBrick.h"
 #include <iostream>
 
+#define X(a, b) b,
+const char* v_type_name[] = {
+  VALUE_TYPE_TABLE
+};
+#undef X
 
 Board::Board(QColor bgColor) {
 	background = bgColor;
 	previewBrick = nullptr;
 	setMouseTracking(true);
 	setAcceptDrops(true);
+	createMainFunction();
+}
+
+void Board::createMainFunction() {
+	Workspace::StatementBrick* mainfunction = new Workspace::StatementBrick(this, "EXECUTAR %s", "main", QColor("#b35702"));
+	mainfunction->move(QPoint(200, 200));
+	mainfunction->setZOrder(0);
+	mainfunction->show();
 }
 
 void Board::paintEvent(QPaintEvent* event) {
@@ -29,8 +43,24 @@ void Board::dragLeaveEvent(QDragLeaveEvent* event) {
 	previewBrick = nullptr;
 }
 
+bool Board::variableExist(QString name) {
+	return variables.contains(name);
+}
+
+void Board::addVariable(QString name, ValueType type) {
+	variables.insert(name, type);
+}
+
 QJsonDocument Board::saveToFile(QString path) {
 	if (zOrder.contains(0)) {
+
+		QJsonArray variablesJson;
+		for (auto pair : variables.asKeyValueRange()) {
+			QJsonObject var;
+			var[pair.first] = v_type_name[pair.second];
+			variablesJson.append(var);
+		}
+			
 
 		QJsonArray jsonArray;
 		for (QWidget* b : zOrder[0]) {
@@ -41,10 +71,13 @@ QJsonDocument Board::saveToFile(QString path) {
 			}
 		}
 
+		QJsonObject mainJson;
+		mainJson["variables"] = variablesJson;
+		mainJson["bricks"] = jsonArray;
+
 		QFile file(path);
-		QJsonParseError jsonParser;
 		QJsonDocument document;
-		document.setArray(jsonArray);
+		document.setObject(mainJson) ;
 		
 		file.open(QFile::WriteOnly | QFile::Text);
 		file.write(document.toJson(QJsonDocument::Indented));

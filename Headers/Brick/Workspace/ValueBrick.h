@@ -15,6 +15,10 @@ namespace Workspace {
             ValueBrick(const char* message, const char* name, QColor color);
             BrickType getType() override;
             void move(const QPoint& pos) override;
+
+            virtual void makeShadow(QPoint pos) override;
+            virtual void removeShadow() override;
+            virtual void replaceShadow(Brick* brick) override;
     };
 };
 
