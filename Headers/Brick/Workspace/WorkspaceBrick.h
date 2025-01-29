@@ -62,6 +62,7 @@ namespace Workspace {
         void addParam(Parameter param) override;
 
         QJsonObject GetJson();
+        bool variableExists(QString name);
 
         virtual void setZOrder(int z);
         virtual void move(const QPoint& pos);

@@ -84,6 +84,13 @@ void Workspace::Brick::setColor(QColor color) {
 
 Workspace::Brick* Workspace::Brick::getNext() { return next; }
 
+bool Workspace::Brick::variableExists(QString name) {
+    if (owner != nullptr) 
+        return this->variable == name || owner->variableExists(name);
+
+    return this->variable == name;
+}
+
 void Workspace::Brick::mousePressEvent(QMouseEvent* event) { 
     mousePos = event->pos(); 
     if (configRect().contains(event->pos())) {
@@ -125,6 +132,7 @@ QJsonObject Workspace::Brick::GetJson() {
     json["name"] = this->name;
     json["type"] = type_name[this->getType()];
     json["message"] = this->message;
+    json["variable"] = this->variable;
     if (isFree()) {
         json["pos"] = tr("(") + QString::number(pos().x()) + tr(",") + QString::number(pos().y()) + tr(")");
     }
@@ -192,6 +200,16 @@ void Workspace::Brick::mouseReleaseEvent(QMouseEvent* event) {
         if (getType() == BrickType::VALUE)
             lastCloser->insertParam(this);
         lastCloser->replaceShadow(this);
+
+        if (variable != "" && owner != nullptr) {
+            bool change = false;
+            while (owner->variableExists(variable)) {
+                variable = QChar(qMax(97, (variable[0].toLatin1() + 1) % 123));
+                change = true;
+            }
+            if (change) 
+                recalculateSize();
+        }
     }
     lastCloser = nullptr;
 }
@@ -238,6 +256,9 @@ void Workspace::Brick::moveBrick(QPoint newPos) {
 }
 
 void Workspace::Brick::mouseMoveEvent(QMouseEvent* event) {
+    QPoint point = event->pos() - mousePos;
+    if (point.manhattanLength() > 10)
+
     setCursor(QCursor(Qt::OpenHandCursor));
     if (showConfig() && configRect().contains(event->pos()))
         setCursor(QCursor(Qt::PointingHandCursor));

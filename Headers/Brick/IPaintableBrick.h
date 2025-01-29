@@ -28,6 +28,7 @@ class IPaintableBrick {
     virtual QPen getContourPen() = 0;
     virtual QColor getColor() = 0;
     virtual QString getMessage() = 0;
+    virtual QString getVariableName() = 0;
     virtual QWidget* getWidget() = 0;
     virtual QList<Statement> getStatements() = 0;
     virtual QList<QString> getLines() = 0;

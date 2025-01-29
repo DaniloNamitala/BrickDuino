@@ -11,6 +11,11 @@ PaintableBrick::PaintableBrick(QWidget* parent, const char* message, const char*
     _showConfig = false;
     cachePaint = new QPixmap*;
     *cachePaint = nullptr;
+
+    if (this->message.contains("%v0")) {
+        variable = "i";
+    }
+
     recalculateSize();
 }
 
@@ -21,6 +26,8 @@ QList<Parameter>& PaintableBrick::getParams() { return params; }
 QList<Statement> PaintableBrick::getStatements() { return statements; }
 
 QString PaintableBrick::getMessage() { return message; }
+
+QString PaintableBrick::getVariableName() { return variable; }
 
 QList<QString> PaintableBrick::getLines() { return lines; }
 
@@ -93,9 +100,13 @@ QPixmap** PaintableBrick::getCache() {
 
 QSize PaintableBrick::headerSize(int index) { 
     if (lines.count() <= index) return QSize(0, 0);
+    QString _line = lines.at(index);
+
+    if (_line.contains("%v0"))
+        _line.replace("%v0", variable);
 
     QRegularExpression re("(%[0-9]+)|([a-zA-Z0-9,\\.<>=\\+\\-\\*%/]+)");
-    QRegularExpressionMatchIterator i = re.globalMatch(lines.at(index));
+    QRegularExpressionMatchIterator i = re.globalMatch(_line);
     QFontMetrics fm(Util::font());
 
     int height = BRICK_MIN_HEIGHT;

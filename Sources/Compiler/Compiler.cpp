@@ -134,6 +134,7 @@ void Compiler::write(QTextStream& stream, QVariantMap bMap, QString tab) {
 	QString message = bMap.value("message", "").toString();
 	QString name = bMap.value("name", "").toString();
 	QString type = bMap.value("type", "").toString();
+	QString variable = bMap.value("variable", "").toString();
 
 	QVariantList statements = bMap["statements"].toList();
 	QVariantList args = bMap["args"].toList();
@@ -141,6 +142,9 @@ void Compiler::write(QTextStream& stream, QVariantMap bMap, QString tab) {
 	QRegularExpression re("%[0-9]+");
 	QRegularExpressionMatchIterator it = re.globalMatch(message);
 	QString code = grammar[name];
+
+	if (code.contains("%v0"))
+		code.replace("%v0", variable);
 
 	while (it.hasNext()) {
 		QRegularExpressionMatch match = it.next();

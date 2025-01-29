@@ -86,6 +86,10 @@ void StatementBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
     QList<Parameter>& params = brick->getParams();
     for (int i = 0; i < brick->getLines().count(); i++) {
         QString line = brick->getLines().at(i);
+
+        if (line.contains("%v0"))
+            line.replace("%v0", brick->getVariableName());
+
         int lineHeight = brick->headerSize(i).height();
 
         QRegularExpressionMatchIterator it = re.globalMatch(line);
