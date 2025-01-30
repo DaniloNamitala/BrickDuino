@@ -7,11 +7,12 @@
 #include "Util.h"
 #include "StatementBrickPainter.h"
 #include "ConfigBrickIf.h"
+#include "ValueBrick.h"
 #include "string.h"
 
 Workspace::StatementBrick::StatementBrick(QWidget* parent, const char* message, const char* name, QColor color) : Workspace::Brick(parent, message, name, color) {
 	painter = new StatementBrickPainter();
-	_showConfig = strcmp(name, "if_statement") == 0 || strcmp(name, "case_statement") == 0;
+	_showConfig = strcmp(name, "if_statement") == 0 || strcmp(name, "case_statement") == 0 || strcmp(name, "for_statement") == 0;
 	for (int i = 0; i < QString(message).count("%s"); i++) {
 		this->statements.append(Statement());
 	}
@@ -139,6 +140,15 @@ void Workspace::StatementBrick::removeElse() {
 
 void Workspace::StatementBrick::openConfig() {
 	if (!showConfig()) return;
+
+	if (this->name == "for_statement") {
+		Workspace::Brick* _brick = new Workspace::ValueBrick(this->variable.toStdString().c_str(), "variable_call", QColor("#82101b"));
+		_brick->setParent(this->parentWidget());
+		_brick->setZOrder(0);
+		_brick->move(mousePos + this->pos() + QPoint(30, 0));
+		return;
+	}
+
 	ConfigBrickIf* config = new ConfigBrickIf(this, name);
 	config->show();
 }
