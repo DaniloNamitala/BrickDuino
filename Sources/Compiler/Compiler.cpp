@@ -1,11 +1,11 @@
 #include "Compiler.h"
 #include <QtCore>
 
-Compiler::Compiler(QJsonDocument document, QString output) {
+Compiler::Compiler(QJsonDocument document, QString output, QString grammar) {
 	this->document = document;
 	this->path = output;
 
-	readGrammar("D:/Projetos/TCC/BrickDuino/Sources/cpp_grammar.json");
+	readGrammar("D:/Projetos/TCC/BrickDuino/Sources/" + grammar + ".json");
 }
 
 bool Compiler::compile() {
@@ -17,8 +17,6 @@ bool Compiler::compile() {
 		stream << grammar["includes"];
 	}
 
-	writeVariables(stream);
-
 	QVariantList bricks = document["bricks"].toArray().toVariantList();
 	for (QVariant brick : bricks) {
 		QVariantMap bMap = brick.toMap();
@@ -28,16 +26,32 @@ bool Compiler::compile() {
 }
 
 void Compiler::writeVariables(QTextStream& stream) {
+	QString section_start = "";
+	QString section_end = "";
+
+	if (grammar.contains("variable_section")) {
+		QStringList s = grammar["variable_section"].split("%variables");
+		section_start = s[0];
+		if (s.count() > 1)
+			section_end = s[1];
+	}
+
 	QVariantList variables = document["variables"].toArray().toVariantList();
 
+	stream << section_start;
 	for (QVariant var : variables) {
 		QJsonObject obj = var.toJsonObject();
+		QString declaration = grammar["variable_declaration"];
+		
 		QString name = obj.keys().first();
-		QString type = obj.value(name).toString().toLower();
+		QString type = grammar[obj.value(name).toString()];
 
-		stream << type << " " << name << ";\n";
+		declaration.replace("%name", name);
+		declaration.replace("%type", type);
+
+		stream << declaration << "\n";
 	}
-	stream << "\n";
+	stream << section_end;
 }
 
 void Compiler::writeCase(QTextStream& stream, QVariantMap bMap, QString tab) {
@@ -124,6 +138,8 @@ void Compiler::writeIf(QTextStream& stream, QVariantMap bMap, QString tab) {
 		else {
 			stream << "\n";
 		}
+		if ((i != (lines.size() -1)) && c.count() > 1)
+			c[1].replace(";", "");
 		stream << tab << c.value(1, "").trimmed();
 
 	}
@@ -142,6 +158,18 @@ void Compiler::write(QTextStream& stream, QVariantMap bMap, QString tab) {
 	QRegularExpression re("%[0-9]+");
 	QRegularExpressionMatchIterator it = re.globalMatch(message);
 	QString code = grammar[name];
+
+	if (name == "main") {
+		QStringList m = code.split("%variable_section");
+		if (m.count() > 1) {
+			stream << m[0];
+			writeVariables(stream);
+			code = m[1];
+		} else {
+			writeVariables(stream);
+			code = m[0];
+		}
+	}
 
 	if (code.contains("%v0"))
 		code.replace("%v0", variable);
@@ -191,10 +219,10 @@ void Compiler::writeBrick(QTextStream& stream, QVariantMap bMap, QString tab) {
 	}
 }
 
-void Compiler::readGrammar(const char* path) {
+void Compiler::readGrammar(QString path) {
 	QFile file;
 	QString fileBuffer;
-	file.setFileName(QString(path));
+	file.setFileName(path);
 	file.open(QIODevice::ReadOnly | QIODevice::Text);
 	fileBuffer = file.readAll();
 	file.close();
@@ -212,7 +240,7 @@ QString Compiler::getValue(QVariantMap map) {
 	QString message = map["message"].toString();
 
 	if (name == "literal_number") return message;
-	if (name == "literal_string") return "\"" + message + "\"";
+	if (name == "literal_string") return grammar["string_del"] + message + grammar["string_del"];
 	if (name == "variable_call") return message;
 
 	QVariantList args = map["args"].toList();

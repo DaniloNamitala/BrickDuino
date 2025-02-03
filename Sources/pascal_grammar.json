@@ -1,0 +1,41 @@
+{
+  "main": "Program teste;\n\n%variable_section \nbegin\nstatement\nend;",
+  "variable_section": "var\n%variables",
+  "if_statement": "if ([args]) begin\nstatement\nend;",
+  "else_if_statement": "else if ([args]) begin\nstatement\nend;",
+  "else_statement": "else begin\nstatement\nend;",
+  "string_del": "'",
+
+  "variable_declaration": "%name : %type;",
+  "INT": "integer",
+  "BOOL": "boolean",
+  "FLOAT": "real",
+  "STRING": "string",
+
+  "mod_operator": "(%1 mod %2)",
+  "div_operator": "(%1 / %2)",
+  "mul_operator": "(%1 * %2)",
+  "sub_operator": "(%1 - %2)",
+  "add_operator": "(%1 + %2)",
+
+  "not_equal_operator": "(%1 <> %2)",
+  "less_equal_operator": "(%1 <= %2)",
+  "greater_equal_operator": "(%1 >= %2)",
+  "less_operator": "(%1 < %2)",
+  "greater_operator": "(%1 > %2)",
+  "equal_operator": "(%1 == %2)",
+  "not_operator": "not(%1)",
+  "or_operator": "(%1 or %2)",
+  "and_operator": "(%1 and %2)",
+  "literal_true": "true",
+  "literal_false": "false",
+
+  "std_output": "write(%1);",
+  "std_input": "read(%1);",
+  "while_statement": "while (%1) do begin\nstatement\nend;",
+  "switch_statement": "switch (%1) begin\nstatement\n end;",
+  "do_while_statement": "repeat\nstatement\n until (not(%1));",
+  "case_statement": "case ([args]):\n statement break;\n",
+  "default_statement": "default:\n statement break;\n",
+  "for_statement": "for (int %v0 = %1; %v0 < %2; %v0 += %3) begin\nstatement\nend"
+}

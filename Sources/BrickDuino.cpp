@@ -27,16 +27,25 @@ void BrickDuino::createActions() {
     saveAsAct->setStatusTip(tr("Salvar Projeto"));
     connect(saveAsAct, &QAction::triggered, this, &BrickDuino::saveFileAs);
 
-    compileAct = new QAction(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart), tr("&Compilar"), this);
-    compileAct->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_B);
-    compileAct->setStatusTip(tr("Compilar Projeto"));
-    connect(compileAct, &QAction::triggered, this, &BrickDuino::compileProject);
+    compileCpp = new QAction(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart), tr("&C++"), this);
+    compileCpp->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_C);
+    compileCpp->setStatusTip(tr("Compilar C++"));
+    connect(compileCpp, &QAction::triggered, this, [=]() {
+        compileProject(".cpp", "cpp_grammar");
+     });
+
+    compilePas = new QAction(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart), tr("&Pascal"), this);
+    compilePas->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_P);
+    compilePas->setStatusTip(tr("Compilar Pascal"));
+    connect(compilePas, &QAction::triggered, this, [=](){
+        compileProject(".pas", "pascal_grammar");
+    });
 }
 
-void BrickDuino::compileProject() {
+void BrickDuino::compileProject(QString extension, QString grammar) {
     saveFile();
 
-    Compiler compiler(_document, _path + ".cpp");
+    Compiler compiler(_document, _path + extension, grammar);
     compiler.compile();
 }
 
@@ -70,7 +79,8 @@ void BrickDuino::createMenus() {
     fileMenu->addAction(saveAsAct);
 
     compileMenu = menuBar()->addMenu(tr("&Compilar"));
-    compileMenu->addAction(compileAct);
+    compileMenu->addAction(compileCpp);
+    compileMenu->addAction(compilePas);
 }
 
 void BrickDuino::saveFile() {

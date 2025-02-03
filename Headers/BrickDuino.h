@@ -24,7 +24,8 @@ private:
     QJsonDocument _document;
     QString _compilePath;
     QMenu* compileMenu;
-    QAction* compileAct;
+    QAction* compileCpp;
+    QAction* compilePas;
 
     void createBlockToolbox();
     void loadBlocksFromJson(const char* path, QLayout* layout);
@@ -33,7 +34,7 @@ private:
     void createMenus();
     void saveFile();
     void saveFileAs();
-    void compileProject();
+    void compileProject(QString extension, QString grammar);
     void addSpoilerActions();
     void createVariable(QString name, QString type);
     void modalCreateVariable();

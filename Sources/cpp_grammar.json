@@ -1,9 +1,17 @@
 {
   "includes": "#include <iostream> \nusing namespace std;\n\n",
-  "main": "int main() {\nstatement\n\nreturn 0;\n}",
+  "main": "%variable_section\nint main() {\nstatement\n\nreturn 0;\n}",
+  "variable_section": "%variables",
   "if_statement": "if ([args]) {\nstatement } ",
   "else_if_statement": "else if ([args]) {\nstatement } ",
   "else_statement": "else {\nstatement } ",
+  "string_del": "\"",
+
+  "variable_declaration": "%type %name;",
+  "INT": "int",
+  "BOOL": "bool",
+  "FLOAT": "float",
+  "STRING": "string",
 
   "mod_operator": "(%1 % %2)",
   "div_operator": "(%1 / %2)",
