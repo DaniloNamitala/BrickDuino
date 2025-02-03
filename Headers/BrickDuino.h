@@ -26,6 +26,7 @@ private:
     QMenu* compileMenu;
     QAction* compileCpp;
     QAction* compilePas;
+    QAction* compilePy;
 
     void createBlockToolbox();
     void loadBlocksFromJson(const char* path, QLayout* layout);

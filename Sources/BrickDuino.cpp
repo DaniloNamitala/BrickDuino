@@ -40,6 +40,13 @@ void BrickDuino::createActions() {
     connect(compilePas, &QAction::triggered, this, [=](){
         compileProject(".pas", "pascal_grammar");
     });
+
+    compilePy = new QAction(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart), tr("&Python"), this);
+    compilePy->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_P);
+    compilePy->setStatusTip(tr("Compilar Python"));
+    connect(compilePy, &QAction::triggered, this, [=]() {
+        compileProject(".py", "python_grammar");
+    });
 }
 
 void BrickDuino::compileProject(QString extension, QString grammar) {
@@ -81,6 +88,7 @@ void BrickDuino::createMenus() {
     compileMenu = menuBar()->addMenu(tr("&Compilar"));
     compileMenu->addAction(compileCpp);
     compileMenu->addAction(compilePas);
+    compileMenu->addAction(compilePy);
 }
 
 void BrickDuino::saveFile() {

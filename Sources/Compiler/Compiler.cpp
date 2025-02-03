@@ -190,7 +190,7 @@ void Compiler::write(QTextStream& stream, QVariantMap bMap, QString tab) {
 		writeBrick(stream, head, tab + "\t");
 	}
 	if (c.size() > 1)
-		stream << tab << c.value(1, "").trimmed();
+		stream << tab << c.value(1, "").replace("\n", "");
 	stream << "\n";
 }
 

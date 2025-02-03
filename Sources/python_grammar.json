@@ -1,0 +1,41 @@
+{
+  "main": "%variable_section\ndef main():\nstatement\n\nmain()",
+  "variable_section": "%variables",
+  "if_statement": "if ([args]):\nstatement",
+  "else_if_statement": "elif ([args]):\nstatement",
+  "else_statement": "else:\nstatement",
+  "string_del": "'",
+
+  "variable_declaration": "%name = None",
+  "INT": "",
+  "BOOL": "",
+  "FLOAT": "",
+  "STRING": "",
+
+  "mod_operator": "(%1 % %2)",
+  "div_operator": "(%1 / %2)",
+  "mul_operator": "(%1 * %2)",
+  "sub_operator": "(%1 - %2)",
+  "add_operator": "(%1 + %2)",
+
+  "not_equal_operator": "(%1 != %2)",
+  "less_equal_operator": "(%1 <= %2)",
+  "greater_equal_operator": "(%1 >= %2)",
+  "less_operator": "(%1 < %2)",
+  "greater_operator": "(%1 > %2)",
+  "equal_operator": "(%1 == %2)",
+  "not_operator": "not(%1)",
+  "or_operator": "(%1 or %2)",
+  "and_operator": "(%1 and %2)",
+  "literal_true": "True",
+  "literal_false": "False",
+
+  "std_output": "print(%1)",
+  "std_input": "%1 = read()",
+  "while_statement": "while (%1):\nstatement",
+  "switch_statement": "match %1:\nstatement",
+  "do_while_statement": "while True:\nstatement\tif(%1): break",
+  "case_statement": "case [args]:\nstatement",
+  "default_statement": "case _:\nstatement",
+  "for_statement": "for i in range(%1, %2, %3) begin\nstatement\nend"
+}

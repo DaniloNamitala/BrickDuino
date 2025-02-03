@@ -41,7 +41,7 @@ void Workspace::StatementBrick::addCase() {
 	int param = params.count() + 1;
 	QString line = QString("CASO %%1").arg(param);
 	int idx_ins = message.indexOf("PADRAO");
-	message.insert(idx_ins, line + " ");
+	message.insert(idx_ins, line + " %s ");
 	int idx = lines.count() - 1;
 
 	lines.insert(idx, line);
