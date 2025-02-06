@@ -190,6 +190,13 @@ void Workspace::Brick::setParent(QWidget* parent) {
         _case->show();
         ((StatementBrick*) this)->insertBrick(_case, 0);
     }
+
+    if (parent != nullptr) {
+        Board* board = (Board*) parent;
+        if (!board->variableExist(variable)) {
+            board->addVariable(variable, ValueType::INT);
+        }
+    }
 }
 
 void Workspace::Brick::mouseReleaseEvent(QMouseEvent* event) {
@@ -207,8 +214,16 @@ void Workspace::Brick::mouseReleaseEvent(QMouseEvent* event) {
                 variable = QChar(qMax(97, (variable[0].toLatin1() + 1) % 123));
                 change = true;
             }
-            if (change) 
+            if (change) {
                 recalculateSize();
+
+                if (this->parentWidget() != nullptr) {
+                    Board* board = (Board*) this->parentWidget();
+                    if (!board->variableExist(variable)) {
+                        board->addVariable(variable, ValueType::INT);
+                    }
+                }
+            }
         }
     }
     lastCloser = nullptr;

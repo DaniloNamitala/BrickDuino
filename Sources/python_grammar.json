@@ -37,5 +37,5 @@
   "do_while_statement": "while True:\nstatement\tif(%1): break",
   "case_statement": "case [args]:\nstatement",
   "default_statement": "case _:\nstatement",
-  "for_statement": "for i in range(%1, %2, %3) begin\nstatement\nend"
+  "for_statement": "for i in range(%1, %2) begin\nstatement\nend"
 }

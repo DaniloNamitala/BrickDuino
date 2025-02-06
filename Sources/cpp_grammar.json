@@ -38,5 +38,5 @@
   "do_while_statement": "do {\nstatement } while (%1);",
   "case_statement": "case ([args]):\n statement break;\n",
   "default_statement": "default:\n statement break;\n",
-  "for_statement": "for (int %v0 = %1; %v0 < %2; %v0 += %3) {\nstatement }"
+  "for_statement": "for (%v0 = %1; %v0 < %2; %v0 += 1) {\nstatement }"
 }

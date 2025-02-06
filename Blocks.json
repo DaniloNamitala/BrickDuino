@@ -47,7 +47,7 @@
         {
           "name": "for_statement",
           "type": "STATEMENT",
-          "message": "PARA %v0 DE %1 ATE %2, INCREMENTANDO %3 %s",
+          "message": "PARA %v0 DE %1 ATE %2 %s",
           "args": [
             {
               "name": "start",
@@ -55,10 +55,6 @@
             },
             {
               "name": "end",
-              "type": "number"
-            },
-            {
-              "name": "increment",
               "type": "number"
             }
           ]
