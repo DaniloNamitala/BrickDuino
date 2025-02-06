@@ -5,6 +5,7 @@
   "else_if_statement": "elif ([args]):\nstatement",
   "else_statement": "else:\nstatement",
   "string_del": "'",
+  "value_definition": "%1 = %2",
 
   "variable_declaration": "%name = None",
   "INT": "",

@@ -9,6 +9,21 @@
           "type": "LITERAL_VALUE",
           "message": "STRING",
           "output": "ANY"
+        },
+        {
+          "name": "value_definition",
+          "type": "FUNCTION",
+          "message": "DEFINA A VARIAVEL %1 PARA O VALOR %2",
+          "args": [
+            {
+              "name": "variable",
+              "type": "any"
+            },
+            {
+              "name": "value",
+              "type": "any"
+            }
+          ]
         }
       ]
     },

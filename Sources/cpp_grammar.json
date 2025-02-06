@@ -1,11 +1,12 @@
 {
   "includes": "#include <iostream> \nusing namespace std;\n\n",
-  "main": "%variable_section\nint main() {\nstatement\n\n\treturn 0;\n}",
+  "main": "%variable_section\nint main() {\nstatement\n\treturn 0;\n}",
   "variable_section": "%variables",
   "if_statement": "if ([args]) {\nstatement } ",
   "else_if_statement": "else if ([args]) {\nstatement } ",
   "else_statement": "else {\nstatement } ",
   "string_del": "\"",
+  "value_definition": "%1 = %2;",
 
   "variable_declaration": "%type %name;",
   "INT": "int",

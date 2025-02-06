@@ -48,6 +48,7 @@ bool Board::variableExist(QString name) {
 }
 
 void Board::addVariable(QString name, ValueType type) {
+	if (name.isNull() || name.isEmpty()) return;
 	variables.insert(name, type);
 }
 
