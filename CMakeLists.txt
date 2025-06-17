@@ -8,7 +8,7 @@ endif()
 
 project ("BrickDuino")
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Core Gui)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Core Gui SvgWidgets)
 
 # Source code
 file(GLOB MAIN_CPP_FILES Sources/*.cpp)
@@ -63,5 +63,6 @@ target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_COMPONENTS})
 
 # libraries
 target_link_libraries(BrickDuino PRIVATE Qt6::Widgets)
+target_link_libraries(BrickDuino PRIVATE Qt6::SvgWidgets)
 target_link_libraries(BrickDuino PRIVATE Qt6::Core)
 target_link_libraries(BrickDuino PRIVATE Qt6::Gui)

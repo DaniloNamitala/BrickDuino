@@ -27,6 +27,8 @@ namespace Workspace {
         bool _isShadow;
         int z_order;
 
+        bool overTrash = false;
+
         void recalculateSize() override;
 
         void mouseMoveEvent(QMouseEvent* event) override;
@@ -35,6 +37,7 @@ namespace Workspace {
         Brick* getCloser();
         virtual void openConfig();
     public:
+        void autoDelete();
         void mouseReleaseEvent(QMouseEvent* event) override;
         Brick(QWidget* parent, const char* message, const char* name, QColor color);
         Brick(const char* message, const char* name, QColor color);

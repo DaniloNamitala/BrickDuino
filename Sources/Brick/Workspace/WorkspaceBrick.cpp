@@ -199,8 +199,26 @@ void Workspace::Brick::setParent(QWidget* parent) {
     }
 }
 
+void Workspace::Brick::autoDelete() {
+    if (next != nullptr)
+        next->autoDelete();
+
+    for (int i = 0; i < params.count(); i++) {
+        if (params[i].getValue() != nullptr)
+            params[i].getValue()->autoDelete();
+    }
+
+    ((Board*)parentWidget())->loadTrash(false);
+    ((Board*)parentWidget())->deleteBrick(this, z_order);
+
+}
+
 void Workspace::Brick::mouseReleaseEvent(QMouseEvent* event) {
     setCursor(QCursor(Qt::OpenHandCursor));
+    if (overTrash) {
+        this->autoDelete();
+        return;
+    }
     setZOrder(0);
     
     if (lastCloser != nullptr) {
@@ -441,10 +459,16 @@ void Workspace::Brick::setZOrder(int z) {
 
 Workspace::Brick* Workspace::Brick::getCloser() {
     QPoint point;
+    overTrash = false;
     point.setY(pos().y() - 5);
     point.setX(pos().x() + 2 * EDGE_RADIUS + PIN_H);
     QWidget* widget = parentWidget()->childAt(point);
     if (Brick* b = dynamic_cast<Brick*>(widget)) return b;
+
+    if (QSvgWidget* svg = dynamic_cast<QSvgWidget*>(widget)) {
+        overTrash = true;
+    }
+    ((Board*) parentWidget())->loadTrash(overTrash);
     return nullptr;
 }
 

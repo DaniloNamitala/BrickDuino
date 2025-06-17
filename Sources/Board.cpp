@@ -14,6 +14,20 @@ const char* v_type_name[] = {
 Board::Board(QColor bgColor) {
 	background = bgColor;
 	previewBrick = nullptr;
+
+	QHBoxLayout* hLayout = new QHBoxLayout(this);
+	hLayout->setAlignment(Qt::AlignRight);
+	QWidget* auxWid = new QWidget(this);
+	auxWid->setBaseSize(100, 100);
+	QVBoxLayout* vLayout = new QVBoxLayout(auxWid);
+	vLayout->setAlignment(Qt::AlignBottom);
+
+	trashCan = new QSvgWidget("D:/Projetos/TCC/BrickDuino/Assets/trash-close-red.svg", this);
+	vLayout->addWidget(trashCan);
+	trashCan->setMaximumSize(QSize(60, 60));
+
+	hLayout->addWidget(auxWid);
+
 	setMouseTracking(true);
 	setAcceptDrops(true);
 	createMainFunction();
@@ -109,6 +123,16 @@ void Board::dragMoveEvent(QDragMoveEvent* event)
 	}
 }
 
+void Board::loadTrash(bool open) {
+	if (open == trashOpen) return;
+	trashOpen = open;
+	if (trashOpen)
+		trashCan->load(tr("D:/Projetos/TCC/BrickDuino/Assets/trash-open-red.svg"));
+	else
+		trashCan->load(tr("D:/Projetos/TCC/BrickDuino/Assets/trash-close-red.svg"));
+
+}
+
 
 void Board::dropEvent(QDropEvent* event)
 {
@@ -139,6 +163,14 @@ void Board::setZOrder(QWidget* widget, int old_z, int new_z) {
 			w->raise();
 		}
 	}
+}
+
+void Board::deleteBrick(QWidget* widget, int z) {
+	zOrder[z].removeAll(widget);
+	if (zOrder[z].isEmpty()) {
+		zOrder.remove(z);
+	};
+	delete widget;
 }
 
 Board::~Board() {

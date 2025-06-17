@@ -2,6 +2,7 @@
 
 #include <QtCore>
 #include <QtWidgets>
+#include <QSvgWidget>
 #include "WorkspaceBrick.h"
 
 
@@ -17,6 +18,8 @@ class Board : public QWidget
         QList<Workspace::Brick*> bricks;
         Workspace::Brick* previewBrick;
         QMap<QString, ValueType> variables;
+        QSvgWidget* trashCan;
+        bool trashOpen = false;
 
         void createMainFunction();
 
@@ -32,9 +35,11 @@ class Board : public QWidget
         Board(QColor bgColor);
         ~Board();
         void setZOrder(QWidget* widget, int old_z, int new_z);
+        void deleteBrick(QWidget* widget, int zOrder);
         void removeOrder(QWidget* widget, int z_order);
         QJsonDocument saveToFile(QString path);
         void addVariable(QString name, ValueType type);
         bool variableExist(QString name);
+        void loadTrash(bool open);
 };
 
