@@ -32,7 +32,7 @@
   "literal_false": "False",
 
   "std_output": "print(%1)",
-  "std_input": "%1 = read()",
+  "std_input": "%1 = input()",
   "while_statement": "while (%1):\nstatement",
   "switch_statement": "match %1:\nstatement",
   "do_while_statement": "while True:\nstatement\tif(%1): break",

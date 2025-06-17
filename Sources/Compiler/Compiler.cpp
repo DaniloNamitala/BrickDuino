@@ -4,7 +4,7 @@
 Compiler::Compiler(QJsonDocument document, QString output, QString grammar) {
 	this->document = document;
 	this->path = output;
-
+	this->isPascal = grammar.contains("pascal");
 	readGrammar("D:/Projetos/TCC/BrickDuino/Sources/" + grammar + ".json");
 }
 
@@ -110,7 +110,7 @@ void Compiler::writeIf(QTextStream& stream, QVariantMap bMap, QString tab) {
 	QRegularExpression re("%[0-9]+");
 
 	for (int i = 0; i < lines.size(); i++) {
-		QString _tab = " ";
+		QString _tab = "";
 		QString line = lines.at(i);
 		QRegularExpressionMatch match = re.match(line);
 
@@ -141,8 +141,11 @@ void Compiler::writeIf(QTextStream& stream, QVariantMap bMap, QString tab) {
 		if ((i != (lines.size() -1)) && c.count() > 1)
 			c[1].replace(";", "");
 		stream << tab << c.value(1, "").trimmed();
-
+		if (isPascal)
+			stream << " ";
 	}
+	if (isPascal)
+		stream << ";";
 	stream << "\n";
 }
 

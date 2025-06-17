@@ -7,6 +7,7 @@ class Compiler {
 private:
 	QJsonDocument document;
 	QString path;
+	bool isPascal = false;
 	QMap<QString, QString> grammar;
 
 	void writeBrick(QTextStream &stream, QVariantMap bMap, QString tab);

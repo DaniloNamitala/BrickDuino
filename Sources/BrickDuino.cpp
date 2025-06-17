@@ -51,9 +51,10 @@ void BrickDuino::createActions() {
 
 void BrickDuino::compileProject(QString extension, QString grammar) {
     saveFile();
-
-    Compiler compiler(_document, _path + extension, grammar);
+    QString fullpath = _path + extension;
+    Compiler compiler(_document,fullpath, grammar);
     compiler.compile();
+    system(("notepad " + fullpath).toStdString().c_str());
 }
 
 void BrickDuino::modalCreateVariable() {
@@ -92,7 +93,6 @@ void BrickDuino::createMenus() {
 }
 
 void BrickDuino::saveFile() {
-    _path = tr("C:/Users/danil/Desktop/save/teste.json");
     if (_path.isEmpty())
         return saveFileAs();
 

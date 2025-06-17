@@ -1,9 +1,9 @@
 {
-  "main": "Program teste;\n\n%variable_section \nbegin\nstatement\nend;",
+  "main": "Program teste;\n\n%variable_section \nbegin\nstatement\nend.",
   "variable_section": "var\n%variables",
-  "if_statement": "if ([args]) begin\nstatement\nend;",
-  "else_if_statement": "else if ([args]) begin\nstatement\nend;",
-  "else_statement": "else begin\nstatement\nend;",
+  "if_statement": "if ([args]) then begin\nstatement\nend ",
+  "else_if_statement": "else if ([args]) then begin\nstatement\nend ",
+  "else_statement": "else begin\nstatement\nend ",
   "string_del": "'",
   "value_definition": "%1 := %2;",
 
