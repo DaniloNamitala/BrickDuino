@@ -1,4 +1,4 @@
-﻿#include "BrickDuino.h"
+﻿#include "ShafraBlock.h"
 #include "Board.h"
 #include "ToolboxFunctionBrick.h"
 #include "ToolboxStatementBrick.h"
@@ -7,7 +7,7 @@
 #include "Compiler.h"
 #include "ModalNewVariable.h"
 
-BrickDuino::BrickDuino(QWidget* parent) {
+ShafraBlock::ShafraBlock(QWidget* parent) {
     this->_path = "";
     spoilerMap = QMap<QString, Spoiler*>();
     createBlockBoard();
@@ -16,16 +16,16 @@ BrickDuino::BrickDuino(QWidget* parent) {
     createMenus();
 }
 
-void BrickDuino::createActions() {
+void ShafraBlock::createActions() {
     saveAct = new QAction(QIcon::fromTheme(QIcon::ThemeIcon::DocumentSave),tr("&Salvar"), this);
     saveAct->setShortcuts(QKeySequence::Save);
     saveAct->setStatusTip(tr("Salvar Projeto"));
-    connect(saveAct, &QAction::triggered, this, &BrickDuino::saveFile);
+    connect(saveAct, &QAction::triggered, this, &ShafraBlock::saveFile);
 
     saveAsAct = new QAction(QIcon::fromTheme(QIcon::ThemeIcon::DocumentSaveAs), tr("&Salvar Como"), this);
     saveAsAct->setShortcuts(QKeySequence::SaveAs);
     saveAsAct->setStatusTip(tr("Salvar Projeto"));
-    connect(saveAsAct, &QAction::triggered, this, &BrickDuino::saveFileAs);
+    connect(saveAsAct, &QAction::triggered, this, &ShafraBlock::saveFileAs);
 
     compileCpp = new QAction(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart), tr("&C++"), this);
     compileCpp->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_C);
@@ -49,7 +49,7 @@ void BrickDuino::createActions() {
     });
 }
 
-void BrickDuino::compileProject(QString extension, QString grammar) {
+void ShafraBlock::compileProject(QString extension, QString grammar) {
     saveFile();
     QString fullpath = _path + extension;
     Compiler compiler(_document,fullpath, grammar);
@@ -57,7 +57,7 @@ void BrickDuino::compileProject(QString extension, QString grammar) {
     system(("notepad " + fullpath).toStdString().c_str());
 }
 
-void BrickDuino::modalCreateVariable() {
+void ShafraBlock::modalCreateVariable() {
     ModalNewVariable* modal = new ModalNewVariable(this);
     if (modal->exec()) {
         createVariable(modal->getText(), modal->getType());
@@ -65,7 +65,7 @@ void BrickDuino::modalCreateVariable() {
     delete modal;
 }
 
-void BrickDuino::createVariable(QString name, QString type) {
+void ShafraBlock::createVariable(QString name, QString type) {
 
     if (blockBoard->variableExist(name)) {
         QMessageBox::warning(this, "Erro", "Ja existe uma variavel com este nome!!");
@@ -81,7 +81,7 @@ void BrickDuino::createVariable(QString name, QString type) {
     }
 }
 
-void BrickDuino::createMenus() {
+void ShafraBlock::createMenus() {
     fileMenu = menuBar()->addMenu(tr("&Arquivo"));
     fileMenu->addAction(saveAct);
     fileMenu->addAction(saveAsAct);
@@ -92,14 +92,14 @@ void BrickDuino::createMenus() {
     compileMenu->addAction(compilePy);
 }
 
-void BrickDuino::saveFile() {
+void ShafraBlock::saveFile() {
     if (_path.isEmpty())
         return saveFileAs();
 
     _document = blockBoard->saveToFile(_path);
 }
 
-void BrickDuino::saveFileAs() {
+void ShafraBlock::saveFileAs() {
     QFileDialog dialog(this);
     dialog.setFileMode(QFileDialog::AnyFile);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
@@ -113,12 +113,12 @@ void BrickDuino::saveFileAs() {
     }
 }
 
-void BrickDuino::createBlockBoard() {
+void ShafraBlock::createBlockBoard() {
     blockBoard = new Board(BOARD_BACKGROUND_COLOR);
     this->setCentralWidget(blockBoard);
 }
 
-void BrickDuino::createBlockToolbox() {
+void ShafraBlock::createBlockToolbox() {
     blockToolbox = new QDockWidget(tr("Blocks"), this);
     blockToolbox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -140,22 +140,22 @@ void BrickDuino::createBlockToolbox() {
     layout->setContentsMargins(0, 0, 0, 0);
     blockToolbox->setWidget(scrollArea); 
 
-    loadBlocksFromJson("D:/Projetos/TCC/BrickDuino/Blocks.json", layout);
+    loadBlocksFromJson("D:/Projetos/TCC/ShafraBlock/Blocks.json", layout);
     addSpoilerActions();
 }
 
-void BrickDuino::addSpoilerActions() {
+void ShafraBlock::addSpoilerActions() {
     Spoiler* _spoiler = spoilerMap.value("VARIAVEIS", nullptr);
     if (_spoiler != nullptr) {
         QPushButton* addVariable = new QPushButton("Criar Variável");
         addVariable->setCursor(Qt::PointingHandCursor);
         addVariable->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        connect(addVariable, &QPushButton::clicked, this, &BrickDuino::modalCreateVariable);
+        connect(addVariable, &QPushButton::clicked, this, &ShafraBlock::modalCreateVariable);
         _spoiler->addActionButton(addVariable);
     }
 }
 
-void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
+void ShafraBlock::loadBlocksFromJson(const char* path, QLayout* layout) {
 
     // Opening and reading file content in buffer
     QFile file;
@@ -222,4 +222,4 @@ void BrickDuino::loadBlocksFromJson(const char* path, QLayout* layout) {
     }
 }
 
-BrickDuino::~BrickDuino() {}
+ShafraBlock::~ShafraBlock() {}

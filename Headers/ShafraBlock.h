@@ -7,7 +7,7 @@
 #include "Board.h"
 #include "Spoiler.h"
 
-class BrickDuino : public QMainWindow
+class ShafraBlock : public QMainWindow
 {
 private:
     QDockWidget *blockToolbox;
@@ -40,6 +40,6 @@ private:
     void createVariable(QString name, QString type);
     void modalCreateVariable();
 public:
-    explicit BrickDuino(QWidget *parent = nullptr);
-    ~BrickDuino();
+    explicit ShafraBlock(QWidget *parent = nullptr);
+    ~ShafraBlock();
 };

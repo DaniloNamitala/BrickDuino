@@ -117,7 +117,7 @@ void StatementBrickPainter::paint(IPaintableBrick* brick, QPaintEvent* event) {
 
     if (brick->showConfig()) {
         // paint config icon
-        QPixmap bmp("D:/Projetos/TCC/BrickDuino/Assets/config.png", "png");
+        QPixmap bmp("D:/Projetos/TCC/ShafraBlock/Assets/config.png", "png");
         painter.drawPixmap(brick->configRect(), bmp);
     }
     

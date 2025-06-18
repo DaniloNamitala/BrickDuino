@@ -5,7 +5,7 @@ Compiler::Compiler(QJsonDocument document, QString output, QString grammar) {
 	this->document = document;
 	this->path = output;
 	this->isPascal = grammar.contains("pascal");
-	readGrammar("D:/Projetos/TCC/BrickDuino/Sources/" + grammar + ".json");
+	readGrammar("D:/Projetos/TCC/ShafraBlock/Sources/" + grammar + ".json");
 }
 
 bool Compiler::compile() {

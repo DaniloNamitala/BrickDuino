@@ -6,7 +6,7 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-project ("BrickDuino")
+project ("ShafraBlock")
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Core Gui SvgWidgets)
 
@@ -34,7 +34,7 @@ SET(INCLUDE_DIR_COMPILER "Headers/Compiler/")
 SET(INCLUDE_DIR_COMPONENTS "Headers/Components/")
 
 # Adicione a origem ao executável deste projeto.
-add_executable (BrickDuino 
+add_executable (ShafraBlock 
   ${MAIN_CPP_FILES} 
   ${TOOLBOX_CPP_FILES} 
   ${PAINTER_CPP_FILES} 
@@ -46,23 +46,23 @@ add_executable (BrickDuino
   ${COMPILER_FILES})  
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET BrickDuino PROPERTY CXX_STANDARD 20)
+  set_property(TARGET ShafraBlock PROPERTY CXX_STANDARD 20)
 endif()
 
 #include directories
-target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR})
-target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_EXCEPTION})
-target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_BRICK_T})
-target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_BRICK_W})
-target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_BRICK_R})
-target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_PAINTER})
-target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_TOOLBOX})
-target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_SCREENS})
-target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_COMPILER})
-target_include_directories(BrickDuino PUBLIC ${INCLUDE_DIR_COMPONENTS})
+target_include_directories(ShafraBlock PUBLIC ${INCLUDE_DIR})
+target_include_directories(ShafraBlock PUBLIC ${INCLUDE_DIR_EXCEPTION})
+target_include_directories(ShafraBlock PUBLIC ${INCLUDE_DIR_BRICK_T})
+target_include_directories(ShafraBlock PUBLIC ${INCLUDE_DIR_BRICK_W})
+target_include_directories(ShafraBlock PUBLIC ${INCLUDE_DIR_BRICK_R})
+target_include_directories(ShafraBlock PUBLIC ${INCLUDE_DIR_PAINTER})
+target_include_directories(ShafraBlock PUBLIC ${INCLUDE_DIR_TOOLBOX})
+target_include_directories(ShafraBlock PUBLIC ${INCLUDE_DIR_SCREENS})
+target_include_directories(ShafraBlock PUBLIC ${INCLUDE_DIR_COMPILER})
+target_include_directories(ShafraBlock PUBLIC ${INCLUDE_DIR_COMPONENTS})
 
 # libraries
-target_link_libraries(BrickDuino PRIVATE Qt6::Widgets)
-target_link_libraries(BrickDuino PRIVATE Qt6::SvgWidgets)
-target_link_libraries(BrickDuino PRIVATE Qt6::Core)
-target_link_libraries(BrickDuino PRIVATE Qt6::Gui)
+target_link_libraries(ShafraBlock PRIVATE Qt6::Widgets)
+target_link_libraries(ShafraBlock PRIVATE Qt6::SvgWidgets)
+target_link_libraries(ShafraBlock PRIVATE Qt6::Core)
+target_link_libraries(ShafraBlock PRIVATE Qt6::Gui)

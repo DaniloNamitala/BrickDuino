@@ -22,7 +22,7 @@ Board::Board(QColor bgColor) {
 	QVBoxLayout* vLayout = new QVBoxLayout(auxWid);
 	vLayout->setAlignment(Qt::AlignBottom);
 
-	trashCan = new QSvgWidget("D:/Projetos/TCC/BrickDuino/Assets/trash-close-red.svg", this);
+	trashCan = new QSvgWidget("D:/Projetos/TCC/ShafraBlock/Assets/trash-close-red.svg", this);
 	vLayout->addWidget(trashCan);
 	trashCan->setMaximumSize(QSize(60, 60));
 
@@ -127,9 +127,9 @@ void Board::loadTrash(bool open) {
 	if (open == trashOpen) return;
 	trashOpen = open;
 	if (trashOpen)
-		trashCan->load(tr("D:/Projetos/TCC/BrickDuino/Assets/trash-open-red.svg"));
+		trashCan->load(tr("D:/Projetos/TCC/ShafraBlock/Assets/trash-open-red.svg"));
 	else
-		trashCan->load(tr("D:/Projetos/TCC/BrickDuino/Assets/trash-close-red.svg"));
+		trashCan->load(tr("D:/Projetos/TCC/ShafraBlock/Assets/trash-close-red.svg"));
 
 }
 
