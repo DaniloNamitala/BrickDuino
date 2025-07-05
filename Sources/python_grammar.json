@@ -8,10 +8,10 @@
   "value_definition": "%1 = %2",
 
   "variable_declaration": "%name = None",
-  "INT": "",
-  "BOOL": "",
-  "FLOAT": "",
-  "STRING": "",
+  "INT": "int",
+  "BOOL": "bool",
+  "FLOAT": "float",
+  "STRING": "str",
 
   "mod_operator": "(%1 % %2)",
   "div_operator": "(%1 / %2)",
@@ -32,7 +32,7 @@
   "literal_false": "False",
 
   "std_output": "print(%1)",
-  "std_input": "%1 = input()",
+  "std_input": "%1 = %type(input())",
   "while_statement": "while (%1):\nstatement",
   "switch_statement": "match %1:\nstatement",
   "do_while_statement": "while True:\nstatement\tif(%1): break",

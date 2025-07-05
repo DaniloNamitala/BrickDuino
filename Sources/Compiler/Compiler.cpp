@@ -1,5 +1,6 @@
 #include "Compiler.h"
 #include <QtCore>
+#include <QtAlgorithms>
 
 Compiler::Compiler(QJsonDocument document, QString output, QString grammar) {
 	this->document = document;
@@ -70,15 +71,15 @@ void Compiler::writeCase(QTextStream& stream, QVariantMap bMap, QString tab) {
 		QString _tab = " ";
 		QString line = lines.at(i);
 		QRegularExpressionMatch match = re.match(line);
-
-		QString code = grammar["case_statement"];
+		QString valueType = "";
+;		QString code = grammar["case_statement"];
 		if (i == lines.count() - 1)
 			code = grammar["default_statement"];
 		if (match.hasMatch()) {
 			QString strMatch = match.captured();
 			int pos = strMatch.mid(1).toInt() - 1;
 			if (args.size() > pos) {
-				QString arg = getValue(args[pos].toMap()["value"].toMap());
+				QString arg = getValue(args[pos].toMap()["value"].toMap(), valueType);
 				code.replace("[args]", arg);
 			}
 		}
@@ -123,9 +124,10 @@ void Compiler::writeIf(QTextStream& stream, QVariantMap bMap, QString tab) {
 				_tab = tab;
 			}
 			QString strMatch = match.captured();
+			QString valueType = "";
 			int pos = strMatch.mid(1).toInt() - 1;
 			if (args.size() > pos) {
-				QString arg = getValue(args[pos].toMap()["value"].toMap());
+				QString arg = getValue(args[pos].toMap()["value"].toMap(), valueType);
 				code.replace("[args]", arg);
 			}
 		}
@@ -182,8 +184,10 @@ void Compiler::write(QTextStream& stream, QVariantMap bMap, QString tab) {
 		QString strMatch = match.captured();
 		int pos = strMatch.mid(1).toInt() - 1;
 		if (args.size() > pos) {
-			QString arg = getValue(args[pos].toMap()["value"].toMap());
+			QString valueType = "";
+			QString arg = getValue(args[pos].toMap()["value"].toMap(), valueType);
 			code.replace(strMatch, arg);
+			code.replace("%type", valueType);
 		}
 	}
 	QStringList c = code.split("statement");
@@ -202,10 +206,10 @@ void Compiler::writeBrick(QTextStream& stream, QVariantMap bMap, QString tab) {
 	QString type = bMap.value("type", "").toString();
 	QString name = bMap.value("name", "").toString();
 	QString message = bMap.value("message", "").toString();
-
+	QString varType = "";
 
 	if (type == "VALUE" || type == "LITERAL_VALUE")
-		stream << getValue(bMap) << "\n";
+		stream << getValue(bMap, varType) << "\n";
 	else if (name == "if_statement")
 		writeIf(stream, bMap, tab);
 	else if (name == "case_statement")
@@ -238,13 +242,21 @@ void Compiler::readGrammar(QString path) {
 	}
 }
 
-QString Compiler::getValue(QVariantMap map) {
+QString Compiler::getValue(QVariantMap map, QString &valueType) {
 	QString name = map["name"].toString();
 	QString message = map["message"].toString();
 
 	if (name == "literal_number") return message;
 	if (name == "literal_string") return grammar["string_del"] + message + grammar["string_del"];
-	if (name == "variable_call") return message;
+	if (name == "variable_call") {
+		QVariantList variables = document["variables"].toArray().toVariantList();
+		for (QVariant var : variables) {
+			QJsonObject obj = var.toJsonObject();
+			if (obj.keys().first() == message)
+				valueType = grammar[obj.value(message).toString()];
+		}
+		return message;
+	}
 
 	QVariantList args = map["args"].toList();
 	if (grammar.contains(name)) {
@@ -255,7 +267,7 @@ QString Compiler::getValue(QVariantMap map) {
 			QString match = i.next().captured();
 			int pos = match.mid(1).toInt() - 1;
 			if (args.size() > pos) {
-				QString arg = getValue(args[pos].toMap()["value"].toMap());
+				QString arg = getValue(args[pos].toMap()["value"].toMap(), valueType);
 				code.replace(match, arg);
 			}
 		}		return code;
